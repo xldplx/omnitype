@@ -202,7 +202,7 @@ function QuestionRow({ question, value, onChange, isLast }) {
           -------------------- */}
       <div className="hidden sm:flex items-center justify-center w-full max-w-4xl mt-4">
         <div className="flex-1 flex justify-end pr-4 md:pr-8">
-          <span className="text-[#10b981] font-semibold text-xs md:text-[0.8rem] uppercase tracking-widest text-right leading-tight">Agree</span>
+          <span className="text-[#10b981] font-semibold text-xs md:text-[0.8rem] uppercase tracking-widest text-right leading-tight">Very True For Me</span>
         </div>
         
         <div className="flex gap-3 md:gap-6 items-center justify-center shrink-0">
@@ -223,7 +223,7 @@ function QuestionRow({ question, value, onChange, isLast }) {
         </div>
 
         <div className="flex-1 flex justify-start pl-4 md:pl-8">
-          <span className="text-[#6366f1] font-semibold text-xs md:text-[0.8rem] uppercase tracking-widest text-left leading-tight">Disagree</span>
+          <span className="text-[#6366f1] font-semibold text-xs md:text-[0.8rem] uppercase tracking-widest text-left leading-tight">Not True For Me</span>
         </div>
       </div>
 
@@ -248,8 +248,8 @@ function QuestionRow({ question, value, onChange, isLast }) {
           ))}
         </div>
         <div className="flex justify-between w-full px-2 text-[0.65rem] uppercase font-semibold tracking-widest mt-6 opacity-60">
-          <span className="text-[#10b981]">Agree</span>
-          <span className="text-[#6366f1]">Disagree</span>
+          <span className="text-[#10b981]">Very True For Me</span>
+          <span className="text-[#6366f1]">Not True For Me</span>
         </div>
       </div>
     </div>

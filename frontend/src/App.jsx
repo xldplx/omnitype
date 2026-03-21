@@ -18,6 +18,12 @@ import TritypeTest from './pages/TritypeTest';
 import TritypeResult from './pages/TritypeResult';
 import ColorPsychologyTest from './pages/ColorPsychologyTest';
 import ColorPsychologyResult from './pages/ColorPsychologyResult';
+import JungianArchetypesTest from './pages/JungianArchetypesTest';
+import JungianArchetypesResult from './pages/JungianArchetypesResult';
+import MoralAlignmentTest from './pages/MoralAlignmentTest';
+import MoralAlignmentResult from './pages/MoralAlignmentResult';
+import ResilienceQuotientTest from './pages/ResilienceQuotientTest';
+import ResilienceQuotientResult from './pages/ResilienceQuotientResult';
 
 export default function App() {
   return (
@@ -48,6 +54,12 @@ export default function App() {
               <Route path="/result/tritype/:type" element={<TritypeResult />} />
               <Route path="/test/color-psychology" element={<ColorPsychologyTest />} />
               <Route path="/result/color-psychology/:type" element={<ColorPsychologyResult />} />
+              <Route path="/test/jungian-archetypes" element={<JungianArchetypesTest />} />
+              <Route path="/result/jungian-archetypes/:type" element={<JungianArchetypesResult />} />
+              <Route path="/test/alignment" element={<MoralAlignmentTest />} />
+              <Route path="/result/alignment/:type" element={<MoralAlignmentResult />} />
+              <Route path="/test/resilience" element={<ResilienceQuotientTest />} />
+              <Route path="/result/resilience/:type" element={<ResilienceQuotientResult />} />
             </Routes>
           </main>
         </div>

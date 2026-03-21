@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
-import { calculateTritypeResult, tritypeTestQuestions } from '../utils/tritypeResultLogic';
+import { calculateJungianResult, jungianQuestions } from '../utils/jungianArchetypesLogic';
 
-export default function TritypeTest() {
+export default function JungianArchetypesTest() {
   const [answers, setAnswers] = useState({});
   const [isFinished, setIsFinished] = useState(false);
   const [result, setResult] = useState(null);
   
-  const questionsPerPage = 6;
+  const questionsPerPage = 6; // 36 questions / 6 = 6 pages
   const [currentPage, setCurrentPage] = useState(0);
 
   // Scroll to top on mount and page change
@@ -17,18 +17,18 @@ export default function TritypeTest() {
     window.scrollTo(0, 0);
   }, [currentPage]);
 
-  const currentQuestions = tritypeTestQuestions.slice(
+  const currentQuestions = jungianQuestions.slice(
     currentPage * questionsPerPage, 
     (currentPage + 1) * questionsPerPage
   );
 
-  const progress = (Object.keys(answers).length / tritypeTestQuestions.length) * 100;
+  const progress = (Object.keys(answers).length / jungianQuestions.length) * 100;
   
   const isPageComplete = currentQuestions.every(q => answers[q.id] !== undefined);
 
   const handleAnswer = (questionId, value) => {
     setAnswers(prev => {
-        const question = tritypeTestQuestions.find(q => q.id === questionId);
+        const question = jungianQuestions.find(q => q.id === questionId);
         return {
             ...prev, 
             [questionId]: { value, type: question.type }
@@ -37,7 +37,7 @@ export default function TritypeTest() {
   };
 
   const handleNextPage = () => {
-    if (currentPage < Math.ceil(tritypeTestQuestions.length / questionsPerPage) - 1) {
+    if (currentPage < Math.ceil(jungianQuestions.length / questionsPerPage) - 1) {
       setCurrentPage(prev => prev + 1);
     } else {
       handleFinish();
@@ -53,17 +53,17 @@ export default function TritypeTest() {
   const handleFinish = () => {
     window.scrollTo(0, 0);
     setIsFinished(true);
+    const answersArray = Object.values(answers);
+    const calculatedResult = calculateJungianResult(answersArray);
     
     // Auto-redirect after 3 seconds
     setTimeout(() => {
-        const answersArray = Object.values(answers);
-        const calculatedResult = calculateTritypeResult(answersArray);
-        setResult(calculatedResult);
+      setResult(calculatedResult);
     }, 3000);
   };
 
   // ----------------------------------------
-  // RESULTS VIEW (Redirects to Dedicated Route)
+  // RESULTS VIEW (Loading State)
   // ----------------------------------------
   if (isFinished && !result) {
     return (
@@ -73,7 +73,7 @@ export default function TritypeTest() {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center w-full max-w-xl px-6 flex flex-col items-center"
         >
-          <div className="w-12 h-12 border-4 border-slate-200 border-t-indigo-500 rounded-full animate-spin mb-8" />
+          <div className="w-12 h-12 border-4 border-slate-200 border-t-blue-500 rounded-full animate-spin mb-8" />
           <h2 className="text-2xl md:text-3xl font-bold mb-4 text-slate-800 tracking-tight">Analyzing Results</h2>
           <p className="text-slate-500 text-[1.1rem] tracking-wide font-medium flex items-center justify-center gap-2">
             Please wait a moment<motion.span animate={{ opacity: [0, 1, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>...</motion.span>
@@ -85,8 +85,7 @@ export default function TritypeTest() {
 
   // Once finishing is complete, redirect user out of the test and into the result page
   if (result) {
-    // We navigate to /result/tritype/{archetypeKey}
-    return <Navigate to={`/result/tritype/${result.archetypeKey}`} state={{ resultData: result }} replace />;
+    return <Navigate to={`/result/jungian-archetypes/${result.primaryInfo.id}`} state={{ resultData: result }} replace />;
   }
 
   // ----------------------------------------
@@ -101,11 +100,11 @@ export default function TritypeTest() {
         <div className="bg-white/90 backdrop-blur-md sticky top-24 md:top-28 z-40 py-5 mb-16 border-b border-slate-100">
           <div className="flex justify-between items-center text-[0.65rem] md:text-xs font-bold text-slate-400 mb-4 tracking-[0.2em] uppercase">
             <span>Progress: {Math.round(progress)}%</span>
-            <span className="hidden sm:inline bg-slate-50 px-3 py-1 rounded-full border border-slate-100">Phase {currentPage + 1} / {Math.ceil(tritypeTestQuestions.length / questionsPerPage)}</span>
+            <span className="hidden sm:inline bg-slate-50 px-3 py-1 rounded-full border border-slate-100">Phase {currentPage + 1} / {Math.ceil(jungianQuestions.length / questionsPerPage)}</span>
           </div>
           <div className="h-1.5 w-full bg-slate-100 overflow-hidden rounded-full">
             <motion.div 
-              className="h-full bg-linear-to-r from-blue-500 to-indigo-500"
+              className="h-full bg-linear-to-r from-sky-400 to-blue-600"
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             />
@@ -152,7 +151,7 @@ export default function TritypeTest() {
                 disabled={!isPageComplete}
                 className={`bg-slate-900 border border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex items-center gap-3 px-12 py-4 rounded-full text-white text-[0.95rem] font-semibold tracking-widest uppercase transition-all duration-500 overflow-hidden relative group ${!isPageComplete ? 'opacity-30 cursor-not-allowed scale-100' : 'hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(0,0,0,0.2)] hover:bg-slate-800'}`}
               >
-                <span className="relative z-10">{currentPage === Math.ceil(tritypeTestQuestions.length / questionsPerPage) - 1 ? 'Analyze Data' : 'Continue'}</span>
+                <span className="relative z-10">{currentPage === Math.ceil(jungianQuestions.length / questionsPerPage) - 1 ? 'Analyze Data' : 'Continue'}</span>
                 <ChevronRight className="w-5 h-5 opacity-70 relative z-10 transition-transform duration-500 group-hover:translate-x-1" />
                 
                 {/* Shine effect on hover */}
@@ -167,25 +166,25 @@ export default function TritypeTest() {
 }
 
 function QuestionRow({ question, value, onChange, isLast }) {
-  // UNIFIED 7 point scale
+  // UNIFIED 7 point scale - EXACTLY LIKE ME (Left/Green) to EXTREMELY UNLIKE ME (Right/Indigo)
   const desktopOptions = [
-    { val: 7, size: 'w-[4.5rem] h-[4.5rem]', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
-    { val: 6, size: 'w-[3.5rem] h-[3.5rem]', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
-    { val: 5, size: 'w-[2.8rem] h-[2.8rem]', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
+    { val: 1, size: 'w-[4.5rem] h-[4.5rem]', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
+    { val: 2, size: 'w-[3.5rem] h-[3.5rem]', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
+    { val: 3, size: 'w-[2.8rem] h-[2.8rem]', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
     { val: 4, size: 'w-[2.2rem] h-[2.2rem]', border: 'border-slate-300', bg: 'bg-slate-300' },
-    { val: 3, size: 'w-[2.8rem] h-[2.8rem]', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
-    { val: 2, size: 'w-[3.5rem] h-[3.5rem]', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
-    { val: 1, size: 'w-[4.5rem] h-[4.5rem]', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
+    { val: 5, size: 'w-[2.8rem] h-[2.8rem]', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
+    { val: 6, size: 'w-[3.5rem] h-[3.5rem]', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
+    { val: 7, size: 'w-[4.5rem] h-[4.5rem]', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
   ];
 
   const mobileOptions = [
-    { val: 7, size: 'w-12 h-12', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
-    { val: 6, size: 'w-10 h-10', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
-    { val: 5, size: 'w-8 h-8', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
+    { val: 1, size: 'w-12 h-12', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
+    { val: 2, size: 'w-10 h-10', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
+    { val: 3, size: 'w-8 h-8', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
     { val: 4, size: 'w-6 h-6', border: 'border-slate-300', bg: 'bg-slate-300' },
-    { val: 3, size: 'w-8 h-8', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
-    { val: 2, size: 'w-10 h-10', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
-    { val: 1, size: 'w-12 h-12', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
+    { val: 5, size: 'w-8 h-8', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
+    { val: 6, size: 'w-10 h-10', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
+    { val: 7, size: 'w-12 h-12', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
   ];
 
   return (
@@ -199,7 +198,7 @@ function QuestionRow({ question, value, onChange, isLast }) {
           -------------------- */}
       <div className="hidden sm:flex items-center justify-center w-full max-w-4xl mt-4">
         <div className="flex-1 flex justify-end pr-4 md:pr-8">
-          <span className="text-[#10b981] font-semibold text-xs md:text-[0.8rem] uppercase tracking-widest text-right leading-tight">Deeply Resonates</span>
+          <span className="text-[#10b981] font-semibold text-xs md:text-[0.8rem] uppercase tracking-widest text-right leading-tight">Profoundly Relate</span>
         </div>
         
         <div className="flex gap-3 md:gap-6 items-center justify-center shrink-0">
@@ -220,7 +219,7 @@ function QuestionRow({ question, value, onChange, isLast }) {
         </div>
 
         <div className="flex-1 flex justify-start pl-4 md:pl-8">
-          <span className="text-[#6366f1] font-semibold text-xs md:text-[0.8rem] uppercase tracking-widest text-left leading-tight">Does Not Resonate</span>
+          <span className="text-[#6366f1] font-semibold text-xs md:text-[0.8rem] uppercase tracking-widest text-left leading-tight">Do Not Relate</span>
         </div>
       </div>
 
@@ -245,8 +244,8 @@ function QuestionRow({ question, value, onChange, isLast }) {
           ))}
         </div>
         <div className="flex justify-between w-full px-2 text-[0.65rem] uppercase font-semibold tracking-widest mt-6 opacity-60">
-          <span className="text-[#10b981]">Deeply Resonates</span>
-          <span className="text-[#6366f1]">Does Not Resonate</span>
+          <span className="text-[#10b981]">Profoundly Relate</span>
+          <span className="text-[#6366f1]">Do Not Relate</span>
         </div>
       </div>
     </div>

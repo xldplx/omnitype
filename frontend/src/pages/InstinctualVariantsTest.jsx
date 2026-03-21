@@ -9,13 +9,13 @@ export default function InstinctualVariantsTest() {
   const [isFinished, setIsFinished] = useState(false);
   const [result, setResult] = useState(null);
   
-  const questionsPerPage = 7;
+  const questionsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(0);
 
-  // Scroll to top on mount
+  // Scroll to top on mount and page change
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+    window.scrollTo(0, 0);
+  }, [currentPage]);
 
   const currentQuestions = instinctualTestQuestions.slice(
     currentPage * questionsPerPage, 
@@ -38,7 +38,6 @@ export default function InstinctualVariantsTest() {
 
   const handleNextPage = () => {
     if (currentPage < Math.ceil(instinctualTestQuestions.length / questionsPerPage) - 1) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
       setCurrentPage(prev => prev + 1);
     } else {
       handleFinish();
@@ -47,13 +46,12 @@ export default function InstinctualVariantsTest() {
 
   const handlePrevPage = () => {
     if (currentPage > 0) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
       setCurrentPage(prev => prev - 1);
     }
   };
 
   const handleFinish = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
     setIsFinished(true);
     const answersArray = Object.values(answers);
     const calculatedResult = calculateInstinctualResult(answersArray);
@@ -170,23 +168,23 @@ export default function InstinctualVariantsTest() {
 function QuestionRow({ question, value, onChange, isLast }) {
   // UNIFIED 7 point scale
   const desktopOptions = [
-    { val: 7, size: 'w-[4.5rem] h-[4.5rem]', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
-    { val: 6, size: 'w-[3.5rem] h-[3.5rem]', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
-    { val: 5, size: 'w-[2.8rem] h-[2.8rem]', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
+    { val: 1, size: 'w-[4.5rem] h-[4.5rem]', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
+    { val: 2, size: 'w-[3.5rem] h-[3.5rem]', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
+    { val: 3, size: 'w-[2.8rem] h-[2.8rem]', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
     { val: 4, size: 'w-[2.2rem] h-[2.2rem]', border: 'border-slate-300', bg: 'bg-slate-300' },
-    { val: 3, size: 'w-[2.8rem] h-[2.8rem]', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
-    { val: 2, size: 'w-[3.5rem] h-[3.5rem]', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
-    { val: 1, size: 'w-[4.5rem] h-[4.5rem]', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
+    { val: 5, size: 'w-[2.8rem] h-[2.8rem]', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
+    { val: 6, size: 'w-[3.5rem] h-[3.5rem]', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
+    { val: 7, size: 'w-[4.5rem] h-[4.5rem]', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
   ];
 
   const mobileOptions = [
-    { val: 7, size: 'w-12 h-12', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
-    { val: 6, size: 'w-10 h-10', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
-    { val: 5, size: 'w-8 h-8', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
+    { val: 1, size: 'w-12 h-12', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
+    { val: 2, size: 'w-10 h-10', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
+    { val: 3, size: 'w-8 h-8', border: 'border-[#10b981]', bg: 'bg-[#10b981]' },
     { val: 4, size: 'w-6 h-6', border: 'border-slate-300', bg: 'bg-slate-300' },
-    { val: 3, size: 'w-8 h-8', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
-    { val: 2, size: 'w-10 h-10', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
-    { val: 1, size: 'w-12 h-12', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
+    { val: 5, size: 'w-8 h-8', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
+    { val: 6, size: 'w-10 h-10', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
+    { val: 7, size: 'w-12 h-12', border: 'border-[#6366f1]', bg: 'bg-[#6366f1]' },
   ];
 
   return (
@@ -200,7 +198,7 @@ function QuestionRow({ question, value, onChange, isLast }) {
           -------------------- */}
       <div className="hidden sm:flex items-center justify-center w-full max-w-4xl mt-4">
         <div className="flex-1 flex justify-end pr-4 md:pr-8">
-          <span className="text-[#10b981] font-semibold text-xs md:text-[0.8rem] uppercase tracking-widest text-right leading-tight">Extremely Unlike Me</span>
+          <span className="text-[#10b981] font-semibold text-xs md:text-[0.8rem] uppercase tracking-widest text-right leading-tight">Core Priority</span>
         </div>
         
         <div className="flex gap-3 md:gap-6 items-center justify-center shrink-0">
@@ -221,7 +219,7 @@ function QuestionRow({ question, value, onChange, isLast }) {
         </div>
 
         <div className="flex-1 flex justify-start pl-4 md:pl-8">
-          <span className="text-[#6366f1] font-semibold text-xs md:text-[0.8rem] uppercase tracking-widest text-left leading-tight">Exactly Like Me</span>
+          <span className="text-[#6366f1] font-semibold text-xs md:text-[0.8rem] uppercase tracking-widest text-left leading-tight">Not A Priority</span>
         </div>
       </div>
 
@@ -246,8 +244,8 @@ function QuestionRow({ question, value, onChange, isLast }) {
           ))}
         </div>
         <div className="flex justify-between w-full px-2 text-[0.65rem] uppercase font-semibold tracking-widest mt-6 opacity-60">
-          <span className="text-[#10b981]">Unlike Me</span>
-          <span className="text-[#6366f1]">Like Me</span>
+          <span className="text-[#10b981]">Core Priority</span>
+          <span className="text-[#6366f1]">Not Priority</span>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ export const instinctualVariantsTypes = {
     id: "self_preservation",
     name: "Self-Preservation (SP)",
     shortName: "Self-Preservation",
+    abbreviation: "sp",
     description: "Your primary focus in life is on physical safety, comfort, health, and resource security. You are naturally attuned to your environment—temperature, lighting, food quality, and financial stability. You build a strong foundation to ensure your survival and independence.",
     coreDesire: "To secure physical well-being, financial independence, and a comfortable, predictable environment.",
     coreFear: "Lack of resources, physical discomfort, illness, or relying on untrustworthy people for survival.",
@@ -26,6 +27,7 @@ export const instinctualVariantsTypes = {
     id: "social",
     name: "Social (SO)",
     shortName: "Social",
+    abbreviation: "so",
     description: "Your primary focus is on your status, role, and connection within groups or communities. You are highly attuned to social hierarchies, unspoken rules, and how you are perceived by others. You seek to find your place in the world and contribute to a larger cause or network.",
     coreDesire: "To belong to a group, achieve social standing, and feel valued by the community.",
     coreFear: "Being outcast, excluded, publicly humiliated, or failing to find a meaningful role in society.",
@@ -49,6 +51,7 @@ export const instinctualVariantsTypes = {
     id: "sexual",
     name: "Sexual / One-to-One (SX)",
     shortName: "Sexual (Sx)",
+    abbreviation: "sx",
     description: "Your primary focus is on intensity, chemistry, and finding 'the juice' in life. Despite the name, this isn't exclusively about intimacy—it’s about a magnetic pull toward people, passions, or ideas that make you feel intensely alive. You seek fusion and transformation.",
     coreDesire: "Total immersion, intense emotional and physical chemistry, and breaking boundaries.",
     coreFear: "A lack of passion, feeling 'dead' inside, or losing the intense connection they have with a specific person/interest.",
@@ -70,7 +73,7 @@ export const instinctualVariantsTypes = {
   }
 };
 
-// 21 High-Impact Questions (7 per style)
+// 30 High-Impact Questions (10 per style)
 const instinctualQuestions = [
   // Type 1: Self-Preservation (SP)
   { id: 1, text: "I am constantly aware of the temperature, lighting, and physical comfort of the room I am in.", type: 1 },
@@ -80,24 +83,33 @@ const instinctualQuestions = [
   { id: 5, text: "I often find myself mentally tracking my energy levels and 'conserving' my energy throughout the day.", type: 1 },
   { id: 6, text: "I prefer to handle my own problems practically rather than talking about them extensively.", type: 1 },
   { id: 7, text: "The idea of relying completely on someone else for my basic survival needs terrifies me.", type: 1 },
+  { id: 8, text: "I am usually the first person to notice if a home isn't practically functional or safe.", type: 1 },
+  { id: 9, text: "I actively research diets, exercise regimens, or health protocols to protect my body from decline.", type: 1 },
+  { id: 10, text: "Accumulating resources (money, property, supplies) feels like a necessary buffer against an unpredictable world.", type: 1 },
 
   // Type 2: Social (SO)
-  { id: 8, text: "I am usually hyper-aware of the subtle power dynamics and social hierarchies in any group I join.", type: 2 },
-  { id: 9, text: "I spend a lot of time thinking about my role in society, my reputation, and how I contribute to the world.", type: 2 },
-  { id: 10, text: "I often feel a strong sense of responsibility toward my friends, community, or chosen family.", type: 2 },
-  { id: 11, text: "The thought of being publicly humiliated or permanently cast out of my friend group is horrifying to me.", type: 2 },
-  { id: 12, text: "I naturally 'read the room' and adapt my behavior to ensure smooth interactions and group harmony.", type: 2 },
-  { id: 13, text: "I feel energized and alive when I am successfully collaborating with a large network of people.", type: 2 },
-  { id: 14, text: "I often worry about missing out (FOMO) if my friends are doing something interesting without me.", type: 2 },
+  { id: 11, text: "I am usually hyper-aware of the subtle power dynamics and social hierarchies in any group I join.", type: 2 },
+  { id: 12, text: "I spend a lot of time thinking about my role in society, my reputation, and how I contribute to the world.", type: 2 },
+  { id: 13, text: "I often feel a strong sense of responsibility toward my friends, community, or chosen family.", type: 2 },
+  { id: 14, text: "The thought of being publicly humiliated or permanently cast out of my friend group is horrifying to me.", type: 2 },
+  { id: 15, text: "I naturally 'read the room' and adapt my behavior to ensure smooth interactions and group harmony.", type: 2 },
+  { id: 16, text: "I feel energized and alive when I am successfully collaborating with a large network of people.", type: 2 },
+  { id: 17, text: "I often worry about missing out (FOMO) if my friends are doing something interesting without me.", type: 2 },
+  { id: 18, text: "Understanding the politics, gossip, or connections between people in my network is very important to me.", type: 2 },
+  { id: 19, text: "I actively shape my image and curations to ensure I am perceived exactly how I wish to be seen by society.", type: 2 },
+  { id: 20, text: "It exhausts me heavily when I feel useless or irrelevant to my community.", type: 2 },
 
   // Type 3: Sexual (SX)
-  { id: 15, text: "I have zero interest in casual small talk; I want to immediately dive into deep, intense topics.", type: 3 },
-  { id: 16, text: "I often get 'obsessed' with a specific person, hobby, or idea, pouring all my energy into it until I burn out.", type: 3 },
-  { id: 17, text: "A life that is safe, comfortable, and predictable sounds incredibly boring and 'dead' to me.", type: 3 },
-  { id: 18, text: "When I connect with someone romantically or platonically, I want to completely merge minds and souls.", type: 3 },
-  { id: 19, text: "People often describe my energy as 'intense', 'magnetic', or 'overwhelming'.", type: 3 },
-  { id: 20, text: "I often ignore basic physical needs (like eating or sleeping) when I am completely captivated by someone or something.", type: 3 },
-  { id: 21, text: "I would rather have a relationship full of passionate highs and dramatic lows than one that is stable but boring.", type: 3 }
+  { id: 21, text: "I have zero interest in casual small talk; I want to immediately dive into deep, intense topics.", type: 3 },
+  { id: 22, text: "I often get 'obsessed' with a specific person, hobby, or idea, pouring all my energy into it until I burn out.", type: 3 },
+  { id: 23, text: "A life that is safe, comfortable, and predictable sounds incredibly boring and 'dead' to me.", type: 3 },
+  { id: 24, text: "When I connect with someone romantically or platonically, I want to completely merge minds and souls.", type: 3 },
+  { id: 25, text: "People often describe my energy as 'intense', 'magnetic', or 'overwhelming'.", type: 3 },
+  { id: 26, text: "I often ignore basic physical needs (like eating or sleeping) when I am completely captivated by someone or something.", type: 3 },
+  { id: 27, text: "I would rather have a relationship full of passionate highs and dramatic lows than one that is stable but boring.", type: 3 },
+  { id: 28, text: "I constantly seek a 'spark' or chemistry in my interactions, and if it's missing, I quickly completely disengage.", type: 3 },
+  { id: 29, text: "I am unafraid of vulnerability if it means gaining access to the raw, unpolished core of another human being.", type: 3 },
+  { id: 30, text: "I feel a profound lack of purpose unless I have a consuming passion driving me forward right now.", type: 3 }
 ];
 
 const shuffle = (array) => {
@@ -116,7 +128,11 @@ export function calculateInstinctualResult(answers) {
     const scores = { 1: 0, 2: 0, 3: 0 };
   
     answers.forEach(answer => {
-      scores[answer.type] += answer.value;
+      // The UI uses val: 7 for "Extremely Unlike Me" and val: 1 for "Exactly Like Me".
+      // We must invert this so that "Exactly Like Me" (1) yields the highest positive score (e.g. 7 points)
+      // and "Extremely Unlike Me" (7) yields the lowest point value (e.g. 1 point).
+      const correctedScore = 8 - answer.value;
+      scores[answer.type] += correctedScore;
     });
   
     // Find highest score
@@ -148,7 +164,7 @@ export function calculateInstinctualResult(answers) {
         }
     }
 
-    const MAX_SCORE_PER_TYPE = 49; // 7 questions * 7 max
+    const MAX_SCORE_PER_TYPE = 70; // 10 questions * 7 max
     const breakdown = {};
     for (let i = 1; i <= 3; i++) {
         breakdown[i] = Math.max(0, Math.round((scores[i] / MAX_SCORE_PER_TYPE) * 100));
@@ -162,7 +178,7 @@ export function calculateInstinctualResult(answers) {
       type: PrimaryType,
       fullTitle: primaryInfo.shortName,
       info: primaryInfo,
-      stacking: `${primaryInfo.shortName.substring(0,2)}/${secondaryInfo.shortName.substring(0,2)}`,
+      stacking: `${primaryInfo.abbreviation}/${secondaryInfo.abbreviation}`,
       blindspot: blindspotInfo,
       breakdown
     };

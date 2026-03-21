@@ -12,10 +12,10 @@ export default function LoveLanguagesTest() {
   const questionsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(0);
 
-  // Scroll to top on mount
+  // Scroll to top on mount and page change
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+    window.scrollTo(0, 0);
+  }, [currentPage]);
 
   const currentQuestions = loveLanguagesTestQuestions.slice(
     currentPage * questionsPerPage, 
@@ -39,7 +39,6 @@ export default function LoveLanguagesTest() {
 
   const handleNextPage = () => {
     if (currentPage < Math.ceil(loveLanguagesTestQuestions.length / questionsPerPage) - 1) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
       setCurrentPage(prev => prev + 1);
     } else {
       handleFinish(); // Call handleFinish when all pages are done
@@ -48,13 +47,12 @@ export default function LoveLanguagesTest() {
 
   const handlePrevPage = () => {
     if (currentPage > 0) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
       setCurrentPage(prev => prev - 1);
     }
   };
 
   const handleFinish = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo(0, 0);
     setIsFinished(true);
     const answersArray = Object.values(answers);
     const calculatedResult = calculateLoveLanguagesResult(answersArray);

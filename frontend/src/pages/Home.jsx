@@ -52,7 +52,7 @@ const tests = [
     title: 'Jungian Archetypes',
     description: 'Map the mythic character templates resting in your unconscious mind. Are you the Creator, Sage, or Hero?',
     time: '15 min',
-    active: false,
+    active: true,
     color: 'from-sky-400 to-blue-600',
     bgLight: 'bg-sky-50',
     borderLight: 'border-sky-100',
@@ -82,7 +82,7 @@ const tests = [
   },
   {
     id: 'color-psychology',
-    title: 'Colour Psychology',
+    title: 'Color Psychology',
     description: 'What exact hex codes and gradients represent your current emotional state and aura?',
     time: '5 min',
     active: true,
@@ -162,11 +162,22 @@ const tests = [
     title: 'Moral Alignment',
     description: 'Are you Lawful Good or Chaotic Evil? Discover where exactly you stand on the classic D&D alignment chart.',
     time: '8 min',
-    active: false,
+    active: true,
     color: 'from-teal-400 to-emerald-500',
     bgLight: 'bg-emerald-50',
     borderLight: 'border-emerald-100',
     icon: Square
+  },
+  {
+    id: 'resilience',
+    title: 'Resilience Quotient',
+    description: 'Measure your psychological fortitude. Are you an Anchor or a Reactor when faced with chaos and stress?',
+    time: '5 min',
+    active: true,
+    color: 'from-sky-500 to-indigo-600',
+    bgLight: 'bg-sky-50',
+    borderLight: 'border-sky-100',
+    icon: ShieldAlert
   }
 ];
 
