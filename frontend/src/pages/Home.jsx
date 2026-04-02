@@ -1,10 +1,20 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Hexagon, Circle, Triangle, Square, Sparkles, Diamond, Pentagon, Layers, ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, Compass, Binary } from 'lucide-react';
+import { ArrowRight, Hexagon, Circle, Triangle, Square, Sparkles, Diamond, Pentagon, Layers, ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, Compass, Binary, Skull } from 'lucide-react';
+
+const categories = [
+  { id: 'cognition', title: "Personality & Thinking", desc: "Understand who you are and how your mind works." },
+  { id: 'motivation', title: "Motivations & Instincts", desc: "Find out what drives your choices every day." },
+  { id: 'relational', title: "Relationships & Connection", desc: "Learn how you communicate and bond with others." },
+  { id: 'philosophy', title: "Style & Values", desc: "Discover your true colors and what you stand for." },
+  { id: 'behavioral', title: "Science & Behavior", desc: "Tested methods to measure your mind and strength." },
+  { id: 'shadow', title: "The Hidden Self", desc: "Explore the darker, hidden parts of your personality." }
+];
 
 const tests = [
   {
     id: 'mbti',
+    category: 'cognition',
     title: '16 Archetypes',
     description: 'Cognitive functions and personality mapping based on Jungian psychology. A comprehensive deep-dive into your psyche.',
     time: '12 min',
@@ -16,6 +26,7 @@ const tests = [
   },
   {
     id: 'enneagram',
+    category: 'motivation',
     title: 'The Enneagram',
     description: 'Uncover your core fears, desires, and underlying motivations that subconsciously drive your daily decisions.',
     time: '12 min',
@@ -27,6 +38,7 @@ const tests = [
   },
   {
     id: 'love-languages',
+    category: 'relational',
     title: 'Love Languages',
     description: 'How do you naturally give and receive affection? Find out your primary language of interpersonal connection.',
     time: '12 min',
@@ -38,6 +50,7 @@ const tests = [
   },
   {
     id: 'attachment-styles',
+    category: 'relational',
     title: 'Attachment Styles',
     description: 'Discover your subconscious relationship reflexes. Are you Secure, Anxious, Avoidant, or Fearful?',
     time: '10 min',
@@ -49,6 +62,7 @@ const tests = [
   },
   {
     id: 'jungian-archetypes',
+    category: 'cognition',
     title: 'Jungian Archetypes',
     description: 'Map the mythic character templates resting in your unconscious mind. Are you the Creator, Sage, or Hero?',
     time: '15 min',
@@ -60,6 +74,7 @@ const tests = [
   },
   {
     id: 'tritype',
+    category: 'motivation',
     title: 'The Tritype',
     description: 'Go beyond your core type. Discover the three Enneagram types that form your unique inner-workings.',
     time: '15 min',
@@ -71,6 +86,7 @@ const tests = [
   },
   {
     id: 'aesthetic-core',
+    category: 'philosophy',
     title: 'Aesthetic Core',
     description: 'Are you Dark Academia, Cyberpunk, or Cottagecore? Map the visual language of your soul.',
     time: '5 min',
@@ -82,6 +98,7 @@ const tests = [
   },
   {
     id: 'color-psychology',
+    category: 'philosophy',
     title: 'Color Psychology',
     description: 'What exact hex codes and gradients represent your current emotional state and aura?',
     time: '5 min',
@@ -93,6 +110,7 @@ const tests = [
   },
   {
     id: 'instinctual-variants',
+    category: 'motivation',
     title: 'Instinctual Variants',
     description: 'The "missing half" of Enneagram. Are you Self-Preservation, Social, or Sexual (Sx)?',
     time: '10 min',
@@ -104,6 +122,7 @@ const tests = [
   },
   {
     id: 'hexaco-model',
+    category: 'behavioral',
     title: 'HEXACO Model',
     description: 'The scientific standard for personality mapping, including the critical Honesty-Humility trait.',
     time: '15 min',
@@ -115,6 +134,7 @@ const tests = [
   },
   {
     id: 'socionics',
+    category: 'relational',
     title: 'Socionics',
     description: 'Complex systemic typology predicting inter-type dynamics and psychological "Information Metabolism".',
     time: '20 min',
@@ -126,6 +146,7 @@ const tests = [
   },
   {
     id: 'cognitive-loop',
+    category: 'cognition',
     title: 'Cognitive Loop Test',
     description: 'Detect if your psyche is in a "Jumper" state, skipping auxiliary functions and looping on stress.',
     time: '10 min',
@@ -137,6 +158,7 @@ const tests = [
   },
   {
     id: 'attitudinal-psyche',
+    category: 'cognition',
     title: 'Attitudinal Psyche',
     description: 'Identify your stance on Logic, Emotion, Volition, and Physics. The 3rd piece of your personality stack.',
     time: '12 min',
@@ -148,6 +170,7 @@ const tests = [
   },
   {
     id: 'objective-personality',
+    category: 'cognition',
     title: 'Objective Personality',
     description: 'The scientific evolution of MBTI. Map your psyche across 512 unique behavioral subtypes.',
     time: '25 min',
@@ -159,6 +182,7 @@ const tests = [
   },
   {
     id: 'alignment',
+    category: 'philosophy',
     title: 'Moral Alignment',
     description: 'Are you Lawful Good or Chaotic Evil? Discover where exactly you stand on the classic D&D alignment chart.',
     time: '8 min',
@@ -170,6 +194,7 @@ const tests = [
   },
   {
     id: 'resilience',
+    category: 'behavioral',
     title: 'Resilience Quotient',
     description: 'Measure your psychological fortitude. Are you an Anchor or a Reactor when faced with chaos and stress?',
     time: '5 min',
@@ -178,52 +203,106 @@ const tests = [
     bgLight: 'bg-sky-50',
     borderLight: 'border-sky-100',
     icon: ShieldAlert
+  },
+  {
+    id: 'dark-triad',
+    category: 'shadow',
+    title: 'The Dark Triad',
+    description: 'Explore the shadows of your psyche. Understand your levels of Machiavellianism, Narcissism, and Psychopathy.',
+    time: '10 min',
+    active: false,
+    color: 'from-zinc-600 to-slate-800',
+    bgLight: 'bg-zinc-100',
+    borderLight: 'border-zinc-200',
+    icon: Skull
   }
 ];
 
 export default function Home() {
   return (
-    <div className="w-full min-h-screen bg-[#fafafa] flex flex-col items-center pt-20 md:pt-32 pb-32 relative overflow-hidden selection:bg-indigo-100">
+    <div className="w-full min-h-screen bg-[#fafafa] flex flex-col items-center pb-32 relative overflow-hidden selection:bg-indigo-100">
       
       {/* Immersive Modern Background Architecture */}
       <div className="fixed top-[-20vh] left-[-10vw] w-[60vw] h-[60vw] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none z-0" />
       <div className="fixed bottom-[10vh] right-[-10vw] w-[50vw] h-[50vw] bg-rose-500/5 rounded-full blur-[100px] pointer-events-none z-0" />
 
-      {/* Simplified Hero Section */}
-      <motion.div 
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="text-center max-w-4xl mb-12 md:mb-20 px-6 relative z-10 flex flex-col items-center"
-      >
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-none">
-          OmniType<span className="text-indigo-600">.</span>
-        </h1>
-      </motion.div>
+      {/* Proper Hero Section */}
+      <div className="w-full min-h-[100dvh] flex flex-col items-center justify-center relative z-10 px-6 pt-20 md:pt-28">
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-center max-w-4xl flex flex-col items-center"
+        >
+          <h1 className="text-[15vw] sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight text-slate-900 leading-none mb-6">
+            OmniType<span className="text-indigo-600">.</span>
+          </h1>
+          <p className="text-lg sm:text-xl md:text-2xl text-slate-500 font-medium max-w-2xl text-balance mb-12">
+            The ultimate dashboard for your personality. Understand how you think, find out what drives you, and learn how you connect with others.
+          </p>
+          <button 
+            onClick={() => {
+              const el = document.getElementById('tests-directory');
+              if (el) {
+                const y = el.getBoundingClientRect().top + window.scrollY - 100;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+              }
+            }}
+            className="group inline-flex items-center gap-4 px-6 py-3 bg-white text-slate-800 rounded-full font-bold text-base md:text-lg transition-all duration-300 border border-slate-200/80 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 cursor-pointer"
+          >
+            <span className="pl-2 group-hover:text-indigo-600 transition-colors">Begin the Assessment</span>
+            <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:bg-indigo-50 group-hover:border-indigo-100 transition-colors">
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-transform group-hover:translate-x-0.5" />
+            </div>
+          </button>
+        </motion.div>
+      </div>
 
-      {/* Symmetrical Grid Section */}
-      <div className="w-full max-w-5xl px-4 md:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full">
-          {tests.map((test, i) => (
-            <motion.div
-              key={test.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: i * 0.1 + 0.1, ease: 'easeOut' }}
-              className="w-full h-full"
-            >
-              {test.active ? (
-                <Link to={`/test/${test.id}`} className="block h-full group">
-                  <TestCard test={test} />
-                </Link>
-              ) : (
-                <div className="h-full opacity-[0.8] cursor-not-allowed group">
-                  <TestCard test={test} />
-                </div>
-              )}
-            </motion.div>
-          ))}
-        </div>
+      <div id="tests-directory" className="w-full pt-16">
+        {/* Categorized Test Sections */}
+        {categories.map((cat, catIdx) => {
+          const catTests = tests.filter(t => t.category === cat.id);
+          if (catTests.length === 0) return null;
+
+          return (
+            <div key={cat.id} className="w-full max-w-5xl mx-auto px-4 md:px-8 relative z-10 mb-20 md:mb-28">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, ease: 'easeOut' }}
+                className="flex flex-col items-center text-center mb-10 md:mb-14"
+              >
+                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight mb-4">{cat.title}</h2>
+                <p className="text-slate-500 font-medium text-lg md:text-xl max-w-2xl text-balance">{cat.desc}</p>
+                <div className="w-16 h-1 bg-indigo-500/20 rounded-full mt-8" />
+              </motion.div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full">
+                {catTests.map((test, i) => (
+                  <motion.div
+                    key={test.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.5, delay: i * 0.05, ease: 'easeOut' }}
+                    className="w-full h-full"
+                  >
+                    {test.active ? (
+                      <Link to={`/test/${test.id}`} className="block h-full group">
+                        <TestCard test={test} />
+                      </Link>
+                    ) : (
+                      <div className="h-full opacity-[0.8] cursor-not-allowed group">
+                        <TestCard test={test} />
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -76,7 +76,7 @@ export default function MbtiPage() {
 
   // Once finishing is complete, redirect user out of the test and into the result page
   if (result) {
-    return <Navigate to={`/result/mbti/${result.type.toLowerCase()}`} replace />;
+    return <Navigate to={`/result/mbti/${result.type.toLowerCase()}`} state={{ percentages: result.percentages }} replace />;
   }
 
   const finalResult = SHOW_SAMPLE_INTP ? {

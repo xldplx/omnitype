@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams, Navigate, useNavigate } from 'react-router-dom';
+import { useParams, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ChevronLeft, Share2, Activity, Target, Zap, Heart, Compass, Layout, Users, Briefcase, Sparkles, Gamepad2, AlertTriangle, XCircle, CloudLightning, EyeOff, Crown } from 'lucide-react';
 import { typeDescriptions } from '../utils/mbtiResultLogic';
@@ -7,6 +7,7 @@ import { typeDescriptions } from '../utils/mbtiResultLogic';
 export default function MbtiResult() {
   const { type } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const upperType = type?.toUpperCase();
 
   useEffect(() => {
@@ -20,6 +21,7 @@ export default function MbtiResult() {
   }
 
   // Simulated accurate percentages for the visually striking cognitive bars
+  // Fallback used if user lands on this page via direct URL without taking the test. 
   const getSimulatedScores = (typeStr) => {
     return {
       EI: typeStr.includes('E') ? 78 : 22,
@@ -29,7 +31,7 @@ export default function MbtiResult() {
     };
   };
 
-  const percentages = getSimulatedScores(upperType);
+  const percentages = location.state?.percentages || getSimulatedScores(upperType);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -125,7 +127,7 @@ export default function MbtiResult() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 lg:gap-x-24 gap-y-12">
             <ResultBar left="Extraverted" right="Introverted" leftCode="E" rightCode="I" leftValue={percentages.EI} rightValue={100 - percentages.EI} color={`bg-${typeInfo.colors[0]}-500`} />
-            <ResultBar left="Intuitive" right="Observant" leftCode="N" rightCode="S" leftValue={100 - percentages.SN} rightValue={percentages.SN} color={`bg-${typeInfo.colors[1]}-500`} />
+            <ResultBar left="Intuitive" right="Observant" leftCode="N" rightCode="S" leftValue={percentages.SN} rightValue={100 - percentages.SN} color={`bg-${typeInfo.colors[1]}-500`} />
             <ResultBar left="Thinking" right="Feeling" leftCode="T" rightCode="F" leftValue={percentages.TF} rightValue={100 - percentages.TF} color={`bg-${typeInfo.colors[0]}-400`} />
             <ResultBar left="Judging" right="Prospecting" leftCode="J" rightCode="P" leftValue={percentages.JP} rightValue={100 - percentages.JP} color={`bg-${typeInfo.colors[1]}-400`} />
           </div>
