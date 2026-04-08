@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Hexagon, Circle, Triangle, Square, Sparkles, Diamond, Pentagon, Layers, ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, Compass, Binary, Skull } from 'lucide-react';
+import { ArrowRight, Hexagon, Circle, Triangle, Square, Sparkles, Diamond, Pentagon, Layers, ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, Compass, Binary, Skull, Brain, Fingerprint, CloudRain } from 'lucide-react';
 
 const categories = [
   { id: 'cognition', title: "Personality & Thinking", desc: "Understand who you are and how your mind works." },
@@ -8,6 +8,7 @@ const categories = [
   { id: 'relational', title: "Relationships & Connection", desc: "Learn how you communicate and bond with others." },
   { id: 'philosophy', title: "Style & Values", desc: "Discover your true colors and what you stand for." },
   { id: 'behavioral', title: "Science & Behavior", desc: "Tested methods to measure your mind and strength." },
+  { id: 'neurodiversity', title: "Neurodiversity & Mental Health", desc: "Discover how your unique brain processes information and experiences the world." },
   { id: 'shadow', title: "The Hidden Self", desc: "Explore the darker, hidden parts of your personality." }
 ];
 
@@ -215,6 +216,54 @@ const tests = [
     bgLight: 'bg-zinc-100',
     borderLight: 'border-zinc-200',
     icon: Skull
+  },
+  {
+    id: 'adhd',
+    category: 'neurodiversity',
+    title: 'ADHD Test',
+    description: 'A deep-dive into your cognitive architecture. Map focus stability, executive rhythm, and impulse control.',
+    time: '8 min',
+    active: true,
+    color: 'from-orange-500 to-rose-500',
+    bgLight: 'bg-orange-50',
+    borderLight: 'border-orange-100',
+    icon: Brain
+  },
+  {
+    id: 'depression',
+    category: 'neurodiversity',
+    title: 'Depression Test',
+    description: 'A thoughtful exploration of your emotional current. Map your energy levels, mood stability, and internal joy.',
+    time: '6 min',
+    active: false,
+    color: 'from-blue-600 to-indigo-900',
+    bgLight: 'bg-blue-50',
+    borderLight: 'border-blue-100',
+    icon: CloudRain
+  },
+  {
+    id: 'suicide',
+    category: 'neurodiversity',
+    title: 'Suicidal Thoughts Test',
+    description: 'A supportive wellness check. Map your internal safety, existential fatigue, and hope persistence.',
+    time: '5 min',
+    active: false,
+    color: 'from-slate-500 to-slate-800',
+    bgLight: 'bg-slate-50',
+    borderLight: 'border-slate-100',
+    icon: ShieldAlert
+  },
+  {
+    id: 'big-five',
+    category: 'behavioral',
+    title: 'The Big Five',
+    description: 'The scientific standard for personality assessment. Measure Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism.',
+    time: '12 min',
+    active: false,
+    color: 'from-blue-500 to-indigo-600',
+    bgLight: 'bg-blue-50',
+    borderLight: 'border-blue-100',
+    icon: Fingerprint
   }
 ];
 
@@ -312,7 +361,7 @@ function TestCard({ test }) {
   const Icon = test.icon;
   
   return (
-    <div className="bg-white/70 backdrop-blur-2xl p-6 sm:p-8 md:p-10 flex flex-col h-full relative overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-[2rem] md:rounded-4xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2 group">
+    <div className="bg-white/70 backdrop-blur-2xl p-6 sm:p-8 md:p-10 flex flex-col h-full relative overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-[2rem] md:rounded-4xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.12)] hover:-translate-y-2">
       
       {/* Decorative inner gradient flash */}
       <div className={`absolute inset-0 bg-linear-to-br ${test.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-none`} />

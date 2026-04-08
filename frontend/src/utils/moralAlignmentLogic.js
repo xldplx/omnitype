@@ -187,7 +187,8 @@ export function calculateMoralAlignment(answers) {
   if (geScore >= 8) goodEvilSegment = "good";
   else if (geScore <= -8) goodEvilSegment = "evil";
 
-  const resultId = `${lawChaosSegment}-${goodEvilSegment}`;
+  let resultId = `${lawChaosSegment}-${goodEvilSegment}`;
+  if (resultId === "neutral-neutral") resultId = "true-neutral";
   
   // Calculate percentage mapping for UI
   // Score range: -36 to +36. Normalize to 0-100%

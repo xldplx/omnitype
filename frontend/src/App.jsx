@@ -24,6 +24,12 @@ import MoralAlignmentTest from './pages/MoralAlignmentTest';
 import MoralAlignmentResult from './pages/MoralAlignmentResult';
 import ResilienceQuotientTest from './pages/ResilienceQuotientTest';
 import ResilienceQuotientResult from './pages/ResilienceQuotientResult';
+import AdhdTest from './pages/AdhdTest';
+import AdhdResult from './pages/AdhdResult';
+import DepressionTest from './pages/DepressionTest';
+import DepressionResult from './pages/DepressionResult';
+import SuicideTest from './pages/SuicideTest';
+import SuicideResult from './pages/SuicideResult';
 
 export default function App() {
   return (
@@ -60,6 +66,12 @@ export default function App() {
               <Route path="/result/alignment/:type" element={<MoralAlignmentResult />} />
               <Route path="/test/resilience" element={<ResilienceQuotientTest />} />
               <Route path="/result/resilience/:type" element={<ResilienceQuotientResult />} />
+              <Route path="/test/adhd" element={<AdhdTest />} />
+              <Route path="/result/adhd/:type" element={<AdhdResult />} />
+              <Route path="/test/depression" element={<DepressionTest />} />
+              <Route path="/result/depression/:type" element={<DepressionResult />} />
+              <Route path="/test/suicide" element={<SuicideTest />} />
+              <Route path="/result/suicide/:type" element={<SuicideResult />} />
             </Routes>
           </main>
         </div>
