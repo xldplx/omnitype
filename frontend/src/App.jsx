@@ -26,11 +26,10 @@ import ResilienceQuotientTest from './pages/ResilienceQuotientTest';
 import ResilienceQuotientResult from './pages/ResilienceQuotientResult';
 import AdhdTest from './pages/AdhdTest';
 import AdhdResult from './pages/AdhdResult';
-import DepressionTest from './pages/DepressionTest';
-import DepressionResult from './pages/DepressionResult';
-import SuicideTest from './pages/SuicideTest';
-import SuicideResult from './pages/SuicideResult';
-
+import HspTest from './pages/HspTest';
+import HspResult from './pages/HspResult';
+import BurnoutTest from './pages/BurnoutTest';
+import BurnoutResult from './pages/BurnoutResult';
 export default function App() {
   return (
     <Router>
@@ -68,10 +67,10 @@ export default function App() {
               <Route path="/result/resilience/:type" element={<ResilienceQuotientResult />} />
               <Route path="/test/adhd" element={<AdhdTest />} />
               <Route path="/result/adhd/:type" element={<AdhdResult />} />
-              <Route path="/test/depression" element={<DepressionTest />} />
-              <Route path="/result/depression/:type" element={<DepressionResult />} />
-              <Route path="/test/suicide" element={<SuicideTest />} />
-              <Route path="/result/suicide/:type" element={<SuicideResult />} />
+              <Route path="/test/hsp" element={<HspTest />} />
+              <Route path="/result/hsp/:type" element={<HspResult />} />
+              <Route path="/test/burnout" element={<BurnoutTest />} />
+              <Route path="/result/burnout/:type" element={<BurnoutResult />} />
             </Routes>
           </main>
         </div>

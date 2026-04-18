@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useParams, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronLeft, Shield, Heart, Activity, Target, Flame, AlertTriangle, Briefcase, MessageSquare, Users, Zap, BrainCircuit, BatteryCharging } from 'lucide-react';
-import { adhdStatuses } from '../utils/adhdLogic';
+import { ChevronLeft, Shield, Heart, Activity, Target, AlertTriangle, MessageSquare, Zap, Eye, BatteryCharging, Leaf, VolumeX, Home } from 'lucide-react';
+import { hspStatuses } from '../utils/hspLogic';
 
-export default function AdhdResult() {
+export default function HspResult() {
   const { type } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,18 +19,18 @@ export default function AdhdResult() {
   // If accessed directly via URL, reconstruct resultData
   if (!resultData && type) {
     const statusKey = type.toUpperCase();
-    if (adhdStatuses[statusKey]) {
+    if (hspStatuses[statusKey]) {
         resultData = {
            statusKey,
            fullTitle: type,
-           info: adhdStatuses[statusKey],
-           breakdown: { inPercent: 80, hyperPercent: 65, impulsePercent: 40 } // Simulated
+           info: hspStatuses[statusKey],
+           breakdown: { sensoryPercent: 85, empathyPercent: 90, processingPercent: 75 } // Simulated
         };
     }
   }
 
   if (!resultData) {
-    return <Navigate to="/test/adhd" replace />;
+    return <Navigate to="/test/hsp" replace />;
   }
 
   const { info, breakdown } = resultData;
@@ -49,7 +49,7 @@ export default function AdhdResult() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#fafafa] relative overflow-hidden flex flex-col items-center selection:bg-orange-200 uppercase-none">
+    <div className="w-full min-h-screen bg-[#fafafa] relative overflow-hidden flex flex-col items-center selection:bg-pink-200 uppercase-none">
       
       {/* Massive Editorial Background Typography */}
       <motion.div 
@@ -59,7 +59,7 @@ export default function AdhdResult() {
         className="fixed top-20 left-0 right-0 h-screen flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden"
       >
         <span className="font-black text-[40vw] tracking-tighter leading-none text-slate-800">
-          ADHD
+          HSP
         </span>
       </motion.div>
 
@@ -95,8 +95,8 @@ export default function AdhdResult() {
             <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${info.color} opacity-50 group-hover:opacity-100 transition-opacity duration-700`} />
             
             <h3 className="text-xs font-bold tracking-[0.4em] uppercase mb-6 text-slate-500 flex items-center gap-3">
-              <Activity className="w-4 h-4 text-orange-500" />
-              Cognitive Profile Reveal
+              <Eye className="w-4 h-4 text-pink-500" />
+              Sensory Profile Reveal
             </h3>
             
             <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-black mb-6 text-slate-900 tracking-tighter leading-none bg-clip-text bg-linear-to-br from-slate-900 to-slate-600 pb-2">
@@ -116,70 +116,88 @@ export default function AdhdResult() {
              <h2 className={`text-3xl md:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-b ${info.color} z-10 relative leading-tight drop-shadow-sm`}>
                {info.subName}
              </h2>
-             <span className="text-xs md:text-sm font-bold tracking-widest uppercase text-slate-600 mt-6 z-10 whitespace-nowrap bg-white/50 px-4 py-2 rounded-full border border-white/80">Neural Archetype</span>
+             <span className="text-xs md:text-sm font-bold tracking-widest uppercase text-slate-600 mt-6 z-10 whitespace-nowrap bg-white/50 px-4 py-2 rounded-full border border-white/80">Sensitivity Level</span>
           </div>
         </motion.div>
 
-        {/* Neural Metrics Breakdown (High-Tech Bar Gauges) */}
+        {/* Sensory Metrics Breakdown (High-Tech Bar Gauges) */}
         <motion.div variants={itemVariants} className="bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_40px_rgb(0,0,0,0.06)] rounded-[2.5rem] p-10 md:p-16 mb-8">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 border-b border-slate-100 pb-8 gap-4">
             <div className="flex items-center gap-3">
-                <BrainCircuit className="w-6 h-6 text-indigo-500" />
-                <h4 className="text-sm font-bold tracking-[0.3em] text-slate-500 uppercase">Neural Activity Metrics</h4>
+                <Activity className="w-6 h-6 text-pink-500" />
+                <h4 className="text-sm font-bold tracking-[0.3em] text-slate-500 uppercase">Sensory Processing Metrics</h4>
             </div>
             <div className="flex items-center gap-2 bg-slate-100 px-5 py-2.5 rounded-full border border-slate-200">
-                <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-                <span className="text-xs font-black text-slate-600 uppercase tracking-widest">{info.energy}</span>
+                <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" />
+                <span className="text-xs font-black text-slate-600 uppercase tracking-widest">HSP Matrix</span>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16">
-              <MetricGauge label="Inattention" value={breakdown.inPercent} color={info.color} icon={Target} delay={0.2} />
-              <MetricGauge label="Hyperactivity" value={breakdown.hyperPercent} color={info.color} icon={Flame} delay={0.4} />
-              <MetricGauge label="Impulse Control" value={breakdown.impulsePercent} color={info.color} icon={Zap} delay={0.6} />
+              <MetricGauge label="Sensory Input" value={breakdown.sensoryPercent} color={info.color} icon={Target} delay={0.2} />
+              <MetricGauge label="Emotional Empathy" value={breakdown.empathyPercent} color={info.color} icon={Heart} delay={0.4} />
+              <MetricGauge label="Depth of Processing" value={breakdown.processingPercent} color={info.color} icon={Activity} delay={0.6} />
           </div>
         </motion.div>
 
-        {/* NEW: Cognitive Fuel & Flow State (Dark Mode Section) */}
+        {/* NEW: Environmental & Recovery Strategy (Dark Mode Section) */}
         <motion.div variants={itemVariants} className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.3)] rounded-[2.5rem] p-10 md:p-16 mb-8 relative overflow-hidden group">
             <div className={`absolute top-0 right-0 w-[40rem] h-[40rem] bg-linear-to-bl ${info.color} rounded-full blur-[120px] opacity-10 pointer-events-none transition-transform duration-1000 group-hover:scale-110`} />
             
             <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-white/50 mb-12 border-b border-white/10 pb-6 relative z-10">
-              <BatteryCharging className="w-5 h-5 text-orange-400" />
-              Cognitive Fuel & Flow State
+              <Leaf className="w-5 h-5 text-emerald-400" />
+              Environmental & Recovery Strategy
             </h4>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
-                {/* Dopamine Style */}
+                {/* Recharge Mode */}
                 <div className="flex flex-col">
                     <div className="flex items-center gap-4 mb-6">
                         <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${info.color} flex items-center justify-center shadow-lg`}>
-                            <Zap className="w-6 h-6 text-white" />
+                            <BatteryCharging className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                            <span className="text-[0.65rem] font-bold tracking-widest text-white/50 uppercase block mb-1">Dopamine Style</span>
-                            <h5 className="text-2xl font-bold text-white tracking-tight leading-none">{info.dopamineStyle}</h5>
+                            <span className="text-[0.65rem] font-bold tracking-widest text-white/50 uppercase block mb-1">Recharge Mode</span>
+                            <h5 className="text-2xl font-bold text-white tracking-tight leading-none">{info.rechargeMode}</h5>
                         </div>
                     </div>
                     <p className="text-slate-400 text-lg leading-relaxed font-medium pl-16">
-                        {info.dopamineDesc}
+                        {info.rechargeDesc}
                     </p>
                 </div>
 
-                {/* Hyperfocus Mode */}
+                {/* Sensory Triggers */}
                 <div className="flex flex-col">
                     <div className="flex items-center gap-4 mb-6">
                         <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${info.color} flex items-center justify-center shadow-lg`}>
-                            <BrainCircuit className="w-6 h-6 text-white" />
+                            <VolumeX className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                            <span className="text-[0.65rem] font-bold tracking-widest text-white/50 uppercase block mb-1">Hyperfocus Mode</span>
-                            <h5 className="text-2xl font-bold text-white tracking-tight leading-none">{info.hyperfocus}</h5>
+                            <span className="text-[0.65rem] font-bold tracking-widest text-white/50 uppercase block mb-1">Sensory Triggers</span>
+                            <h5 className="text-2xl font-bold text-white tracking-tight leading-none">Primary Drains</h5>
                         </div>
                     </div>
                     <p className="text-slate-400 text-lg leading-relaxed font-medium pl-16">
-                        {info.hyperfocusDesc}
+                        {info.sensoryTriggers}
                     </p>
+                </div>
+
+                {/* Ideal Workspace */}
+                <div className="flex flex-col md:col-span-2 mt-4 bg-white/5 p-8 rounded-3xl border border-white/10">
+                    <div className="flex items-center gap-4 mb-4">
+                        <Home className="w-6 h-6 text-sky-400" />
+                        <h5 className="text-xl font-bold text-white tracking-tight">Ideal Workspace & Environmental Needs</h5>
+                    </div>
+                    <div className="pl-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <span className="text-xs font-bold text-white/40 uppercase tracking-widest block mb-2">Space Required</span>
+                            <p className="text-slate-300 text-[1.05rem] leading-relaxed">{info.environmentalNeeds}</p>
+                        </div>
+                        <div>
+                            <span className="text-xs font-bold text-white/40 uppercase tracking-widest block mb-2">Optimal Setup</span>
+                            <p className="text-slate-300 text-[1.05rem] leading-relaxed">{info.idealWorkspace}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </motion.div>
@@ -196,50 +214,10 @@ export default function AdhdResult() {
 
             <div className="bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14 flex flex-col h-full hover:-translate-y-2 transition-transform duration-500 group">
                 <h4 className="text-xs font-bold tracking-[0.3em] text-slate-400 uppercase mb-8 flex items-center gap-3 border-b border-slate-100 pb-4">
-                <Heart className="w-5 h-5 text-rose-500 transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-12" />
+                <AlertTriangle className="w-5 h-5 text-rose-500 transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-12" />
                 Hidden Fear
                 </h4>
                 <p className="text-slate-800 font-bold leading-relaxed text-2xl md:text-[2rem] tracking-tight">{info.coreFear}</p>
-            </div>
-        </motion.div>
-
-        {/* Professional & Social Discovery */}
-        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14 hover:-translate-y-2 transition-all duration-500 group">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-8 border-b border-slate-100 pb-4">
-              <Briefcase className="w-5 h-5 text-indigo-500 transition-transform duration-500 group-hover:scale-110" />
-              Professional Identity
-            </h4>
-            <div className="flex flex-wrap gap-3 mb-8">
-                {info.careers?.map((career, idx) => (
-                    <span key={career} className="bg-white border border-slate-200 text-slate-700 px-5 py-2.5 rounded-full text-sm font-bold tracking-wide shadow-sm hover:shadow-md transition-shadow cursor-default">{career}</span>
-                ))}
-            </div>
-            <p className="text-slate-600 leading-relaxed text-[1.1rem] font-medium">You excel in roles that align with your unique cognitive rhythm and problem-solving speed.</p>
-          </div>
-
-          <div className="bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14 hover:-translate-y-2 transition-all duration-500 group">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-8 border-b border-slate-100 pb-4">
-              <MessageSquare className="w-5 h-5 text-emerald-500 transition-transform duration-500 group-hover:scale-110" />
-              Social Communication Style
-            </h4>
-            <p className="text-slate-800 font-black text-2xl tracking-tight mb-4">{info.socialStyle}</p>
-            <p className="text-slate-600 leading-relaxed text-[1.1rem] font-medium">Your conversational rhythm is distinctive—uncovering this pattern helps you navigate social energy more effectively.</p>
-          </div>
-        </motion.div>
-
-        {/* MBTI Compatibility Section */}
-        <motion.div variants={itemVariants} className="bg-slate-50 border border-slate-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-16 mb-8 relative overflow-hidden group">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-500 mb-12 border-b border-slate-200 pb-4 relative z-10">
-              <Users className="w-5 h-5 text-sky-500" />
-              MBTI Profiles Most Likely to share this Archetype
-            </h4>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 relative z-10">
-              {info.mbti?.map((mbti, idx) => (
-                <div key={idx} className="bg-white border border-slate-200 rounded-[2rem] p-8 text-center hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-2 transition-all duration-500">
-                  <span className={`text-3xl font-black tracking-tighter leading-none text-transparent bg-clip-text bg-linear-to-b ${info.color}`}>{mbti}</span>
-                </div>
-              ))}
             </div>
         </motion.div>
 
@@ -247,13 +225,13 @@ export default function AdhdResult() {
         <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div className="bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-12 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500">
             <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-8 border-b border-slate-100 pb-4">
-              <Target className="w-5 h-5 text-emerald-500" />
+              <Zap className="w-5 h-5 text-indigo-500" />
               The Superpowers (Pros)
             </h4>
             <ul className="grid grid-cols-1 gap-5">
               {info.pros?.map((item, idx) => (
-                <li key={idx} className="flex gap-5 items-start bg-emerald-50/50 p-5 rounded-2xl border border-emerald-100/50 hover:bg-emerald-50 transition-colors">
-                  <div className={`w-3 h-3 rounded-full bg-emerald-400 shrink-0 mt-1.5 shadow-sm`} />
+                <li key={idx} className="flex gap-5 items-start bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100/50 hover:bg-indigo-50 transition-colors">
+                  <div className={`w-3 h-3 rounded-full bg-indigo-400 shrink-0 mt-1.5 shadow-sm`} />
                   <p className="text-slate-700 font-semibold text-[1.1rem] leading-relaxed">{item}</p>
                 </li>
               ))}
@@ -274,7 +252,28 @@ export default function AdhdResult() {
             </ul>
           </div>
         </motion.div>
-
+        
+        {/* Traits Summary */}
+        <motion.div variants={itemVariants} className="bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-16 mb-8 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500">
+            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-8 border-b border-slate-100 pb-4">
+              <MessageSquare className="w-5 h-5 text-sky-500" />
+              Trait Manifestations
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+               <div className="bg-slate-50 border border-slate-100 rounded-2xl p-6">
+                  <h5 className="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2"><Target className="w-4 h-4 text-slate-400"/> Sensory Reaction</h5>
+                  <p className="text-slate-600 text-[1.05rem] leading-relaxed">{info.traits?.sensory}</p>
+               </div>
+               <div className="bg-slate-50 border border-slate-100 rounded-2xl p-6">
+                  <h5 className="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2"><Heart className="w-4 h-4 text-slate-400"/> Empathy Style</h5>
+                  <p className="text-slate-600 text-[1.05rem] leading-relaxed">{info.traits?.empathy}</p>
+               </div>
+               <div className="bg-slate-50 border border-slate-100 rounded-2xl p-6">
+                  <h5 className="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2"><Activity className="w-4 h-4 text-slate-400"/> Processing Style</h5>
+                  <p className="text-slate-600 text-[1.05rem] leading-relaxed">{info.traits?.processing}</p>
+               </div>
+            </div>
+        </motion.div>
 
       </motion.div>
     </div>

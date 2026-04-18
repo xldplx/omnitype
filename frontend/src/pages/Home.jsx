@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Hexagon, Circle, Triangle, Square, Sparkles, Diamond, Pentagon, Layers, ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, Compass, Binary, Skull, Brain, Fingerprint, CloudRain } from 'lucide-react';
+import { ArrowRight, Hexagon, Circle, Triangle, Square, Sparkles, Diamond, Pentagon, Layers, ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, Compass, Binary, Skull, Brain, Fingerprint, Eye, Battery } from 'lucide-react';
 
 const categories = [
   { id: 'cognition', title: "Personality & Thinking", desc: "Understand who you are and how your mind works." },
@@ -230,29 +230,30 @@ const tests = [
     icon: Brain
   },
   {
-    id: 'depression',
+    id: 'hsp',
     category: 'neurodiversity',
-    title: 'Depression Test',
-    description: 'A thoughtful exploration of your emotional current. Map your energy levels, mood stability, and internal joy.',
-    time: '6 min',
-    active: false,
-    color: 'from-blue-600 to-indigo-900',
-    bgLight: 'bg-blue-50',
-    borderLight: 'border-blue-100',
-    icon: CloudRain
+    title: 'Highly Sensitive Person',
+    description: 'Measure your sensory sensitivity, emotional empathy, and depth of processing in chaotic environments.',
+    time: '8 min',
+    active: true,
+    color: 'from-pink-400 to-rose-400',
+    bgLight: 'bg-pink-50',
+    borderLight: 'border-pink-100',
+    icon: Eye
   },
   {
-    id: 'suicide',
+    id: 'burnout',
     category: 'neurodiversity',
-    title: 'Suicidal Thoughts Test',
-    description: 'A supportive wellness check. Map your internal safety, existential fatigue, and hope persistence.',
-    time: '5 min',
-    active: false,
-    color: 'from-slate-500 to-slate-800',
-    bgLight: 'bg-slate-50',
-    borderLight: 'border-slate-100',
-    icon: ShieldAlert
+    title: 'Nervous System & Burnout',
+    description: 'Map your physical exhaustion, cognitive fatigue, and whether you are stuck in Fight, Flight, or Freeze.',
+    time: '8 min',
+    active: true,
+    color: 'from-amber-400 to-orange-500',
+    bgLight: 'bg-amber-50',
+    borderLight: 'border-amber-100',
+    icon: Battery
   },
+
   {
     id: 'big-five',
     category: 'behavioral',
