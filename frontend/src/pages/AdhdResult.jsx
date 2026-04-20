@@ -184,6 +184,50 @@ export default function AdhdResult() {
             </div>
         </motion.div>
 
+        {/* NEW: Temporal & Emotional Processing (Dark Mode Section) */}
+        <motion.div variants={itemVariants} className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.3)] rounded-[2.5rem] p-10 md:p-16 mb-8 relative overflow-hidden group">
+            <div className={`absolute bottom-0 left-0 w-[40rem] h-[40rem] bg-linear-to-tr ${info.color} rounded-full blur-[120px] opacity-10 pointer-events-none transition-transform duration-1000 group-hover:scale-110`} />
+            
+            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-white/50 mb-12 border-b border-white/10 pb-6 relative z-10">
+              <Activity className="w-5 h-5 text-indigo-400" />
+              Temporal & Emotional Processing
+            </h4>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
+                {/* Time Perception */}
+                <div className="flex flex-col">
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${info.color} flex items-center justify-center shadow-lg`}>
+                            <Target className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                            <span className="text-[0.65rem] font-bold tracking-widest text-white/50 uppercase block mb-1">Time Perception</span>
+                            <h5 className="text-2xl font-bold text-white tracking-tight leading-none">Internal Clock</h5>
+                        </div>
+                    </div>
+                    <p className="text-slate-400 text-lg leading-relaxed font-medium pl-16">
+                        {info.timePerception}
+                    </p>
+                </div>
+
+                {/* Rejection Sensitivity (RSD) */}
+                <div className="flex flex-col">
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${info.color} flex items-center justify-center shadow-lg`}>
+                            <Heart className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                            <span className="text-[0.65rem] font-bold tracking-widest text-white/50 uppercase block mb-1">Rejection Sensitivity</span>
+                            <h5 className="text-2xl font-bold text-white tracking-tight leading-none">RSD Profile</h5>
+                        </div>
+                    </div>
+                    <p className="text-slate-400 text-lg leading-relaxed font-medium pl-16">
+                        {info.rsdDesc}
+                    </p>
+                </div>
+            </div>
+        </motion.div>
+
         {/* Core Traits Layer */}
         <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             <div className="bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14 flex flex-col h-full hover:-translate-y-2 transition-transform duration-500 group">

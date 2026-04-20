@@ -17,6 +17,12 @@ export const adhdTestQuestions = [
     { id: 16, text: "When you’re in a conversation, how often do you find yourself finishing the sentences of the people you are talking to, before they can finish them themselves?", type: "impulsivity" },
     { id: 17, text: "How often do you have difficulty waiting your turn in situations when turn taking is required?", type: "impulsivity" },
     { id: 18, text: "How often do you interrupt others when they are busy?", type: "impulsivity" },
+    { id: 19, text: "How often do you feel a strong sense of overwhelming paralysis when faced with a task that has many steps?", type: "inattention" },
+    { id: 20, text: "How often do you lose track of time or severely underestimate how long a task will take?", type: "inattention" },
+    { id: 21, text: "How often do you intensely crave a new hobby or project, only to abandon it shortly after starting?", type: "hyperactivity" },
+    { id: 22, text: "How often do you feel physically exhausted from trying to mask your true energy levels or keep yourself organized?", type: "hyperactivity" },
+    { id: 23, text: "How often do you feel a sudden, intense burst of motivation late at night when you should be sleeping?", type: "hyperactivity" },
+    { id: 24, text: "How often do you experience intense emotional reactions, like feeling deeply rejected or criticized over small comments?", type: "impulsivity" }
 ];
 
 export const adhdStatuses = {
@@ -38,7 +44,9 @@ export const adhdStatuses = {
         mbti: ['ISTJ', 'ESTJ', 'INTJ', 'ENTJ'],
         careers: ['Data Architecture', 'Project Engineering', 'Strategic Logistics', 'Financial Management'],
         socialStyle: 'The Anchored Communicator. You speak with precision and expect others to be direct and organized in their thoughts.',
-        energy: 'Regulated & Consistent'
+        energy: 'Regulated & Consistent',
+        rsdDesc: 'Low Sensitivity. You generally take feedback at face value and do not easily misinterpret neutral comments as rejection.',
+        timePerception: 'Linear & Accurate. You have a reliable internal clock and can accurately estimate how long tasks will take.'
     },
     'POSSIBLE': {
         name: 'You might have ADHD patterns',
@@ -58,7 +66,9 @@ export const adhdStatuses = {
         mbti: ['INFJ', 'ESFJ', 'ISFJ', 'ENFJ'],
         careers: ['User Experience Design', 'Clinical Counseling', 'Creative Operations', 'Market Research'],
         socialStyle: 'The Attuned Mediator. You are highly aware of social cues and adapt your energy to match the person you are talking to.',
-        energy: 'Fluctuating but Controllable'
+        energy: 'Fluctuating but Controllable',
+        rsdDesc: 'Situational Sensitivity. You may feel strong stings of rejection when over-stressed, but you can usually logic your way out of it.',
+        timePerception: 'Elastic. You can stick to a schedule when necessary, but time often slips away when you get engaged in something interesting.'
     },
     'LIKELY': {
         name: 'You likely have ADHD',
@@ -78,7 +88,9 @@ export const adhdStatuses = {
         mbti: ['ENFP', 'ENTP', 'INFP', 'INTP'],
         careers: ['Founding / Entrepreneurship', 'Investigative Journalism', 'Rapid Prototyping', 'Emergency Medicine'],
         socialStyle: 'The Tangent Master. Your conversations are wide-ranging and enthusiastic, often jumping between five topics at once.',
-        energy: 'High Voltage / Low Range'
+        energy: 'High Voltage / Low Range',
+        rsdDesc: 'High Sensitivity. You often experience Rejection Sensitive Dysphoria (RSD), taking slight criticisms or delayed texts as evidence that people dislike you.',
+        timePerception: 'Now vs. Not Now. Time is essentially binary to you. If a deadline isn\'t immediately pressing, it doesn\'t exist in your mind.'
     },
     'FULLY': {
         name: 'You definitely have ADHD patterns',
@@ -98,7 +110,9 @@ export const adhdStatuses = {
         mbti: ['ENFP', 'ENTP', 'ESFP', 'ESTP'],
         careers: ['Live Production', 'Crisis Management', 'Specialized Creative Direction', 'Stock Trading'],
         socialStyle: 'The Electric Catalyst. You inspire others with your raw energy and directness, often becoming the life of the party.',
-        energy: 'Unpredictable Lightning'
+        energy: 'Unpredictable Lightning',
+        rsdDesc: 'Extreme Sensitivity. Your emotions run incredibly hot. Perceived rejection or failure can trigger an overwhelming physical and emotional response.',
+        timePerception: 'Time Blindness. You constantly underestimate how long tasks take, leading to chronic lateness and the "Time Optimism" trap.'
     },
     'ATTENTIVE': {
         name: 'You likely have Inattentive ADHD',
@@ -118,7 +132,9 @@ export const adhdStatuses = {
         mbti: ['INFP', 'INTP', 'INFJ', 'ISFP'],
         careers: ['Creative Writing', 'Scientific Research', 'Psychology / Therapy', 'Conceptual Illustration'],
         socialStyle: 'The Gentle Observer. You listen more than you speak, often offering profound insights only when the room goes quiet.',
-        energy: 'Low External / Infinite Internal'
+        energy: 'Low External / Infinite Internal',
+        rsdDesc: 'Internalized Sensitivity. You rarely show it, but you deeply internalize criticism, often replaying embarrassing moments in your head for years.',
+        timePerception: 'The Lost Hours. You frequently experience "time dilation" where hours pass in what feels like minutes because you are trapped in your thoughts.'
     }
 };
 
@@ -157,9 +173,9 @@ export const calculateAdhdResult = (answers) => {
     }
 
     // Breakdown Percentages
-    const inPercent = Math.min(Math.round((inattentiveCount / 9) * 100), 100);
-    const hyperPercent = Math.min(Math.round((hyperCount / 6) * 100), 100);
-    const impulsePercent = Math.min(Math.round((impulseCount / 3) * 100), 100);
+    const inPercent = Math.min(Math.round((inattentiveCount / 11) * 100), 100);
+    const hyperPercent = Math.min(Math.round((hyperCount / 9) * 100), 100);
+    const impulsePercent = Math.min(Math.round((impulseCount / 4) * 100), 100);
 
     return {
         statusKey,
