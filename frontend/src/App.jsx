@@ -30,6 +30,14 @@ import HspTest from './pages/HspTest';
 import HspResult from './pages/HspResult';
 import BurnoutTest from './pages/BurnoutTest';
 import BurnoutResult from './pages/BurnoutResult';
+
+import DarkTriadTest from './pages/DarkTriadTest';
+import DarkTriadResult from './pages/DarkTriadResult';
+import DefenseTest from './pages/DefenseTest';
+import DefenseResult from './pages/DefenseResult';
+import ImposterTest from './pages/ImposterTest';
+import ImposterResult from './pages/ImposterResult';
+
 export default function App() {
   return (
     <Router>
@@ -71,6 +79,12 @@ export default function App() {
               <Route path="/result/hsp/:type" element={<HspResult />} />
               <Route path="/test/burnout" element={<BurnoutTest />} />
               <Route path="/result/burnout/:type" element={<BurnoutResult />} />
+              <Route path="/test/dark-triad" element={<DarkTriadTest />} />
+              <Route path="/result/dark-triad/:type" element={<DarkTriadResult />} />
+              <Route path="/test/defense" element={<DefenseTest />} />
+              <Route path="/result/defense/:type" element={<DefenseResult />} />
+              <Route path="/test/imposter" element={<ImposterTest />} />
+              <Route path="/result/imposter/:type" element={<ImposterResult />} />
             </Routes>
           </main>
         </div>

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Hexagon, Circle, Triangle, Square, Sparkles, Diamond, Pentagon, Layers, ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, Compass, Binary, Skull, Brain, Fingerprint, Eye, Battery } from 'lucide-react';
+import { ArrowRight, Hexagon, Circle, Triangle, Square, Sparkles, Diamond, Pentagon, Layers, ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, Compass, Binary, Skull, Brain, Fingerprint, Eye, Battery, Shield, UserMinus } from 'lucide-react';
 
 const categories = [
   { id: 'cognition', title: "Personality & Thinking", desc: "Understand who you are and how your mind works." },
@@ -211,11 +211,35 @@ const tests = [
     title: 'The Dark Triad',
     description: 'Explore the shadows of your psyche. Understand your levels of Machiavellianism, Narcissism, and Psychopathy.',
     time: '10 min',
-    active: false,
+    active: true,
     color: 'from-zinc-600 to-slate-800',
     bgLight: 'bg-zinc-100',
     borderLight: 'border-zinc-200',
     icon: Skull
+  },
+  {
+    id: 'defense',
+    category: 'shadow',
+    title: 'Defense Mechanisms',
+    description: 'Discover how your brain unconsciously protects you from anxiety and emotional pain through Intellectualization, Projection, or Avoidance.',
+    time: '8 min',
+    active: true,
+    color: 'from-sky-500 to-indigo-600',
+    bgLight: 'bg-sky-50',
+    borderLight: 'border-sky-100',
+    icon: Shield
+  },
+  {
+    id: 'imposter',
+    category: 'shadow',
+    title: 'Imposter Syndrome',
+    description: 'Deconstruct your internal critic. Are you the Perfectionist, the Perpetual Student, or the Rugged Individualist?',
+    time: '8 min',
+    active: true,
+    color: 'from-fuchsia-500 to-purple-600',
+    bgLight: 'bg-fuchsia-50',
+    borderLight: 'border-fuchsia-100',
+    icon: UserMinus
   },
   {
     id: 'adhd',
