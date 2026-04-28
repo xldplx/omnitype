@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Hexagon, Circle, Triangle, Square, Sparkles, Diamond, Pentagon, Layers, ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, Compass, Binary, Skull, Brain, Fingerprint, Eye, Battery, Shield, UserMinus } from 'lucide-react';
+import { ArrowRight, Hexagon, Circle, Triangle, Square, Sparkles, Diamond, Pentagon, Layers, ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, Compass, Binary, Skull, Brain, Fingerprint, Eye, Battery, Shield, UserMinus, Swords, HeartHandshake, Waves, Sprout, LayoutGrid, Ghost, Flame, Flag, Coffee, Wand2, Navigation2, Mountain, Microscope, Activity, Gem, Puzzle, HeartCrack, Settings, Siren, Timer } from 'lucide-react';
 
 const categories = [
   { id: 'cognition', title: "Personality & Thinking", desc: "Understand who you are and how your mind works." },
@@ -26,6 +26,30 @@ const tests = [
     icon: Hexagon
   },
   {
+    id: 'mindset-architecture',
+    category: 'cognition',
+    title: 'Mindset Architecture',
+    description: 'Are you anchored by a Fixed mindset or propelled by Growth? Map your core beliefs about intelligence and talent.',
+    time: '8 min',
+    active: false,
+    color: 'from-emerald-400 to-cyan-500',
+    bgLight: 'bg-emerald-50',
+    borderLight: 'border-emerald-100',
+    icon: Sprout
+  },
+  {
+    id: 'mental-models',
+    category: 'cognition',
+    title: 'Mental Models',
+    description: 'Discover the logical frameworks you use to solve complex problems, from First Principles to Systems Thinking.',
+    time: '12 min',
+    active: false,
+    color: 'from-blue-500 to-indigo-600',
+    bgLight: 'bg-blue-50',
+    borderLight: 'border-blue-100',
+    icon: LayoutGrid
+  },
+  {
     id: 'enneagram',
     category: 'motivation',
     title: 'The Enneagram',
@@ -36,6 +60,54 @@ const tests = [
     bgLight: 'bg-rose-50',
     borderLight: 'border-rose-100',
     icon: Circle
+  },
+  {
+    id: 'tritype',
+    category: 'motivation',
+    title: 'The Tritype',
+    description: 'Go beyond your core type. Discover the three Enneagram types that form your unique inner-workings.',
+    time: '15 min',
+    active: true,
+    color: 'from-violet-500 to-fuchsia-600',
+    bgLight: 'bg-violet-50',
+    borderLight: 'border-violet-100',
+    icon: Layers
+  },
+  {
+    id: 'instinctual-variants',
+    category: 'motivation',
+    title: 'Instinctual Variants',
+    description: 'The "missing half" of Enneagram. Are you Self-Preservation, Social, or Sexual (Sx)?',
+    time: '10 min',
+    active: true,
+    color: 'from-emerald-500 to-teal-600',
+    bgLight: 'bg-emerald-50',
+    borderLight: 'border-emerald-100',
+    icon: Zap
+  },
+  {
+    id: 'core-needs',
+    category: 'motivation',
+    title: 'The 6 Core Needs',
+    description: 'What is your primary driver? Discover if you are motivated by Certainty, Variety, Significance, or Growth.',
+    time: '10 min',
+    active: false,
+    color: 'from-orange-500 to-amber-600',
+    bgLight: 'bg-orange-50',
+    borderLight: 'border-orange-100',
+    icon: Activity
+  },
+  {
+    id: 'core-values',
+    category: 'motivation',
+    title: 'Values Architecture',
+    description: 'Map your non-negotiable priorities. Discover the top 5 values that form the foundation of your choices.',
+    time: '10 min',
+    active: false,
+    color: 'from-amber-400 to-yellow-500',
+    bgLight: 'bg-amber-50',
+    borderLight: 'border-amber-100',
+    icon: Gem
   },
   {
     id: 'love-languages',
@@ -62,6 +134,66 @@ const tests = [
     icon: Pentagon
   },
   {
+    id: 'conflict-styles',
+    category: 'relational',
+    title: 'Conflict Styles',
+    description: 'How do you navigate disagreements? Discover if you are a Competitor, Collaborator, or Avoider in the heat of the moment.',
+    time: '10 min',
+    active: false,
+    color: 'from-orange-500 to-red-600',
+    bgLight: 'bg-orange-50',
+    borderLight: 'border-orange-100',
+    icon: Swords
+  },
+  {
+    id: 'apology-languages',
+    category: 'relational',
+    title: 'Apology Languages',
+    description: 'The secret to restorative repair. Find out how you naturally express regret and what you need to hear to truly forgive.',
+    time: '8 min',
+    active: false,
+    color: 'from-teal-400 to-emerald-500',
+    bgLight: 'bg-emerald-50',
+    borderLight: 'border-emerald-100',
+    icon: HeartHandshake
+  },
+  {
+    id: 'social-battery',
+    category: 'relational',
+    title: 'Social Battery',
+    description: 'Map your social endurance. Are you a 1-on-1 Deep-Diver, a Group Connector, or a Selective Observer?',
+    time: '5 min',
+    active: false,
+    color: 'from-cyan-400 to-blue-500',
+    bgLight: 'bg-cyan-50',
+    borderLight: 'border-cyan-100',
+    icon: Waves
+  },
+  {
+    id: 'red-green-flags',
+    category: 'relational',
+    title: 'Red & Green Flags',
+    description: 'A deep-dive into your interpersonal hygiene. Identify your healthy "green" traits and your subtle "red" warning signs.',
+    time: '8 min',
+    active: false,
+    color: 'from-emerald-500 to-red-500',
+    bgLight: 'bg-slate-50',
+    borderLight: 'border-slate-200',
+    icon: Flag
+  },
+  {
+    id: 'beige-flags',
+    category: 'relational',
+    title: 'Beige Flags',
+    description: 'The third category of flags. Discover the odd, quirky, and non-dealbreaker traits that make your personality unique.',
+    time: '5 min',
+    active: false,
+    color: 'from-amber-200 to-yellow-400',
+    bgLight: 'bg-amber-50',
+    borderLight: 'border-amber-100',
+    icon: Coffee
+  },
+  {
     id: 'jungian-archetypes',
     category: 'cognition',
     title: 'Jungian Archetypes',
@@ -72,18 +204,6 @@ const tests = [
     bgLight: 'bg-sky-50',
     borderLight: 'border-sky-100',
     icon: Diamond
-  },
-  {
-    id: 'tritype',
-    category: 'motivation',
-    title: 'The Tritype',
-    description: 'Go beyond your core type. Discover the three Enneagram types that form your unique inner-workings.',
-    time: '15 min',
-    active: true,
-    color: 'from-violet-500 to-fuchsia-600',
-    bgLight: 'bg-violet-50',
-    borderLight: 'border-violet-100',
-    icon: Layers
   },
   {
     id: 'aesthetic-core',
@@ -98,6 +218,18 @@ const tests = [
     icon: Star
   },
   {
+    id: 'main-character',
+    category: 'philosophy',
+    title: 'Main Character Energy',
+    description: 'Measure your "Protagonist Syndrome." Are you centering your own narrative or playing a supporting role?',
+    time: '5 min',
+    active: false,
+    color: 'from-fuchsia-400 to-purple-600',
+    bgLight: 'bg-fuchsia-50',
+    borderLight: 'border-fuchsia-100',
+    icon: Wand2
+  },
+  {
     id: 'color-psychology',
     category: 'philosophy',
     title: 'Color Psychology',
@@ -110,18 +242,6 @@ const tests = [
     icon: Palette
   },
   {
-    id: 'instinctual-variants',
-    category: 'motivation',
-    title: 'Instinctual Variants',
-    description: 'The "missing half" of Enneagram. Are you Self-Preservation, Social, or Sexual (Sx)?',
-    time: '10 min',
-    active: true,
-    color: 'from-emerald-500 to-teal-600',
-    bgLight: 'bg-emerald-50',
-    borderLight: 'border-emerald-100',
-    icon: Zap
-  },
-  {
     id: 'hexaco-model',
     category: 'behavioral',
     title: 'HEXACO Model',
@@ -132,6 +252,42 @@ const tests = [
     bgLight: 'bg-blue-50',
     borderLight: 'border-blue-100',
     icon: ClipboardCheck
+  },
+  {
+    id: 'locus-of-control',
+    category: 'behavioral',
+    title: 'Locus of Control',
+    description: 'Do you control your destiny or does it control you? Discover your orientation between Internal and External control.',
+    time: '8 min',
+    active: false,
+    color: 'from-cyan-500 to-blue-600',
+    bgLight: 'bg-cyan-50',
+    borderLight: 'border-cyan-100',
+    icon: Navigation2
+  },
+  {
+    id: 'grit-scale',
+    category: 'behavioral',
+    title: 'The Grit Scale',
+    description: 'Measure your passion and persistence for long-term goals. Are you built for the sprint or the marathon?',
+    time: '5 min',
+    active: false,
+    color: 'from-slate-500 to-slate-700',
+    bgLight: 'bg-slate-50',
+    borderLight: 'border-slate-100',
+    icon: Mountain
+  },
+  {
+    id: 'cognitive-reflection',
+    category: 'behavioral',
+    title: 'Cognitive Reflection',
+    description: 'Test your ability to override intuition with logical reflection. A sharp measure of your analytical "Thinking Fast and Slow."',
+    time: '5 min',
+    active: false,
+    color: 'from-rose-500 to-orange-600',
+    bgLight: 'bg-rose-50',
+    borderLight: 'border-rose-100',
+    icon: Microscope
   },
   {
     id: 'socionics',
@@ -242,6 +398,30 @@ const tests = [
     icon: UserMinus
   },
   {
+    id: 'shadow-archetype',
+    category: 'shadow',
+    title: 'The Shadow Archetype',
+    description: 'What parts of yourself have you repressed? Map the traits you deny in yourself but project onto others.',
+    time: '15 min',
+    active: false,
+    color: 'from-slate-600 to-slate-900',
+    bgLight: 'bg-slate-100',
+    borderLight: 'border-slate-200',
+    icon: Ghost
+  },
+  {
+    id: 'primal-fears',
+    category: 'shadow',
+    title: 'Primal Fears',
+    description: 'Peel back the layers of your anxiety. Are you driven by a fear of rejection, abandonment, or insignificance?',
+    time: '10 min',
+    active: false,
+    color: 'from-red-900 to-black',
+    bgLight: 'bg-red-50',
+    borderLight: 'border-red-100',
+    icon: Flame
+  },
+  {
     id: 'adhd',
     category: 'neurodiversity',
     title: 'ADHD Test',
@@ -252,6 +432,66 @@ const tests = [
     bgLight: 'bg-orange-50',
     borderLight: 'border-orange-100',
     icon: Brain
+  },
+  {
+    id: 'autism-spectrum',
+    category: 'neurodiversity',
+    title: 'Autism Spectrum',
+    description: 'A clinical-grade screening tool to map your neuro-signature across the autism spectrum.',
+    time: '12 min',
+    active: false,
+    color: 'from-blue-400 to-indigo-500',
+    bgLight: 'bg-blue-50',
+    borderLight: 'border-blue-100',
+    icon: Puzzle
+  },
+  {
+    id: 'rsd-test',
+    category: 'neurodiversity',
+    title: 'RSD Profile',
+    description: 'Measure your Rejection Sensitive Dysphoria. Understand the intense emotional resonance related to perceived rejection.',
+    time: '8 min',
+    active: false,
+    color: 'from-rose-400 to-red-500',
+    bgLight: 'bg-rose-50',
+    borderLight: 'border-rose-100',
+    icon: HeartCrack
+  },
+  {
+    id: 'executive-function',
+    category: 'neurodiversity',
+    title: 'Executive Function',
+    description: 'Map the "Admin" of your brain. Deep-dive into working memory, inhibition, and task-switching.',
+    time: '10 min',
+    active: false,
+    color: 'from-slate-600 to-slate-800',
+    bgLight: 'bg-slate-100',
+    borderLight: 'border-slate-200',
+    icon: Settings
+  },
+  {
+    id: 'cptsd-responses',
+    category: 'neurodiversity',
+    title: 'CPTSD Responses',
+    description: 'Identify your primary survival reflex. Are you driven by Fight, Flight, Freeze, or Fawn responses?',
+    time: '12 min',
+    active: false,
+    color: 'from-purple-500 to-indigo-700',
+    bgLight: 'bg-purple-50',
+    borderLight: 'border-purple-100',
+    icon: Siren
+  },
+  {
+    id: 'ocd-tendencies',
+    category: 'neurodiversity',
+    title: 'OCD Tendencies',
+    description: 'Measure the drive for order, symmetry, and intrusive thought patterns in your psychological landscape.',
+    time: '10 min',
+    active: false,
+    color: 'from-cyan-600 to-blue-700',
+    bgLight: 'bg-cyan-50',
+    borderLight: 'border-cyan-100',
+    icon: Timer
   },
   {
     id: 'hsp',
@@ -277,7 +517,6 @@ const tests = [
     borderLight: 'border-amber-100',
     icon: Battery
   },
-
   {
     id: 'big-five',
     category: 'behavioral',
