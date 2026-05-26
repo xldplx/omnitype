@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { toPng } from 'html-to-image';
@@ -189,7 +189,7 @@ export default function IdentityDashboard() {
   };
 
   // Compile assessment progress (Show all 16 assessments dynamically!)
-  const activeTests = [
+  const activeTests = useMemo(() => [
     { id: 'mbti', title: '16 Archetypes', value: mbtiData?.type || mbtiData?.info?.name || (typeof mbtiData === 'string' ? mbtiData : null), path: '/test/mbti', loaded: !!mbtiData },
     { id: 'enneagram', title: 'The Enneagram', value: enneagramData?.type || enneagramData?.info?.name || (typeof enneagramData === 'string' ? enneagramData : null), path: '/test/enneagram', loaded: !!enneagramData },
     { id: 'alignment', title: 'Moral Alignment', value: alignmentData?.type || alignmentData?.info?.name || (typeof alignmentData === 'string' ? alignmentData : null), path: '/test/alignment', loaded: !!alignmentData },
@@ -206,23 +206,24 @@ export default function IdentityDashboard() {
     { id: 'hsp', title: 'High Sensitive Person', value: hspData?.type || hspData?.info?.name || (typeof hspData === 'string' ? hspData : null), path: '/test/hsp', loaded: !!hspData },
     { id: 'burnout', title: 'Burnout Index', value: burnoutData?.type || burnoutData?.info?.name || (typeof burnoutData === 'string' ? burnoutData : null), path: '/test/burnout', loaded: !!burnoutData },
     { id: 'imposter', title: 'Imposter Syndrome', value: imposterData?.type || imposterData?.info?.name || (typeof imposterData === 'string' ? imposterData : null), path: '/test/imposter', loaded: !!imposterData }
-  ];
+  ], [
+    mbtiData, enneagramData, alignmentData, loveLanguagesData, attachmentStylesData,
+    darkTriadData, defenseData, instinctualData, tritypeData, colorData,
+    jungianData, resilienceData, adhdData, hspData, burnoutData, imposterData
+  ]);
 
-  const completedCount = activeTests.filter(t => t.loaded).length;
+  const completedCount = useMemo(() => activeTests.filter(t => t.loaded).length, [activeTests]);
 
-  const calculateCognitiveDensity = () => {
-    const defaultTraits = [
-      { label: "Cognition", value: mbtiData ? 95 : 30, icon: Brain, color: "from-indigo-500 to-purple-500", desc: "Your abstract logic processing and architectural mental modeling capabilities." },
-      { label: "Resilience", value: defenseData ? 90 : 40, icon: Shield, color: "from-purple-500 to-pink-500", desc: "Your nervous system's capacity to absorb chaotic high-friction triggers." },
-      { label: "Vulnerability", value: alignmentData ? 85 : 35, icon: Heart, color: "from-rose-400 to-pink-500", desc: "Your level of relational safety, openness, and reciprocal moral alignment." },
-      { label: "Shadow Strategy", value: darkTriadData ? 82 : 25, icon: Zap, color: "from-amber-400 to-orange-500", desc: "Calculated pragmatism, self-assertion, and capacity for strategic control." }
-    ];
-    return defaultTraits;
-  };
+  const results = useMemo(() => [
+    { label: "Mind & Thinking", value: mbtiData ? 95 : 30, icon: Brain, color: "from-indigo-500 to-purple-500", desc: "How your mind processes information, solves problems, and creates new thoughts." },
+    { label: "Inner Strength", value: defenseData ? 90 : 40, icon: Shield, color: "from-purple-500 to-pink-500", desc: "Your natural strength in handling stressful moments and bouncing back from setbacks." },
+    { label: "Heart & Connection", value: alignmentData ? 85 : 35, icon: Heart, color: "from-rose-400 to-pink-500", desc: "How open, warm, and trusting you are in your relationships with others." },
+    { label: "Drive & Ambition", value: darkTriadData ? 82 : 25, icon: Zap, color: "from-amber-400 to-orange-500", desc: "Your self-confidence, goal focus, and ability to advocate for yourself." },
+    { label: "Social Vibe", value: loveLanguagesData ? 88 : 30, icon: Users, color: "from-emerald-400 to-teal-500", desc: "How deeply you understand and tune into other people's feelings and needs." },
+    { label: "Adaptability", value: completedCount >= 4 ? 85 : 35, icon: Compass, color: "from-sky-400 to-blue-500", desc: "How easily you adapt to new situations, embrace change, and flow with life's currents." }
+  ], [mbtiData, defenseData, alignmentData, darkTriadData, loveLanguagesData, completedCount]);
 
-  const results = calculateCognitiveDensity();
-
-  const getDynamicInsights = () => {
+  const insights = useMemo(() => {
     const list = [];
     if (mbtiData) {
       list.push({ title: `${mbtiData.type || mbtiData} Visionary`, desc: "Advanced conceptual processing with a strong preference for structural logic.", icon: Hexagon });
@@ -243,18 +244,16 @@ export default function IdentityDashboard() {
     }
 
     return list;
-  };
-
-  const insights = getDynamicInsights();
+  }, [mbtiData, defenseData, darkTriadData]);
 
   // Load the major types for the shareable ID Card (MBTI, Enneagram, Alignment, Love Language, Attachment Style)
-  const majorTypes = {
+  const majorTypes = useMemo(() => ({
     mbti: mbtiData ? (mbtiData.type || mbtiData).toUpperCase() : "LOCKED",
     enneagram: enneagramData ? (enneagramData.type || enneagramData) : "LOCKED",
     alignment: alignmentData ? (alignmentData.type || alignmentData) : "LOCKED",
     loveLanguage: loveLanguagesData ? (loveLanguagesData.fullTitle || loveLanguagesData.info?.name || loveLanguagesData) : "LOCKED",
     attachmentStyle: attachmentStylesData ? (attachmentStylesData.fullTitle || attachmentStylesData.info?.name || attachmentStylesData) : "LOCKED"
-  };
+  }), [mbtiData, enneagramData, alignmentData, loveLanguagesData, attachmentStylesData]);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -281,53 +280,83 @@ export default function IdentityDashboard() {
 
   const generateNarrative = () => {
     let parts = [];
-    if (mbtiData) parts.push(`guided by the high-level cognitive framework of an **${mbtiData.type || mbtiData}**`);
-    if (alignmentData) parts.push(`harmonized through the moral priorities of a **${alignmentData.type || alignmentData}** stance`);
-    if (loveLanguagesData) parts.push(`communicating affection via **${loveLanguagesData.fullTitle || loveLanguagesData}**`);
-    if (attachmentStylesData) parts.push(`and operating in relationship models with a **${attachmentStylesData.fullTitle || attachmentStylesData}** style`);
+    if (mbtiData) parts.push(`someone who processes the world as an **${mbtiData.type || mbtiData}**`);
+    if (alignmentData) parts.push(`guided by a **${alignmentData.type || alignmentData}** heart`);
+    if (loveLanguagesData) parts.push(`sharing care and affection through **${loveLanguagesData.fullTitle || loveLanguagesData}**`);
+    if (attachmentStylesData) parts.push(`and connecting with others in a **${attachmentStylesData.fullTitle || attachmentStylesData}** way`);
 
     if (parts.length === 0) {
-      return "Start your self-discovery path by taking assessments below. Your personal brand blueprint narrative will assemble automatically once you unlock your first archetype.";
+      return "Start your self-discovery journey by taking assessments below! Your personal story will assemble automatically once you unlock your first personality badge.";
     }
-    return `You represent a highly unique psychological composition: ${parts.join(', ')}. This precise architectural arrangement allows you to balance deep abstract reasoning with stable emotional boundaries and targeted moral integrity.`;
+    return `You have a highly unique and beautiful way of being: you are ${parts.join(', ')}. This wonderful mix allows you to stay true to your thoughts while keeping stable, warm relationships and acting with real kindness.`;
   };
 
   const getSynergyProfile = () => {
     if (completedCount === 0) {
       return {
-        title: "Dormant Potential",
+        title: "A New Beginning",
         badge: "Level 0",
-        desc: "Complete your first personality test to activate your cognitive synergy blueprint.",
+        desc: "Take your first test to unlock your synergy score and start your story!",
         synergyPercent: 0
       };
     }
     if (completedCount <= 2) {
       return {
-        title: "Emergent Architect",
+        title: "Curious Explorer",
         badge: "Level 1",
-        desc: "You are beginning to link your core cognitive traits together. Map at least 3 archetypes to unlock compound insights.",
+        desc: "You are starting to connect the pieces of your personality. Unlock at least 3 traits to see unique combination profiles!",
         synergyPercent: 40
       };
     }
 
     if (mbtiData && enneagramData) {
       return {
-        title: `${mbtiData.type || mbtiData} • Type ${enneagramData.type || enneagramData}`,
-        badge: "Dynamic Catalyst",
-        desc: `Your rational structure as a ${mbtiData.type || mbtiData} coordinates uniquely with the instinctual drives of Enneagram ${enneagramData.type || enneagramData}, creating a highly targeted focus on long-term execution and emotional self-awareness.`,
+        title: `${mbtiData.type || mbtiData} + Enneagram ${enneagramData.type || enneagramData}`,
+        badge: "Perfect Duo",
+        desc: `Being a ${mbtiData.type || mbtiData} combined with Enneagram Type ${enneagramData.type || enneagramData} means your natural gift for clear thinking blends beautifully with your inner motivations. You're great at turning big dreams into real, thoughtful action while staying deeply in touch with yourself.`,
         synergyPercent: 75
       };
     }
 
     return {
-      title: "Coherent Searcher",
+      title: "Thoughtful Learner",
       badge: "Level 2",
-      desc: "Your psychological profile shows stable balance across your completed assessments. Map the remaining assessments to fully align your stack.",
+      desc: "You show a beautiful and stable balance across your unlocked traits. Keep exploring the rest of the assessments to complete your entire harmony circle!",
       synergyPercent: 85
     };
   };
 
-  const synergy = getSynergyProfile();
+  const synergy = useMemo(() => getSynergyProfile(), [completedCount, mbtiData, enneagramData]);
+  const narrativeHtml = useMemo(() => generateNarrative(), [mbtiData, alignmentData, loveLanguagesData, attachmentStylesData]);
+
+  const vibeCheck = useMemo(() => {
+    let introvertedExtroverted = 50;
+    let ideasFacts = 50;
+    let logicHeart = 50;
+    let structuredSpontaneous = 50;
+
+    if (mbtiData) {
+      const type = (mbtiData.type || mbtiData).toUpperCase();
+      if (type.includes('I')) introvertedExtroverted = 25;
+      if (type.includes('E')) introvertedExtroverted = 75;
+      
+      if (type.includes('N')) ideasFacts = 25;
+      if (type.includes('S')) ideasFacts = 75;
+      
+      if (type.includes('T')) logicHeart = 25;
+      if (type.includes('F')) logicHeart = 75;
+      
+      if (type.includes('J')) structuredSpontaneous = 25;
+      if (type.includes('P')) structuredSpontaneous = 75;
+    }
+
+    return {
+      ie: introvertedExtroverted,
+      ns: ideasFacts,
+      tf: logicHeart,
+      jp: structuredSpontaneous
+    };
+  }, [mbtiData]);
 
   const getBioText = () => {
     const list = [];
@@ -337,407 +366,605 @@ export default function IdentityDashboard() {
     if (loveLanguagesData) list.push(loveLanguagesData.fullTitle || loveLanguagesData);
     if (attachmentStylesData) list.push(attachmentStylesData.fullTitle || attachmentStylesData);
     return `My OmniType Stack: ${list.join(' | ') || 'Unmapped'}. Discover your psychological blueprint at omnitype.co`;
-  };
-
-  return (
+  };  return (
     <div className="w-full min-h-screen bg-[#fafafa] pb-32 selection:bg-indigo-100 uppercase-none relative">
 
       {/* Background Decorative Blobs matching main site theme */}
       <div className="fixed top-[-20vh] right-[-10vw] w-[60vw] h-[60vw] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none z-0" />
       <div className="fixed bottom-[-10vh] left-[-10vw] w-[50vw] h-[50vw] bg-rose-500/5 rounded-full blur-[100px] pointer-events-none z-0" />
 
-      {/* Hero Section */}
-      <div className="w-full pt-32 pb-12 px-6 md:px-12 flex flex-col items-center relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center max-w-3xl"
-        >
-          <h1 className="text-5xl md:text-8xl font-black text-slate-900 tracking-tight mb-6">
-            Identity Map<span className="text-indigo-600">.</span>
-          </h1>
-          <p className="text-lg md:text-xl text-slate-500 font-medium max-w-2xl mx-auto leading-relaxed">
-            Your unique psychological fingerprint, dynamically aggregated from your completed assessments.
-          </p>
-        </motion.div>
-      </div>
+      {/* Header padding and small subtitle block */}
+      <div className="w-full pt-32 pb-6 px-6 md:px-12 flex flex-col items-center relative z-10" />
 
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-10">
-
-        {/* Left Column: Stats & Map */}
-        <div className="lg:col-span-8 flex flex-col gap-8">
-
-          {/* Basic Info Section */}
-          <div className="bg-white/70 backdrop-blur-3xl rounded-[2.5rem] border border-white/80 p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col relative overflow-hidden group">
-            <div className="absolute top-8 right-8 z-20">
-              {isEditing ? (
-                <div className="flex gap-2">
-                  <button
-                    onClick={handleSaveProfile}
-                    className="p-3 bg-emerald-500 text-white rounded-full hover:bg-emerald-600 transition-colors shadow-md flex items-center justify-center"
-                  >
-                    <Check className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => setIsEditing(false)}
-                    className="p-3 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors shadow-md flex items-center justify-center"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={handleEditClick}
-                  className="flex items-center gap-2 px-4 py-2 bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-100 text-slate-600 hover:text-indigo-600 font-semibold text-xs uppercase tracking-widest rounded-full transition-all duration-300 shadow-sm"
-                >
-                  <Edit2 className="w-3.5 h-3.5" />
-                  <span>Edit Profile</span>
-                </button>
-              )}
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
+        {/* ROW 1: Cinematic Welcome Hero (8 cols) & Basic Info Quick Editor (4 cols) */}
+        
+        {/* Cinematic Welcome Hero Card */}
+        <div className="lg:col-span-8 bg-white/70 backdrop-blur-3xl rounded-[2.5rem] border border-white/80 p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.02)] flex flex-col justify-between relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-[40%] h-[100%] bg-gradient-to-l from-indigo-500/5 to-transparent pointer-events-none" />
+          
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="h-2 w-2 rounded-full bg-indigo-600 animate-ping" />
+              <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-[0.2em] bg-indigo-50 px-2.5 py-1 rounded-full">
+                Active Session
+              </span>
             </div>
-
-            <h2 className="text-3xl font-extrabold text-slate-800 mb-8 tracking-tight flex items-center gap-3">
-              Basic Information
+            
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-none mb-3">
+              Welcome back, <span className="text-indigo-600">{profile.name.split(' ')[0] || "Explorer"}</span>
             </h2>
+            <p className="text-slate-500 font-medium text-sm md:text-base max-w-xl leading-relaxed mb-6">
+              Your psychological map is compiled and updated in real-time. Here is your unified brand profile.
+            </p>
+          </div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 border-t border-slate-100/80">
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Stack Completion</span>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-2xl font-black text-slate-800">{Math.round((completedCount / 16) * 100)}%</span>
+                <span className="text-xs font-bold text-slate-400">({completedCount}/16)</span>
+              </div>
+              <div className="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
+                <div 
+                  className="bg-indigo-600 h-full rounded-full transition-all duration-1000" 
+                  style={{ width: `${(completedCount / 16) * 100}%` }}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Identity Tier</span>
+              <span className="text-2xl font-black text-indigo-600">
+                {completedCount === 0 ? "Observer" : completedCount < 4 ? "Seeker" : completedCount < 8 ? "Architect" : "Apex Sage"}
+              </span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Member Since</span>
+              <span className="text-2xl font-black text-slate-800">{profile.memberSince || "May 2026"}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Basic Profile Quick Editor Card */}
+        <div className="lg:col-span-4 bg-white/70 backdrop-blur-3xl rounded-[2.5rem] border border-white/80 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.02)] flex flex-col justify-between relative overflow-hidden group">
+          <div className="absolute top-6 right-6">
             {isEditing ? (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Name</label>
+              <div className="flex gap-1.5">
+                <button
+                  onClick={handleSaveProfile}
+                  className="p-2 bg-emerald-500 text-white rounded-full hover:bg-emerald-600 transition-colors shadow-sm"
+                >
+                  <Check className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="p-2 bg-rose-500 text-white rounded-full hover:bg-rose-600 transition-colors shadow-sm"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleEditClick}
+                className="p-2 bg-slate-50 hover:bg-indigo-50 border border-slate-200/50 hover:border-indigo-100 text-slate-400 hover:text-indigo-600 rounded-full transition-colors"
+              >
+                <Edit2 className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          <div>
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Profile Metadata</h3>
+            
+            {isEditing ? (
+              <div className="space-y-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase">Name</label>
                   <input
                     type="text"
                     value={editName}
                     placeholder="Your Name"
                     onChange={(e) => setEditName(e.target.value)}
-                    className="w-full bg-white border border-slate-200 focus:border-indigo-500 outline-none rounded-xl px-4 py-3 font-bold text-slate-800 shadow-inner"
+                    className="w-full bg-white border border-slate-200 focus:border-indigo-500 outline-none rounded-xl px-3.5 py-2 font-bold text-sm text-slate-800"
                   />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Age</label>
-                  <input
-                    type="number"
-                    value={editAge}
-                    onChange={(e) => setEditAge(e.target.value)}
-                    className="w-full bg-white border border-slate-200 focus:border-indigo-500 outline-none rounded-xl px-4 py-3 font-bold text-slate-800 shadow-inner"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Gender</label>
-                  <select
-                    value={editGender}
-                    onChange={(e) => setEditGender(e.target.value)}
-                    className="w-full bg-white border border-slate-200 focus:border-indigo-500 outline-none rounded-xl px-4 py-3 font-bold text-slate-800 shadow-inner appearance-none cursor-pointer"
-                  >
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Non-Binary">Non-Binary</option>
-                    <option value="Agender">Agender</option>
-                    <option value="Genderfluid">Genderfluid</option>
-                    <option value="Prefer not to say">Prefer not to say</option>
-                  </select>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase">Age</label>
+                    <input
+                      type="number"
+                      value={editAge}
+                      onChange={(e) => setEditAge(e.target.value)}
+                      className="w-full bg-white border border-slate-200 focus:border-indigo-500 outline-none rounded-xl px-3.5 py-2 font-bold text-sm text-slate-800"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase">Gender</label>
+                    <select
+                      value={editGender}
+                      onChange={(e) => setEditGender(e.target.value)}
+                      className="w-full bg-white border border-slate-200 focus:border-indigo-500 outline-none rounded-xl px-2 py-2 font-bold text-sm text-slate-800"
+                    >
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Non-Binary">Non-Binary</option>
+                      <option value="Agender">Agender</option>
+                      <option value="Genderfluid">Genderfluid</option>
+                      <option value="Prefer not to say">Prefer not to say</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="flex flex-col">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Name</span>
-                  <span className="text-2xl font-black text-slate-800 tracking-tight leading-tight">{profile.name || "Your Name"}</span>
+              <div className="space-y-4">
+                <div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">Name</span>
+                  <span className="text-xl font-black text-slate-800 tracking-tight block">{profile.name}</span>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Age</span>
-                  <span className="text-2xl font-black text-slate-800 tracking-tight leading-tight">{profile.age}</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Gender</span>
-                  <span className="text-2xl font-black text-slate-800 tracking-tight leading-tight">{profile.gender}</span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Omnitype Tier</span>
-                  <span className="text-2xl font-black text-indigo-600 tracking-tight leading-tight">
-                    {completedCount === 0 ? "Observer" : completedCount < 4 ? "Seeker" : completedCount < 6 ? "Architect" : "Apex Sage"}
-                  </span>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">Age</span>
+                    <span className="text-xl font-black text-slate-800 block">{profile.age}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">Gender</span>
+                    <span className="text-xl font-black text-slate-800 block">{profile.gender}</span>
+                  </div>
                 </div>
               </div>
             )}
           </div>
 
-          {/* Cognitive Brand Blueprint */}
-          <div className="bg-white/90 backdrop-blur-3xl border border-indigo-50 shadow-[0_20px_50px_rgba(99,102,241,0.03)] rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-linear-to-bl from-indigo-500/5 via-purple-500/3 to-transparent rounded-full blur-[80px] pointer-events-none" />
-            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
-              <Sparkles className="w-5 h-5 text-indigo-500" />
-              Cognitive Brand Blueprint
-            </h2>
-            <p className="text-slate-600 text-lg md:text-[1.2rem] leading-relaxed font-medium" dangerouslySetInnerHTML={{ __html: generateNarrative() }} />
+          <div className="mt-6 pt-4 border-t border-slate-100/80 flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase">
+            <User className="w-3.5 h-3.5 text-indigo-500" />
+            <span>Profile Synced with LocalStorage</span>
           </div>
+        </div>
 
-          {/* Synergy Analyzer */}
-          <div className="bg-linear-to-br from-indigo-500/5 via-purple-500/5 to-white/70 backdrop-blur-3xl rounded-[2.5rem] border border-indigo-100/50 p-8 md:p-12 shadow-[0_20px_50px_rgba(99,102,241,0.03)] flex flex-col md:flex-row items-center gap-8 relative overflow-hidden group">
-            <div className="flex-1">
-              <span className="text-[10px] font-bold uppercase tracking-widest bg-indigo-50 border border-indigo-100/50 text-indigo-600 px-3 py-1.5 rounded-full mb-4 inline-block">{synergy.badge}</span>
-              <h2 className="text-3xl font-black text-slate-800 tracking-tight mb-4">{synergy.title}</h2>
-              <p className="text-slate-500 leading-relaxed font-medium">{synergy.desc}</p>
+        {/* ROW 2: Core Personality Pillars (7 cols) & My Vibe Check (5 cols) */}
+        
+        {/* Core Personality Pillars Card */}
+        <div className="lg:col-span-7 bg-white/70 backdrop-blur-3xl border border-white/85 shadow-[0_20px_50px_rgba(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-indigo-500/5 via-purple-500/3 to-transparent rounded-full blur-[80px] pointer-events-none" />
+          
+          <div className="relative z-10 flex flex-col justify-between h-full">
+            <div>
+              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.25em] mb-6 flex items-center gap-2">
+                <Award className="w-4 h-4 text-indigo-500 animate-pulse" />
+                Core Personality Pillars
+              </h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                
+                {/* MBTI Pillar */}
+                <div className={`p-5 rounded-3xl border text-center flex flex-col justify-between min-h-[140px] transition-all duration-300 ${
+                  mbtiData 
+                    ? 'bg-gradient-to-br from-indigo-50/45 to-white border-indigo-100/50 shadow-2xs' 
+                    : 'bg-slate-50/40 border-slate-100/80 text-slate-300'
+                }`}>
+                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Cognition</span>
+                  {mbtiData ? (
+                    <div>
+                      <span className="text-2xl font-black text-indigo-600 block leading-tight tracking-tight">{mbtiData.type || mbtiData}</span>
+                      <span className="text-[8px] font-bold text-slate-400 uppercase mt-1 block">16 Archetypes</span>
+                    </div>
+                  ) : (
+                    <div>
+                      <span className="text-lg font-bold text-slate-300 block">LOCKED</span>
+                      <Link to="/test/mbti" className="text-[9px] font-bold text-indigo-500 underline mt-2 block uppercase tracking-wider">Unlock</Link>
+                    </div>
+                  )}
+                </div>
+
+                {/* Enneagram Pillar */}
+                <div className={`p-5 rounded-3xl border text-center flex flex-col justify-between min-h-[140px] transition-all duration-300 ${
+                  enneagramData 
+                    ? 'bg-gradient-to-br from-purple-50/45 to-white border-purple-100/50 shadow-2xs' 
+                    : 'bg-slate-50/40 border-slate-100/80 text-slate-300'
+                }`}>
+                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Motivation</span>
+                  {enneagramData ? (
+                    <div>
+                      <span className="text-2xl font-black text-purple-600 block leading-tight tracking-tight">Type {enneagramData.type || enneagramData}</span>
+                      <span className="text-[8px] font-bold text-slate-400 uppercase mt-1 block">Enneagram</span>
+                    </div>
+                  ) : (
+                    <div>
+                      <span className="text-lg font-bold text-slate-300 block">LOCKED</span>
+                      <Link to="/test/enneagram" className="text-[9px] font-bold text-purple-500 underline mt-2 block uppercase tracking-wider">Unlock</Link>
+                    </div>
+                  )}
+                </div>
+
+                {/* Moral Alignment Pillar */}
+                <div className={`p-5 rounded-3xl border text-center flex flex-col justify-between min-h-[140px] transition-all duration-300 ${
+                  alignmentData 
+                    ? 'bg-gradient-to-br from-rose-50/45 to-white border-rose-100/50 shadow-2xs' 
+                    : 'bg-slate-50/40 border-slate-100/80 text-slate-300'
+                }`}>
+                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block mb-1">Heart</span>
+                  {alignmentData ? (
+                    <div>
+                      <span className="text-xl font-black text-rose-600 block leading-tight tracking-tight truncate">{alignmentData.type || alignmentData}</span>
+                      <span className="text-[8px] font-bold text-slate-400 uppercase mt-1 block">Moral Alignment</span>
+                    </div>
+                  ) : (
+                    <div>
+                      <span className="text-lg font-bold text-slate-300 block">LOCKED</span>
+                      <Link to="/test/alignment" className="text-[9px] font-bold text-rose-500 underline mt-2 block uppercase tracking-wider">Unlock</Link>
+                    </div>
+                  )}
+                </div>
+
+              </div>
             </div>
+            
+            <div className="mt-6 flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase">
+              <Fingerprint className="w-4 h-4 text-indigo-500" />
+              <span>Your primary psychological blueprints</span>
+            </div>
+          </div>
+        </div>
 
-            <div className="flex flex-col items-center bg-white/80 border border-indigo-100/30 rounded-3xl p-6 shadow-sm shrink-0 min-w-[200px]">
-              <span className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Synergy Index</span>
-              <div className="relative w-28 h-28 flex items-center justify-center">
-                <svg className="w-full h-full transform -rotate-95" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="40" stroke="#f1f5f9" strokeWidth="8" fill="transparent" />
-                  <motion.circle
-                    cx="50" cy="50" r="40" stroke="url(#synergy-gradient)" strokeWidth="8" fill="transparent"
-                    strokeDasharray="251.2"
-                    initial={{ strokeDashoffset: 251.2 }}
-                    animate={{ strokeDashoffset: 251.2 - (251.2 * synergy.synergyPercent) / 100 }}
-                    transition={{ duration: 1.5, ease: "easeOut" }}
+        {/* My Vibe Check Card */}
+        <div className="lg:col-span-5 bg-white/70 backdrop-blur-3xl rounded-[2.5rem] border border-white/80 p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.02)] flex flex-col justify-between relative overflow-hidden group">
+          <div>
+            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.25em] mb-6 flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-indigo-500 animate-pulse" />
+              My Vibe Check
+            </h3>
+            
+            <div className="space-y-5">
+              
+              {/* Energy balance */}
+              <div>
+                <div className="flex justify-between text-[10px] font-black uppercase mb-1.5 tracking-wider">
+                  <span className={vibeCheck.ie <= 50 ? 'text-indigo-600' : 'text-slate-450'}>Introverted</span>
+                  <span className={vibeCheck.ie > 50 ? 'text-indigo-600' : 'text-slate-450'}>Extroverted</span>
+                </div>
+                <div className="h-2 w-full bg-slate-100 rounded-full relative overflow-hidden shadow-inner">
+                  <div className="absolute top-0 bottom-0 left-[48%] right-[48%] bg-slate-300 rounded-full" />
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${vibeCheck.ie}%` }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    className="h-full bg-indigo-500 rounded-full"
                   />
-                  <defs>
-                    <linearGradient id="synergy-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#6366f1" />
-                      <stop offset="100%" stopColor="#c084fc" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-                <div className="absolute flex flex-col items-center justify-center">
-                  <span className="text-2xl font-black text-slate-800">{synergy.synergyPercent}%</span>
-                  <span className="text-[8px] font-bold text-slate-400 uppercase tracking-wider">Alignment</span>
                 </div>
               </div>
+
+              {/* Focus balance */}
+              <div>
+                <div className="flex justify-between text-[10px] font-black uppercase mb-1.5 tracking-wider">
+                  <span className={vibeCheck.ns <= 50 ? 'text-purple-600' : 'text-slate-450'}>Ideas & Concepts</span>
+                  <span className={vibeCheck.ns > 50 ? 'text-purple-600' : 'text-slate-450'}>Facts & Details</span>
+                </div>
+                <div className="h-2 w-full bg-slate-100 rounded-full relative overflow-hidden shadow-inner">
+                  <div className="absolute top-0 bottom-0 left-[48%] right-[48%] bg-slate-300 rounded-full" />
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${vibeCheck.ns}%` }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    className="h-full bg-purple-500 rounded-full"
+                  />
+                </div>
+              </div>
+
+              {/* Decisions balance */}
+              <div>
+                <div className="flex justify-between text-[10px] font-black uppercase mb-1.5 tracking-wider">
+                  <span className={vibeCheck.tf <= 50 ? 'text-rose-500' : 'text-slate-450'}>Logic & Reason</span>
+                  <span className={vibeCheck.tf > 50 ? 'text-rose-500' : 'text-slate-450'}>Heart & Feelings</span>
+                </div>
+                <div className="h-2 w-full bg-slate-100 rounded-full relative overflow-hidden shadow-inner">
+                  <div className="absolute top-0 bottom-0 left-[48%] right-[48%] bg-slate-300 rounded-full" />
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${vibeCheck.tf}%` }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    className="h-full bg-rose-450 rounded-full"
+                  />
+                </div>
+              </div>
+
+              {/* Lifestyle balance */}
+              <div>
+                <div className="flex justify-between text-[10px] font-black uppercase mb-1.5 tracking-wider">
+                  <span className={vibeCheck.jp <= 50 ? 'text-amber-500' : 'text-slate-450'}>Structured Plans</span>
+                  <span className={vibeCheck.jp > 50 ? 'text-amber-500' : 'text-slate-450'}>Spontaneous Flow</span>
+                </div>
+                <div className="h-2 w-full bg-slate-100 rounded-full relative overflow-hidden shadow-inner">
+                  <div className="absolute top-0 bottom-0 left-[48%] right-[48%] bg-slate-300 rounded-full" />
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${vibeCheck.jp}%` }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    className="h-full bg-amber-500 rounded-full"
+                  />
+                </div>
+              </div>
+
             </div>
           </div>
 
-          {/* Main Visualizer */}
-          <div className="bg-white/70 backdrop-blur-3xl rounded-[2.5rem] border border-white/80 p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col md:flex-row items-center gap-12 overflow-hidden relative">
-            <div className="flex-1 relative z-10">
-              <h2 className="text-3xl font-extrabold text-slate-800 mb-4 tracking-tight flex items-center gap-3">
-                Your Neural Map
-                <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-              </h2>
-              <p className="text-slate-500 font-medium mb-8 leading-relaxed">
-                Aggregated psychological metrics based on completed assessments. Unlock maximum density by answering all surveys.
-              </p>
+          <div className="mt-4 text-[9px] font-medium text-slate-400">
+            {!mbtiData && "Unlock 16 Archetypes (MBTI) to customize your vibe balance sliders."}
+          </div>
+        </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                {results.map((res, i) => (
-                  <motion.button
-                    key={i}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => setSelectedTrait(res)}
-                    className={`flex flex-col items-start p-4 rounded-3xl border transition-all duration-300 ${selectedTrait?.label === res.label
+        {/* ROW 3: ID Card Terminal (4 cols) & Neural Map Visualizer (8 cols) */}
+        
+        {/* ID Card Terminal Cell */}
+        <div className="lg:col-span-4 bg-white/70 backdrop-blur-3xl rounded-[2.5rem] border border-white/80 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.02)] flex flex-col justify-between relative overflow-hidden group">
+          <div>
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Your Verified Pass</h3>
+            
+            {/* Pristine ID Card Wrapper */}
+            <div className="w-full flex justify-center py-2 overflow-hidden rounded-3xl">
+              <ShareableIDCard user={{ ...profile, majorTypes, completedCount }} ref={cardRef} />
+            </div>
+          </div>
+
+          <div className="space-y-4 mt-6">
+            <p className="text-xs font-medium text-slate-400 leading-relaxed">
+              Export your psychological blueprint to showcase on social bios or team spaces.
+            </p>
+            
+            <button
+              onClick={downloadCard}
+              disabled={isDownloading}
+              className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isDownloading ? (
+                <div className="w-3.5 h-3.5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+              ) : (
+                <Download className="w-3.5 h-3.5 text-indigo-200" />
+              )}
+              <span>{isDownloading ? '...' : 'Download ID Card'}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Neural Map & Visualizer Cell */}
+        <div className="lg:col-span-8 bg-white/70 backdrop-blur-3xl rounded-[2.5rem] border border-white/80 p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.02)] flex flex-col justify-between overflow-hidden relative">
+          <div>
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+              Personality Trait Map
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+            </h3>
+            
+            <p className="text-slate-500 text-sm font-medium leading-relaxed mb-6 max-w-xl">
+              Select any quadrant to discover detailed insights. Unlock more elements by completing assessments.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center mt-2">
+            {/* Trait Matrix Grid */}
+            <div className="md:col-span-6 grid grid-cols-2 gap-3 relative">
+              {results.map((res, i) => (
+                <motion.button
+                  key={i}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setSelectedTrait(res)}
+                  className={`flex flex-col items-start p-4 rounded-3xl border transition-all duration-300 ${
+                    selectedTrait?.label === res.label
                       ? 'bg-white border-indigo-200 shadow-md ring-2 ring-indigo-50'
-                      : 'bg-slate-50/50 border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow-sm'
-                      }`}
-                  >
-                    <div className={`w-10 h-10 rounded-xl bg-linear-to-br ${res.color} flex items-center justify-center text-white shadow-sm mb-3`}>
-                      <res.icon className="w-5 h-5" />
-                    </div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">{res.label}</p>
-                    <p className="text-lg font-black text-slate-800">{res.value}%</p>
-                  </motion.button>
-                ))}
-              </div>
+                      : 'bg-slate-50/50 border-slate-100 hover:bg-white hover:border-slate-200 hover:shadow-xs'
+                  }`}
+                >
+                  <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${res.color} flex items-center justify-center text-white shadow-2xs mb-2.5`}>
+                    <res.icon className="w-4.5 h-4.5" />
+                  </div>
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">{res.label}</span>
+                  <span className="text-base font-black text-slate-800">{res.value}%</span>
+                </motion.button>
+              ))}
             </div>
 
-            <div className="w-full md:w-auto flex flex-col items-center bg-slate-50/50 rounded-[3rem] p-8 border border-slate-100/50 relative">
+            {/* Trait Bars Module */}
+            <div className="md:col-span-6 bg-slate-50/50 border border-slate-100/50 rounded-3xl p-6 relative flex flex-col items-center justify-center min-h-[220px]">
               <TraitBars data={results} />
-
+              
               <AnimatePresence mode="wait">
                 {selectedTrait && (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-[3rem] p-8 flex flex-col items-center text-center justify-center border border-indigo-100 shadow-2xl z-20"
+                    className="absolute inset-0 bg-white/95 backdrop-blur-xs rounded-3xl p-6 flex flex-col items-center text-center justify-center border border-indigo-100 shadow-xl z-20"
                   >
-                    <div className={`w-16 h-16 rounded-2xl bg-linear-to-br ${selectedTrait.color} flex items-center justify-center text-white mb-4 shadow-lg`}>
-                      <selectedTrait.icon className="w-8 h-8" />
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${selectedTrait.color} flex items-center justify-center text-white mb-3 shadow-md`}>
+                      <selectedTrait.icon className="w-6 h-6" />
                     </div>
-                    <h3 className="text-xl font-black text-slate-800 uppercase tracking-tighter mb-2">{selectedTrait.label}</h3>
-                    <p className="text-sm text-slate-500 font-medium mb-6 leading-relaxed">
+                    <h4 className="text-md font-black text-slate-800 uppercase tracking-tighter mb-1.5">{selectedTrait.label}</h4>
+                    <p className="text-xs text-slate-500 font-medium leading-relaxed mb-4">
                       {selectedTrait.desc}
                     </p>
                     <button
                       onClick={() => setSelectedTrait(null)}
-                      className="px-6 py-2 bg-slate-900 text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 transition-colors"
+                      className="px-5 py-1.5 bg-slate-900 text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-indigo-600 transition-colors"
                     >
                       Close Insight
                     </button>
                   </motion.div>
                 )}
               </AnimatePresence>
-
-              <div className="mt-4 flex gap-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-indigo-500" />
-                  <span className="text-[10px] font-bold text-slate-400 uppercase">Cognitive Baseline</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Gamified Locked vs. Unlocked Test Aggregates */}
-          <div className="bg-white/70 backdrop-blur-3xl rounded-[2.5rem] border border-white/80 p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col relative">
-            <h2 className="text-2xl font-extrabold text-slate-800 mb-8 tracking-tight flex items-center gap-3">
-              <Layers className="w-6 h-6 text-indigo-500" />
-              Personality Stack Unlocks ({completedCount}/{activeTests.length})
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {activeTests.map((t) => (
-                <div
-                  key={t.id}
-                  className={`relative p-6 rounded-[2rem] border transition-all duration-500 ${t.loaded
-                    ? 'bg-linear-to-br from-indigo-50/50 to-white border-indigo-100/50 shadow-sm'
-                    : 'bg-slate-50/40 border-slate-100 backdrop-blur-sm'
-                    }`}
-                >
-                  {!t.loaded && (
-                    <div className="absolute top-6 right-6">
-                      <Lock className="w-4 h-4 text-slate-300" />
-                    </div>
-                  )}
-
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1.5">{t.title}</h3>
-
-                  {t.loaded ? (
-                    <div>
-                      <p className="text-xl font-black text-indigo-600 tracking-tight mb-4 truncate">{t.value}</p>
-                      <Link
-                        to={t.path}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-widest"
-                      >
-                        <span>Retake Test</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="text-xl font-bold text-slate-300 tracking-tight mb-4">UNKNOWN</p>
-                      <Link
-                        to={t.path}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-indigo-600 text-white rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 hover:scale-105 shadow-sm"
-                      >
-                        <PlusCircle className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                        <span>Take Test</span>
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Timeline */}
-          <div className="bg-white/70 backdrop-blur-3xl rounded-[2.5rem] border border-white/80 p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col relative">
-            <h2 className="text-2xl font-extrabold text-slate-800 mb-8 tracking-tight flex items-center gap-3">
-              <Calendar className="w-6 h-6 text-indigo-500" />
-              Completion Timeline
-            </h2>
-
-            <div className="relative border-l border-indigo-100 ml-4 pl-8 space-y-8 py-2">
-              <div className="relative">
-                <span className="absolute -left-12 top-0.5 bg-indigo-500 text-white rounded-full p-1.5 border-4 border-white shadow-sm flex items-center justify-center">
-                  <Fingerprint className="w-3.5 h-3.5" />
-                </span>
-                <h3 className="text-sm font-black text-slate-800">OmniType Account Initialized</h3>
-                <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">Step 1 • Completed</p>
-              </div>
-
-              <div className="relative">
-                <span className={`absolute -left-12 top-0.5 rounded-full p-1.5 border-4 border-white shadow-sm flex items-center justify-center ${mbtiData ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-400'
-                  }`}>
-                  <Brain className="w-3.5 h-3.5" />
-                </span>
-                <h3 className={`text-sm font-black ${mbtiData ? 'text-slate-800' : 'text-slate-400'}`}>16 Archetypes (MBTI)</h3>
-                <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">
-                  {mbtiData ? 'Step 2 • Fully Mapped' : 'Step 2 • Locked'}
-                </p>
-              </div>
-
-              <div className="relative">
-                <span className={`absolute -left-12 top-0.5 rounded-full p-1.5 border-4 border-white shadow-sm flex items-center justify-center ${loveLanguagesData ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-400'
-                  }`}>
-                  <Heart className="w-3.5 h-3.5" />
-                </span>
-                <h3 className={`text-sm font-black ${loveLanguagesData ? 'text-slate-800' : 'text-slate-400'}`}>Love Languages</h3>
-                <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">
-                  {loveLanguagesData ? 'Step 3 • Fully Mapped' : 'Step 3 • Locked'}
-                </p>
-              </div>
-
-              <div className="relative">
-                <span className={`absolute -left-12 top-0.5 rounded-full p-1.5 border-4 border-white shadow-sm flex items-center justify-center ${completedCount === 7 ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-400'
-                  }`}>
-                  <Award className="w-3.5 h-3.5" />
-                </span>
-                <h3 className={`text-sm font-black ${completedCount === 7 ? 'text-slate-800' : 'text-slate-400'}`}>Apex Integration Status</h3>
-                <p className="text-xs text-slate-400 mt-1 uppercase tracking-widest font-bold">
-                  {completedCount === 7 ? 'All Assessments Complete' : 'Awaiting Remaining Tests'}
-                </p>
-              </div>
             </div>
           </div>
         </div>
 
-        {/* Right Column: ID Card & Sharing */}
-        <div className="lg:col-span-4 flex flex-col gap-8">
-
-          <div className="bg-white/70 backdrop-blur-3xl rounded-[2.5rem] border border-white/80 p-8 shadow-[0_20px_50px_rgba(0,0,0,0.03)] lg:sticky lg:top-36 relative">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-xl font-bold text-slate-800 tracking-tight">Identity ID Card</h2>
-              <div className="flex gap-2">
-                <button
-                  onClick={downloadCard}
-                  className="p-2 rounded-full bg-slate-50 border border-slate-100 text-slate-400 hover:text-indigo-600 hover:border-indigo-100 transition-colors"
-                >
-                  <Download className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Perfect sizing container for ID Card */}
-            <div className="w-full flex justify-center overflow-hidden py-4 rounded-3xl">
-              <ShareableIDCard user={{ ...profile, majorTypes, completedCount }} ref={cardRef} />
-            </div>
-
-            <div className="mt-6 space-y-6">
-              <p className="text-sm font-medium text-slate-500 leading-relaxed">
-                Export your psychological stack as a verified digital asset.
-                Perfect for social bios, portfolios, or team-building sessions.
+        {/* ROW 4: Personality Stack Unlocks (12 cols) */}
+        <div className="lg:col-span-12 bg-white/70 backdrop-blur-3xl rounded-[2.5rem] border border-white/80 p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.02)] flex flex-col relative">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+            <div>
+              <h3 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+                <Layers className="w-5.5 h-5.5 text-indigo-500" />
+                Assessment Ecosystem
+              </h3>
+              <p className="text-slate-500 text-sm font-medium mt-1">
+                Unlock all 16 core paradigms to maximize your identity map completeness.
               </p>
-
-              <div className="grid grid-cols-2 gap-4">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setShowShareModal(true)}
-                  className="w-full py-4 border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm"
-                >
-                  <Share2 className="w-4 h-4 text-slate-400" />
-                  <span>Share Bio</span>
-                </motion.button>
-
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={downloadCard}
-                  disabled={isDownloading}
-                  className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-indigo-700 transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed animate-pulse"
-                >
-                  {isDownloading ? (
-                    <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <Sparkles className="w-4 h-4 text-indigo-200" />
-                  )}
-                  <span>{isDownloading ? '...' : 'Download'}</span>
-                </motion.button>
-              </div>
+            </div>
+            <div className="bg-indigo-50/50 border border-indigo-100/50 rounded-2xl px-4 py-2.5 text-right shrink-0">
+              <span className="text-[10px] font-bold text-slate-400 block uppercase tracking-wider">MAP DENSITY</span>
+              <span className="text-xl font-black text-indigo-600">{completedCount} <span className="text-slate-300">/</span> 16 UNLOCKED</span>
             </div>
           </div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            {activeTests.map((t) => (
+              <div
+                key={t.id}
+                className={`relative p-5 rounded-[2rem] border transition-all duration-300 flex flex-col justify-between min-h-[140px] group ${
+                  t.loaded
+                    ? 'bg-gradient-to-br from-indigo-50/30 to-white border-indigo-100/40 shadow-[0_4px_12px_rgba(99,102,241,0.02)] hover:shadow-xs'
+                    : 'bg-slate-50/30 border-slate-100/80 backdrop-blur-xs'
+                }`}
+              >
+                {!t.loaded && (
+                  <div className="absolute top-4 right-4">
+                    <Lock className="w-3.5 h-3.5 text-slate-300" />
+                  </div>
+                )}
+
+                <div>
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block mb-1.5">{t.title}</span>
+                  
+                  {t.loaded ? (
+                    <span className="text-lg font-black text-indigo-600 tracking-tight truncate block pr-2">
+                      {t.value}
+                    </span>
+                  ) : (
+                    <span className="text-lg font-bold text-slate-300 tracking-tight block">
+                      UNKNOWN
+                    </span>
+                  )}
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-100/50">
+                  {t.loaded ? (
+                    <Link
+                      to={t.path}
+                      className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-widest"
+                    >
+                      <span>Retake Paradigm</span>
+                      <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                    </Link>
+                  ) : (
+                    <Link
+                      to={t.path}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-indigo-600 text-white rounded-full text-[9px] font-bold uppercase tracking-widest transition-all duration-300 hover:scale-102 shadow-2xs"
+                    >
+                      <PlusCircle className="w-3 h-3 text-indigo-400" />
+                      <span>Take Assessment</span>
+                    </Link>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
+        {/* ROW 5: Actionable Growth Guide (12 cols) */}
+        <div className="lg:col-span-12 bg-white/70 backdrop-blur-3xl rounded-[2.5rem] border border-white/80 p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.02)] flex flex-col relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-purple-500/5 to-transparent rounded-full blur-[80px] pointer-events-none" />
+          
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+            <div>
+              <h3 className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+                <Compass className="w-6 h-6 text-indigo-500 animate-spin-slow" />
+                Actionable Growth Tips
+              </h3>
+              <p className="text-slate-500 text-sm font-medium mt-1">
+                Personalized advice unlocked dynamically as you complete your self-discovery surveys.
+              </p>
+            </div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 border border-slate-200/50 px-3 py-1.5 rounded-full block self-start">
+              Updated Live
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            {/* Superpower Card */}
+            <div className="bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-indigo-100/40 p-6 rounded-[2rem] transition-all duration-300 shadow-2xs flex flex-col justify-between group">
+              <div>
+                <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-4 group-hover:scale-105 transition-transform">
+                  <Star className="w-5 h-5" />
+                </div>
+                <h4 className="text-base font-black text-slate-850 tracking-tight mb-2">My Superpower</h4>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                  {mbtiData ? (
+                    `Your unique way of processing the world as an ${mbtiData.type || mbtiData} gives you a remarkable gift for long-term vision, recognizing hidden patterns, and building creative solutions.`
+                  ) : (
+                    "Complete the 16 Archetypes assessment to discover your dynamic mental superpower and how to leverage it daily."
+                  )}
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Mind & Focus</span>
+                {!mbtiData && (
+                  <Link to="/test/mbti" className="text-[9px] font-black text-indigo-600 uppercase tracking-widest hover:underline flex items-center gap-0.5">
+                    Unlock <ChevronRight className="w-3 h-3" />
+                  </Link>
+                )}
+              </div>
+            </div>
+
+            {/* Relationship Vibe Card */}
+            <div className="bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-pink-100/40 p-6 rounded-[2rem] transition-all duration-300 shadow-2xs flex flex-col justify-between group">
+              <div>
+                <div className="w-10 h-10 rounded-2xl bg-rose-50/55 flex items-center justify-center text-rose-500 mb-4 group-hover:scale-105 transition-transform">
+                  <Heart className="w-5 h-5" />
+                </div>
+                <h4 className="text-base font-black text-slate-850 tracking-tight mb-2">My Relationship Vibe</h4>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                  {loveLanguagesData || attachmentStylesData ? (
+                    `You thrive best when relationships are built on honest trust and clear feelings. Communicating through ${loveLanguagesData?.fullTitle || "your love language"} makes you highly receptive and supportive.`
+                  ) : (
+                    "Complete your Love Languages or Attachment Styles surveys to map how you connect with others and foster deep relationships."
+                  )}
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Connection Vibe</span>
+                {(!loveLanguagesData || !attachmentStylesData) && (
+                  <Link to="/test/love-languages" className="text-[9px] font-black text-rose-500 uppercase tracking-widest hover:underline flex items-center gap-0.5">
+                    Unlock <ChevronRight className="w-3 h-3" />
+                  </Link>
+                )}
+              </div>
+            </div>
+
+            {/* Growth Challenge Card */}
+            <div className="bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-amber-100/40 p-6 rounded-[2rem] transition-all duration-300 shadow-2xs flex flex-col justify-between group">
+              <div>
+                <div className="w-10 h-10 rounded-2xl bg-amber-50/55 flex items-center justify-center text-amber-500 mb-4 group-hover:scale-105 transition-transform">
+                  <Compass className="w-5 h-5" />
+                </div>
+                <h4 className="text-base font-black text-slate-850 tracking-tight mb-2">My Growth Area</h4>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                  {alignmentData || defenseData ? (
+                    "When under pressure, your instincts naturally step in to keep you safe. Practice pausing in tense moments, taking a breath, and expressing yourself honestly from a place of warm heart."
+                  ) : (
+                    "Unlock Moral Alignment and Defense Mechanisms to discover how you handle challenges and get actionable exercises to level up your resilience."
+                  )}
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Growth & Peace</span>
+                {(!alignmentData || !defenseData) && (
+                  <Link to="/test/alignment" className="text-[9px] font-black text-amber-600 uppercase tracking-widest hover:underline flex items-center gap-0.5">
+                    Unlock <ChevronRight className="w-3 h-3" />
+                  </Link>
+                )}
+              </div>
+            </div>
+
+          </div>
+        </div>
       </div>
 
       {/* Sharing Overlay Modal */}
