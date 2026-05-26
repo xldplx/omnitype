@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useParams, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ChevronLeft, Shield, Heart, Activity, Zap, AlertTriangle, Users, Briefcase } from 'lucide-react';
+import { ChevronLeft, Shield, Heart, Activity, Zap, AlertTriangle, Users, Briefcase, Target, TrendingUp, MessageCircle, Swords, Sparkles } from 'lucide-react';
 import { attachmentStylesTypes } from '../utils/attachmentStylesLogic';
 
 export default function AttachmentStylesResult() {
@@ -14,7 +14,10 @@ export default function AttachmentStylesResult() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+    if (resultData) {
+      localStorage.setItem('omnitype_attachment_styles', JSON.stringify(resultData));
+    }
+  }, [resultData]);
 
   // If accessed directly via URL (no state), reconstruct resultData from the URL param
   if (!resultData && type) {
@@ -186,6 +189,38 @@ export default function AttachmentStylesResult() {
           </div>
         </motion.div>
 
+        {/* Triggers & Growth Path */}
+        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-12 hover:-translate-y-1 transition-transform duration-500">
+            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-8 border-b border-slate-100 pb-4">
+              <Target className="w-5 h-5 text-indigo-400" />
+              Emotional Triggers
+            </h4>
+            <ul className="space-y-6">
+              {info.triggers?.map((item, idx) => (
+                <li key={idx} className="flex gap-5 items-start">
+                  <div className={`mt-2 w-2 h-2 rounded-full bg-slate-300 shrink-0`} />
+                  <p className="text-slate-600 leading-relaxed text-lg">{item}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-12 hover:-translate-y-1 transition-transform duration-500">
+            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-8 border-b border-slate-100 pb-4">
+              <TrendingUp className="w-5 h-5 text-emerald-400" />
+              Growth & Healing
+            </h4>
+            <ul className="space-y-6">
+              {info.growthPath?.map((item, idx) => (
+                <li key={idx} className="flex gap-5 items-start">
+                  <div className={`mt-2 w-2 h-2 rounded-full bg-linear-to-r ${info.color} shrink-0`} />
+                  <p className="text-slate-600 leading-relaxed text-lg">{item}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </motion.div>
+
         {/* Deep Dive Details */}
         <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-12 hover:-translate-y-1 transition-transform duration-500">
@@ -207,6 +242,41 @@ export default function AttachmentStylesResult() {
               {info.workplaceBehavior}
             </p>
           </div>
+        </motion.div>
+
+        {/* Communication & Conflict */}
+        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-12 hover:-translate-y-1 transition-transform duration-500">
+            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-6 border-b border-slate-100 pb-4">
+              <MessageCircle className="w-5 h-5 text-sky-400" />
+              Communication Style
+            </h4>
+            <p className="text-slate-600 leading-loose text-[1.1rem]">
+              {info.communicationStyle}
+            </p>
+          </div>
+          
+          <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-12 hover:-translate-y-1 transition-transform duration-500">
+            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-6 border-b border-slate-100 pb-4">
+              <Swords className="w-5 h-5 text-rose-400" />
+              Conflict Resolution
+            </h4>
+            <p className="text-slate-600 leading-loose text-[1.1rem]">
+              {info.conflictResolution}
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Dating Advice */}
+        <motion.div variants={itemVariants} className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-12 mb-8 relative overflow-hidden group hover:-translate-y-1 transition-transform duration-500">
+          <div className={`absolute top-0 right-0 w-2 h-full bg-linear-to-b ${info.color} opacity-50 group-hover:opacity-100 transition-opacity duration-500`} />
+          <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-6 border-b border-slate-100 pb-4">
+            <Sparkles className="w-5 h-5 text-amber-400" />
+            Dating & Relationship Advice
+          </h4>
+          <p className="text-slate-600 leading-loose text-[1.2rem] font-medium">
+            {info.datingAdvice}
+          </p>
         </motion.div>
 
         {/* Global Score Breakdown */}

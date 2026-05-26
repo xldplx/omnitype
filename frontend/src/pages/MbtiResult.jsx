@@ -16,6 +16,12 @@ export default function MbtiResult() {
 
   const typeInfo = typeDescriptions[upperType];
 
+  useEffect(() => {
+    if (upperType) {
+      localStorage.setItem('omnitype_mbti', upperType);
+    }
+  }, [upperType]);
+
   if (!typeInfo) {
     return <Navigate to="/test/mbti" replace />;
   }

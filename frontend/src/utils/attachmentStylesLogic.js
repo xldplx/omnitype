@@ -16,6 +16,19 @@ export const attachmentStylesTypes = {
       "Can sometimes stay in a stable but unfulfilling relationship too long because they are good at enduring and repairing.",
       "Might unintentionally overlook the deep underlying anxieties of their anxious or avoidant partners."
     ],
+    triggers: [
+      "Continuous, unexplained emotional withdrawal from a partner.",
+      "A relationship where effort is consistently unreciprocated.",
+      "Extreme, unmanaged emotional volatility or lack of accountability."
+    ],
+    communicationStyle: "Direct, honest, and empathetic. You say what you mean without hidden agendas and expect the same in return. You are comfortable expressing both positive and negative emotions.",
+    conflictResolution: "You view conflict as a temporary hurdle to be solved as a team. You tend to stay emotionally regulated, listen to your partner's perspective, and seek compromises rather than 'winning'.",
+    growthPath: [
+      "Ensure you don't take on the role of 'therapist' for deeply insecure partners.",
+      "Practice setting firm boundaries when your empathy is being taken advantage of.",
+      "Remember that it is okay to walk away from relationships that consistently drain you, even if you have the capacity to endure."
+    ],
+    datingAdvice: "Seek out partners who match your level of consistency and transparency. Don't let your high tolerance for relationship work lead you into settling for someone who requires constant fixing.",
     relationshipDynamics: "In a relationship, you are a grounding force. You offer reassurance naturally but don't require constant validation in return. You are usually not prone to extreme jealousy. You expect relationships to be a source of comfort, not a battlefield.",
     workplaceBehavior: "You are an excellent collaborator. You handle constructive criticism well, don't take professional setbacks as personal attacks, and can build strong and healthy boundaries with your coworkers and managers.",
     color: "from-amber-400 to-orange-500",
@@ -39,6 +52,19 @@ export const attachmentStylesTypes = {
       "Can overwhelm partners by demanding constant reassurance or trying to force closeness when the partner needs space.",
       "May use 'protest behavior' (like making a partner jealous or withdrawing) to get attention."
     ],
+    triggers: [
+      "Unexplained silences, delayed text responses, or sudden changes in communication frequency.",
+      "Ambiguous answers regarding the future of the relationship.",
+      "A partner pulling away physically or emotionally to take space."
+    ],
+    communicationStyle: "Emotionally expressive but often heavily filtered through fear. You may seek frequent verbal confirmation and sometimes struggle to directly state your needs without framing them as accusations.",
+    conflictResolution: "Conflict feels like a threat to the relationship. You may try to solve it immediately without giving space, or use protest behaviors (ignoring, passive-aggression) to force the partner to chase you.",
+    growthPath: [
+      "Develop self-soothing techniques to manage anxiety without relying entirely on your partner.",
+      "Learn to recognize protest behavior and replace it with direct, vulnerable communication.",
+      "Build a strong sense of identity and self-esteem entirely independent of your relationship status."
+    ],
+    datingAdvice: "Look for secure, consistent partners who communicate well and are naturally warm. Actively avoid dismissive-avoidant partners, as their need for space will constantly trigger your deepest anxieties.",
     relationshipDynamics: "You have a highly active 'attachment system.' If your partner is slightly distant, you may assume the relationship is ending and panic. When a partner offers consistent, warm reassurance, you blossom. You are drawn to people, but often inadvertently choose avoidant partners, triggering a cycle of anxiety.",
     workplaceBehavior: "You may suffer strongly from imposter syndrome and require frequent validation from managers to feel secure. You are an incredibly dedicated worker but might over-commit to tasks out of a fear of disappointing the team or being deemed expendable.",
     color: "from-sky-400 to-blue-500",
@@ -62,6 +88,19 @@ export const attachmentStylesTypes = {
       "Will subconsciously sabotage relationships by finding fatal flaws in their partner when things get 'too close'.",
       "Struggle deeply to provide emotional support or vulnerability when a partner desperately needs it."
     ],
+    triggers: [
+      "Partners demanding too much of your time or energy.",
+      "Intense emotional outbursts or perceived 'neediness' from others.",
+      "Feeling pressured to make long-term commitments before you are ready."
+    ],
+    communicationStyle: "Logical, brief, and highly guarded. You tend to withhold emotional depths and prefer to keep conversations focused on facts, ideas, or external events rather than feelings.",
+    conflictResolution: "Your primary instinct is to withdraw. You may shut down completely, use logic to dismiss your partner's emotions, and require intense physical and emotional space to decompress.",
+    growthPath: [
+      "Practice 'leaning in' to the discomfort of intimacy instead of immediately running away.",
+      "Learn to communicate your need for space explicitly ('I need 30 minutes to cool down') rather than ghosting.",
+      "Acknowledge and validate your partner's feelings, even if they seem illogical to you."
+    ],
+    datingAdvice: "Be upfront about your deep need for independence. Look for secure partners who have their own rich lives and won't overwhelm you, and avoid anxious partners whose needs will make you feel trapped.",
     relationshipDynamics: "You value your partner but keep them at arm's length. The closer the relationship gets, the more 'flaws' you suddenly notice in the other person. You often prefer casual relationships or long-distance setups. When confronted with intense emotion or conflict, your flight response triggers instantly.",
     workplaceBehavior: "You excel as an individual contributor. You dislike micromanagement or highly emotional workplace environments. You are excellent in a crisis because you naturally detach your emotions from the situation, but you may occasionally alienate teammates who desire a warmer connection.",
     color: "from-emerald-400 to-teal-500",
@@ -85,6 +124,19 @@ export const attachmentStylesTypes = {
       "May abruptly end relationships out of fear, only to regret it deeply later.",
       "Often struggles to trust their own instincts, assuming that a safe partner is secretly dangerous, or a dangerous partner is safe."
     ],
+    triggers: [
+      "Intense intimacy or someone getting 'too close' (feels profoundly unsafe).",
+      "Sudden distance or perceived rejection from a partner (feels like abandonment).",
+      "Feeling misunderstood or gaslit in a relationship."
+    ],
+    communicationStyle: "Unpredictable. You may alternate between moments of raw, extreme vulnerability and periods of intense defensiveness and secrecy, depending on how safe you feel in the moment.",
+    conflictResolution: "Conflict can escalate rapidly due to high emotional volatility. You might push your partner away aggressively before they have a chance to leave you, testing their loyalty.",
+    growthPath: [
+      "Engage in trauma processing or therapy to heal the core wounds driving the disorganized attachment.",
+      "Practice pausing and identifying your emotions (fear vs. reality) before reacting to a trigger.",
+      "Build a fundamental belief that safe, consistent, and non-abusive love actually exists and you deserve it."
+    ],
+    datingAdvice: "Take relationships very slowly. Communicate your 'push-pull' tendencies to a trusted partner so they understand your sudden withdrawal is a trauma response, not a lack of love.",
     relationshipDynamics: "You want them to 'come here' but also 'go away.' When a partner pulls away, you become intensely anxious and chase them. But when that partner finally offers consistent love, you suddenly feel claustrophobic and detached. This style often stems from confusing or chaotic early life environments.",
     workplaceBehavior: "You may alternate between being highly engaged and deeply withdrawn based on your stress levels. You are likely highly perceptive of office politics and power dynamics, but you may struggle to trust your superiors completely, seeing hidden threats where none exist.",
     color: "from-purple-500 to-fuchsia-600",

@@ -14,7 +14,10 @@ export default function HspResult() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+    if (resultData) {
+      localStorage.setItem('omnitype_hsp', JSON.stringify(resultData));
+    }
+  }, [resultData]);
 
   // If accessed directly via URL, reconstruct resultData
   if (!resultData && type) {

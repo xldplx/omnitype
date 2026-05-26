@@ -86,7 +86,7 @@ export default function App() {
               <Route path="/result/defense/:type" element={<DefenseResult />} />
               <Route path="/test/imposter" element={<ImposterTest />} />
               <Route path="/result/imposter/:type" element={<ImposterResult />} />
-              {/* <Route path="/dashboard" element={<IdentityDashboard />} /> */}
+              <Route path="/dashboard" element={<IdentityDashboard />} />
             </Routes>
           </main>
         </div>
