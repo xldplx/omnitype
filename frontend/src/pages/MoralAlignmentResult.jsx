@@ -13,7 +13,12 @@ export default function MoralAlignmentResult() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+    if (resultData) {
+      localStorage.setItem('omnitype_alignment', JSON.stringify(resultData));
+    } else if (type) {
+      localStorage.setItem('omnitype_alignment', type);
+    }
+  }, [resultData, type]);
 
   // Failsafe for direct URL access without state
   if (!resultData && type) {

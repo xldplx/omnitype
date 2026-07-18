@@ -14,7 +14,12 @@ export default function InstinctualVariantsResult() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+    if (resultData) {
+      localStorage.setItem('omnitype_instinctual_variants', JSON.stringify(resultData));
+    } else if (type) {
+      localStorage.setItem('omnitype_instinctual_variants', type);
+    }
+  }, [resultData, type]);
 
   // If accessed directly via URL (no state), reconstruct resultData from the URL param
   if (!resultData && type) {

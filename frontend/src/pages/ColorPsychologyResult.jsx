@@ -13,7 +13,12 @@ export default function ColorPsychologyResult() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+    if (resultData) {
+      localStorage.setItem('omnitype_color_psychology', JSON.stringify(resultData));
+    } else if (type) {
+      localStorage.setItem('omnitype_color_psychology', type);
+    }
+  }, [resultData, type]);
 
   // If accessed directly via URL, reconstruct minimal simulated data
   if (!resultData && type) {

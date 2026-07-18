@@ -14,7 +14,10 @@ export default function DarkTriadResult() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+    if (resultData) {
+      localStorage.setItem('omnitype_dark_triad', JSON.stringify(resultData));
+    }
+  }, [resultData]);
 
   // If accessed directly via URL, reconstruct resultData
   if (!resultData && type) {
@@ -53,10 +56,10 @@ export default function DarkTriadResult() {
       
       {/* Massive Editorial Background Typography */}
       <motion.div 
-        initial={{ scale: 1.1, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.03 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        className="fixed top-20 left-0 right-0 h-screen flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden"
+         initial={{ scale: 1.1, opacity: 0 }}
+         animate={{ scale: 1, opacity: 0.03 }}
+         transition={{ duration: 1.5, ease: "easeOut" }}
+         className="fixed top-20 left-0 right-0 h-screen flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden"
       >
         <span className="font-black text-[30vw] tracking-tighter leading-none text-slate-800">
           SHADOW
@@ -182,14 +185,58 @@ export default function DarkTriadResult() {
                     </p>
                 </div>
 
-                {/* Dark Core */}
-                <div className="flex flex-col md:col-span-2 mt-4 bg-black/30 p-8 rounded-3xl border border-zinc-800">
-                    <div className="flex items-center gap-4 mb-4">
-                        <Flame className="w-6 h-6 text-amber-500" />
-                        <h5 className="text-xl font-bold text-white tracking-tight">The Dark Core Motivation</h5>
+                {/* Cognitive Modus */}
+                <div className="flex flex-col">
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${info.color} flex items-center justify-center shadow-lg`}>
+                            <BrainCircuit className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                            <span className="text-[0.65rem] font-bold tracking-widest text-zinc-400 uppercase block mb-1">Cognitive Modus Operandi</span>
+                            <h5 className="text-2xl font-bold text-white tracking-tight leading-none">How You Compute</h5>
+                        </div>
                     </div>
-                    <div className="pl-10">
-                        <p className="text-zinc-300 text-[1.05rem] leading-relaxed">{info.darkCore}</p>
+                    <p className="text-zinc-300 text-lg leading-relaxed font-medium pl-16">
+                        {info.cognitiveModus}
+                    </p>
+                </div>
+
+                {/* Exhaustion Index */}
+                <div className="flex flex-col">
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${info.color} flex items-center justify-center shadow-lg`}>
+                            <AlertTriangle className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                            <span className="text-[0.65rem] font-bold tracking-widest text-zinc-400 uppercase block mb-1">Interpersonal Exhaustion Index</span>
+                            <h5 className="text-2xl font-bold text-white tracking-tight leading-none">What Drains You</h5>
+                        </div>
+                    </div>
+                    <p className="text-zinc-300 text-lg leading-relaxed font-medium pl-16">
+                        {info.exhaustionIndex}
+                    </p>
+                </div>
+
+                {/* Dark Core & Self Correction */}
+                <div className="flex flex-col md:col-span-2 mt-4 bg-black/30 p-8 rounded-3xl border border-zinc-800 gap-6">
+                    <div>
+                        <div className="flex items-center gap-4 mb-4">
+                            <Flame className="w-6 h-6 text-amber-500" />
+                            <h5 className="text-xl font-bold text-white tracking-tight">The Dark Core Motivation</h5>
+                        </div>
+                        <div className="pl-10">
+                            <p className="text-zinc-300 text-[1.05rem] leading-relaxed">{info.darkCore}</p>
+                        </div>
+                    </div>
+                    
+                    <div className="border-t border-zinc-800 pt-6">
+                        <div className="flex items-center gap-4 mb-4">
+                            <Shield className="w-6 h-6 text-indigo-400" />
+                            <h5 className="text-xl font-bold text-white tracking-tight">Self-Correction & Psychological Growth</h5>
+                        </div>
+                        <div className="pl-10">
+                            <p className="text-zinc-300 text-[1.05rem] leading-relaxed italic">{info.selfCorrection}</p>
+                        </div>
                     </div>
                 </div>
             </div>

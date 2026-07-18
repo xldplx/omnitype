@@ -14,7 +14,10 @@ export default function DefenseResult() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+    if (resultData) {
+      localStorage.setItem('omnitype_defense', JSON.stringify(resultData));
+    }
+  }, [resultData]);
 
   // If accessed directly via URL, reconstruct resultData
   if (!resultData && type) {
@@ -53,10 +56,10 @@ export default function DefenseResult() {
       
       {/* Massive Editorial Background Typography */}
       <motion.div 
-        initial={{ scale: 1.1, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.03 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        className="fixed top-20 left-0 right-0 h-screen flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden"
+         initial={{ scale: 1.1, opacity: 0 }}
+         animate={{ scale: 1, opacity: 0.03 }}
+         transition={{ duration: 1.5, ease: "easeOut" }}
+         className="fixed top-20 left-0 right-0 h-screen flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden"
       >
         <span className="font-black text-[25vw] tracking-tighter leading-none text-slate-800">
           DEFENSE
@@ -182,14 +185,58 @@ export default function DefenseResult() {
                     </p>
                 </div>
 
-                {/* The Backfire Effect */}
-                <div className="flex flex-col md:col-span-2 mt-4 bg-white/5 p-8 rounded-3xl border border-white/10">
-                    <div className="flex items-center gap-4 mb-4">
-                        <ShieldAlert className="w-6 h-6 text-rose-400" />
-                        <h5 className="text-xl font-bold text-white tracking-tight">The Backfire Effect</h5>
+                {/* Cognitive Load */}
+                <div className="flex flex-col">
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${info.color} flex items-center justify-center shadow-lg`}>
+                            <BrainCircuit className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                            <span className="text-[0.65rem] font-bold tracking-widest text-white/50 uppercase block mb-1">Systemic Cognitive Load</span>
+                            <h5 className="text-2xl font-bold text-white tracking-tight leading-none">Background Processing Cost</h5>
+                        </div>
                     </div>
-                    <div className="pl-10">
-                        <p className="text-slate-300 text-[1.05rem] leading-relaxed font-medium">{info.backfireEffect}</p>
+                    <p className="text-slate-400 text-lg leading-relaxed font-medium pl-16">
+                        {info.cognitiveLoad}
+                    </p>
+                </div>
+
+                {/* Nervous System Status */}
+                <div className="flex flex-col">
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${info.color} flex items-center justify-center shadow-lg`}>
+                            <Activity className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                            <span className="text-[0.65rem] font-bold tracking-widest text-white/50 uppercase block mb-1">Nervous System State</span>
+                            <h5 className="text-2xl font-bold text-white tracking-tight leading-none">Physiological Baseline</h5>
+                        </div>
+                    </div>
+                    <p className="text-slate-400 text-lg leading-relaxed font-medium pl-16">
+                        {info.nervousSystemStatus}
+                    </p>
+                </div>
+
+                {/* The Backfire Effect & Growth Pathway */}
+                <div className="flex flex-col md:col-span-2 mt-4 bg-white/5 p-8 rounded-3xl border border-white/10 gap-6">
+                    <div>
+                        <div className="flex items-center gap-4 mb-4">
+                            <ShieldAlert className="w-6 h-6 text-rose-400" />
+                            <h5 className="text-xl font-bold text-white tracking-tight">The Backfire Effect</h5>
+                        </div>
+                        <div className="pl-10">
+                            <p className="text-slate-300 text-[1.05rem] leading-relaxed font-medium">{info.backfireEffect}</p>
+                        </div>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-6">
+                        <div className="flex items-center gap-4 mb-4">
+                            <Zap className="w-6 h-6 text-emerald-400" />
+                            <h5 className="text-xl font-bold text-white tracking-tight">Targeted Growth Pathway</h5>
+                        </div>
+                        <div className="pl-10">
+                            <p className="text-slate-300 text-[1.05rem] leading-relaxed font-medium italic">{info.growthPathway}</p>
+                        </div>
                     </div>
                 </div>
             </div>
