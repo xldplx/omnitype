@@ -254,17 +254,15 @@ export default function IdentityDashboard() {
   // Load state from localStorage on mount
   useEffect(() => {
     const savedProfile = localStorage.getItem('omnitype_user_profile');
-    if (!savedProfile) {
-      navigate('/login');
-      return;
+    if (savedProfile) {
+      try { 
+        const parsed = JSON.parse(savedProfile);
+        setProfile({
+          ...DEFAULT_PROFILE,
+          ...parsed
+        });
+      } catch (e) { console.error(e); }
     }
-    try { 
-      const parsed = JSON.parse(savedProfile);
-      setProfile({
-        ...DEFAULT_PROFILE,
-        ...parsed
-      });
-    } catch (e) { console.error(e); }
 
     const loadLocal = (key, setter) => {
       const val = localStorage.getItem(key);

@@ -5,6 +5,8 @@ import { User, ChevronDown } from 'lucide-react';
 
 export default function Navbar() {
   const location = useLocation();
+  if (location.pathname === '/error') return null;
+
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);

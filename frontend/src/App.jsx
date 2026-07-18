@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import MbtiPage from './pages/MbtiPage';
@@ -40,6 +40,15 @@ import ImposterResult from './pages/ImposterResult';
 import IdentityDashboard from './pages/IdentityDashboard';
 import Wiki from './pages/Wiki';
 import Login from './pages/Login';
+import ErrorPage from './pages/ErrorPage';
+
+function LocalhostRoute({ children }) {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  if (!isLocalhost) {
+    return <Navigate to="/error" replace />;
+  }
+  return children;
+}
 
 export default function App() {
   return (
@@ -88,9 +97,10 @@ export default function App() {
               <Route path="/result/defense/:type" element={<DefenseResult />} />
               <Route path="/test/imposter" element={<ImposterTest />} />
               <Route path="/result/imposter/:type" element={<ImposterResult />} />
-              <Route path="/dashboard" element={<IdentityDashboard />} />
+              <Route path="/dashboard" element={<LocalhostRoute><IdentityDashboard /></LocalhostRoute>} />
               <Route path="/wiki" element={<Wiki />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/login" element={<LocalhostRoute><Login /></LocalhostRoute>} />
+              <Route path="/error" element={<ErrorPage />} />
             </Routes>
           </main>
         </div>
