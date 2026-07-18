@@ -38,6 +38,8 @@ import DefenseResult from './pages/DefenseResult';
 import ImposterTest from './pages/ImposterTest';
 import ImposterResult from './pages/ImposterResult';
 import IdentityDashboard from './pages/IdentityDashboard';
+import Wiki from './pages/Wiki';
+import Login from './pages/Login';
 
 export default function App() {
   return (
@@ -87,6 +89,8 @@ export default function App() {
               <Route path="/test/imposter" element={<ImposterTest />} />
               <Route path="/result/imposter/:type" element={<ImposterResult />} />
               <Route path="/dashboard" element={<IdentityDashboard />} />
+              <Route path="/wiki" element={<Wiki />} />
+              <Route path="/login" element={<Login />} />
             </Routes>
           </main>
         </div>
