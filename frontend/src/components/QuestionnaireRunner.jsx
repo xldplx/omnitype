@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 
 export default function QuestionnaireRunner({
@@ -59,7 +59,7 @@ export default function QuestionnaireRunner({
         value: a.value,
         type: a.type
       }));
-      
+
       const simpleAnswersMap = {};
       Object.keys(answers).forEach(k => {
         simpleAnswersMap[k] = answers[k].value;
@@ -90,7 +90,7 @@ export default function QuestionnaireRunner({
   if (isFinished && !result) {
     return (
       <div className="w-full min-h-screen bg-[#fafafa] flex flex-col items-center justify-center pt-24 pb-32">
-        <motion.div 
+        <Motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="text-center w-full max-w-xl px-6 flex flex-col items-center"
@@ -99,9 +99,9 @@ export default function QuestionnaireRunner({
           <h2 className="text-2xl md:text-3xl font-bold mb-4 text-slate-800 tracking-tight">{loadingTitle}</h2>
           <p className="text-slate-500 text-[1.1rem] tracking-wide font-medium flex items-center justify-center gap-2">
             {loadingSubtitle}
-            <motion.span animate={{ opacity: [0, 1, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>...</motion.span>
+            <Motion.span animate={{ opacity: [0, 1, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>...</Motion.span>
           </p>
-        </motion.div>
+        </Motion.div>
       </div>
     );
   }
@@ -116,19 +116,21 @@ export default function QuestionnaireRunner({
   // TEST VIEW
   // ----------------------------------------
   return (
-    <div className="w-full min-h-screen bg-white pt-24 pb-32 relative overflow-hidden">
+    <div className="w-full min-h-screen bg-transparent pt-24 pb-32 relative overflow-hidden">
       <div className="w-full max-w-220 mx-auto px-4 md:px-8 mt-12 relative z-10">
-        
+
         {/* Progress Header */}
-        <div className="bg-white/90 backdrop-blur-md sticky top-24 md:top-28 z-40 py-5 mb-16 border-b border-slate-100">
-          <div className="flex justify-between items-center text-[0.65rem] md:text-xs font-bold text-slate-400 mb-4 tracking-[0.2em] uppercase">
-            <span>Progress: {Math.round(progress)}%</span>
-            <span className="hidden sm:inline bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
+        <div className="bg-transparent sticky top-24 md:top-28 z-40 py-5 mb-16 border-b border-slate-200/40">
+          <div className="flex justify-between items-center text-[0.65rem] md:text-xs font-bold text-slate-600 mb-4 tracking-[0.15em] uppercase">
+            <span className="bg-white/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-200/80 shadow-xs flex items-center gap-2">
+              Progress: {Math.round(progress)}%
+            </span>
+            <span className="bg-white/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-200/80 shadow-xs">
               Phase {currentPage + 1} / {totalPages}
             </span>
           </div>
-          <div className="h-1.5 w-full bg-slate-100 overflow-hidden rounded-full">
-            <motion.div 
+          <div className="h-2 w-full bg-slate-200/60 overflow-hidden rounded-full shadow-inner">
+            <Motion.div
               className={`h-full bg-linear-to-r ${progressGradient}`}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.6, ease: "easeOut" }}
@@ -139,7 +141,7 @@ export default function QuestionnaireRunner({
         {/* Question List */}
         <div className="flex flex-col w-full">
           <AnimatePresence mode="wait">
-            <motion.div
+            <Motion.div
               key={currentPage}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -148,9 +150,9 @@ export default function QuestionnaireRunner({
               className="flex flex-col w-full"
             >
               {currentQuestions.map((q, idx) => (
-                <QuestionRow 
-                  key={q.id} 
-                  question={q} 
+                <QuestionRow
+                  key={q.id}
+                  question={q}
                   value={answers[q.id]?.value}
                   onChange={(val) => handleAnswer(q.id, val)}
                   isLast={idx === currentQuestions.length - 1}
@@ -158,31 +160,31 @@ export default function QuestionnaireRunner({
                   rightLabel={rightLabel}
                 />
               ))}
-            </motion.div>
+            </Motion.div>
           </AnimatePresence>
 
           {/* Footer Nav */}
           <div className="pt-20 pb-8 flex flex-col md:flex-row justify-center items-center w-full px-4 md:px-0">
             <div className="flex items-center gap-4">
               {currentPage > 0 && (
-                <button 
+                <button
                   onClick={handlePrevPage}
-                  className="bg-white border border-slate-200 text-slate-600 shadow-sm flex items-center justify-center px-6 py-4 rounded-full font-semibold tracking-widest uppercase transition-all duration-300 hover:bg-slate-50 hover:shadow-md cursor-pointer"
+                  className="bg-white border border-slate-200 text-slate-600 shadow-xs flex items-center justify-center px-6 py-4 rounded-full font-semibold tracking-widest uppercase transition-all duration-300 hover:bg-slate-50 hover:scale-105 active:scale-95 cursor-pointer"
                 >
                   Back
                 </button>
               )}
-              
-              <button 
+
+              <button
                 onClick={handleNextPage}
                 disabled={!isPageComplete}
-                className={`bg-slate-900 border border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex items-center gap-3 px-12 py-4 rounded-full text-white text-[0.95rem] font-semibold tracking-widest uppercase transition-all duration-500 overflow-hidden relative group ${!isPageComplete ? 'opacity-30 cursor-not-allowed scale-100' : 'hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(0,0,0,0.2)] hover:bg-slate-800 cursor-pointer'}`}
+                className={`bg-slate-900 border border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex items-center gap-3 px-12 py-4 rounded-full text-white text-[0.95rem] font-semibold tracking-widest uppercase transition-all duration-300 overflow-hidden relative group ${!isPageComplete ? 'opacity-30 cursor-not-allowed scale-100' : 'hover:scale-105 active:scale-95 hover:shadow-[0_12px_40px_rgb(0,0,0,0.2)] hover:bg-slate-800 cursor-pointer'}`}
               >
                 <span className="relative z-10">
                   {currentPage === totalPages - 1 ? 'Analyze Data' : 'Continue'}
                 </span>
                 <ChevronRight className="w-5 h-5 opacity-70 relative z-10 transition-transform duration-500 group-hover:translate-x-1" />
-                
+
                 {/* Shine effect on hover */}
                 <div className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/20 to-transparent group-hover:animate-[shimmer_1.5s_infinite] transition-all duration-1000" />
               </button>
@@ -190,7 +192,7 @@ export default function QuestionnaireRunner({
           </div>
         </div>
       </div>
-      
+
       {/* Disclaimer Footer if provided */}
       {disclaimer && (
         <div className="w-full max-w-4xl mx-auto px-6 mt-12 pb-20 text-center">
@@ -230,7 +232,7 @@ function QuestionRow({ question, value, onChange, isLast, leftLabel, rightLabel 
       <h3 className="text-[1.2rem] md:text-2xl font-medium text-center mb-10 md:mb-14 text-slate-700 leading-relaxed max-w-3xl px-4 tracking-normal">
         {question.text}
       </h3>
-      
+
       {/* DESKTOP VIEW */}
       <div className="hidden sm:flex items-center justify-center w-full max-w-4xl mt-4">
         <div className="flex-1 flex justify-end pr-4 md:pr-8">
@@ -238,7 +240,7 @@ function QuestionRow({ question, value, onChange, isLast, leftLabel, rightLabel 
             {leftLabel}
           </span>
         </div>
-        
+
         <div className="flex gap-3 md:gap-6 items-center justify-center shrink-0">
           {desktopOptions.map((opt) => (
             <button

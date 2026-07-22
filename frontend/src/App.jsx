@@ -45,6 +45,7 @@ const ImposterResult = lazy(() => import('./pages/ImposterResult'));
 
 const IdentityDashboard = lazy(() => import('./pages/IdentityDashboard'));
 const Wiki = lazy(() => import('./pages/Wiki'));
+const ComingSoon = lazy(() => import('./pages/ComingSoon'));
 const Login = lazy(() => import('./pages/Login'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
 
@@ -68,7 +69,12 @@ function PageLoader() {
 export default function App() {
   return (
     <Router>
-      <div className="bg-slate-50 min-h-screen text-slate-800 relative w-full h-full font-sans overflow-x-hidden">
+      <div className="bg-[#fafafa] min-h-screen text-slate-800 relative w-full h-full font-sans overflow-x-hidden selection:bg-purple-200">
+        
+        {/* Zero-Cost Ambient Radial Background Layer */}
+        <div className="fixed top-[-10vh] left-[-10vw] w-[60vw] h-[60vw] bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.06),_transparent_70%)] pointer-events-none z-0" />
+        <div className="fixed bottom-[10vh] right-[-10vw] w-[50vw] h-[50vw] bg-[radial-gradient(circle_at_center,_rgba(244,63,94,0.05),_transparent_70%)] pointer-events-none z-0" />
+
         <div className="relative z-10 flex flex-col min-h-screen w-full">
           <Navbar />
           <main className="flex-1 w-full mx-auto">
@@ -111,6 +117,7 @@ export default function App() {
                 <Route path="/result/imposter/:type" element={<ImposterResult />} />
                 <Route path="/dashboard" element={<LocalhostRoute><IdentityDashboard /></LocalhostRoute>} />
                 <Route path="/wiki" element={<Wiki />} />
+                <Route path="/coming-soon" element={<ComingSoon />} />
                 <Route path="/login" element={<LocalhostRoute><Login /></LocalhostRoute>} />
                 <Route path="/error" element={<ErrorPage />} />
               </Routes>

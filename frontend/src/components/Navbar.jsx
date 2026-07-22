@@ -1,34 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
-import { User, ChevronDown } from 'lucide-react';
+import { motion as Motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
+import { ChevronDown, ChevronRight, Brain, Compass, Shield, Heart, Activity, Ghost } from 'lucide-react';
 
 export default function Navbar() {
   const location = useLocation();
-  if (location.pathname === '/error') return null;
-
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [isWikiDropdownOpen, setIsWikiDropdownOpen] = useState(false);
-
-  // Load avatar on mount and location changes (to sync updates)
-  useEffect(() => {
-    const saved = localStorage.getItem('omnitype_user_profile');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (parsed.avatarUrl) {
-          setAvatarUrl(parsed.avatarUrl);
-        } else {
-          setAvatarUrl("");
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }, [location.pathname]);
+  const [isWikiOpen, setIsWikiOpen] = useState(false);
+  const [isMbtiSubmenuOpen, setIsMbtiSubmenuOpen] = useState(false);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious();
@@ -36,23 +17,45 @@ export default function Navbar() {
     
     if (latest > previous && latest > 150) {
       setHidden(true);
+      setIsWikiOpen(false);
+      setIsMbtiSubmenuOpen(false);
     } else {
       setHidden(false);
     }
   });
 
-  const wikiLinks = [
-    { label: "Personality Types", to: "/wiki#personality" },
-    { label: "Moral Alignments", to: "/wiki#alignment" },
-    { label: "Enneagram Centers", to: "/wiki#enneagram" },
-    { label: "Relational Psychology", to: "/wiki#relational" },
-    { label: "Stress & Neurodiversity", to: "/wiki#stress" },
-    { label: "Shadow Self", to: "/wiki#shadow" }
+  if (location.pathname === '/error') return null;
+
+  const mbtiTypes = [
+    { code: "INTJ", name: "Architect" },
+    { code: "INTP", name: "Logician" },
+    { code: "ENTJ", name: "Commander" },
+    { code: "ENTP", name: "Debater" },
+    { code: "INFJ", name: "Advocate" },
+    { code: "INFP", name: "Mediator" },
+    { code: "ENFJ", name: "Protagonist" },
+    { code: "ENFP", name: "Campaigner" },
+    { code: "ISTJ", name: "Logistician" },
+    { code: "ISFJ", name: "Defender" },
+    { code: "ESTJ", name: "Executive" },
+    { code: "ESFJ", name: "Consul" },
+    { code: "ISTP", name: "Virtuoso" },
+    { code: "ISFP", name: "Adventurer" },
+    { code: "ESTP", name: "Entrepreneur" },
+    { code: "ESFP", name: "Entertainer" }
+  ];
+
+  const topicItems = [
+    { label: "The Enneagram", icon: Compass, to: "/coming-soon" },
+    { label: "Moral Alignment", icon: Shield, to: "/coming-soon" },
+    { label: "Love Languages", icon: Heart, to: "/coming-soon" },
+    { label: "Neurodiversity", icon: Activity, to: "/coming-soon" },
+    { label: "The Shadow Self", icon: Ghost, to: "/coming-soon" }
   ];
 
   return (
     <div className="fixed top-6 md:top-8 left-0 right-0 z-50 flex justify-center px-4 md:px-8 pointer-events-none">
-      <motion.nav 
+      <Motion.nav 
         variants={{
           visible: { y: 0, opacity: 1 },
           hidden: { y: -120, opacity: 0 }
@@ -62,50 +65,110 @@ export default function Navbar() {
         transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
         className={`pointer-events-auto flex items-center justify-center transition-all duration-700 ${
           scrolled 
-            ? 'bg-white/70 backdrop-blur-2xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.06)] rounded-full px-5 py-2' 
-            : 'bg-white/40 backdrop-blur-md border border-white/40 shadow-[0_4px_24px_rgba(0,0,0,0.04)] px-5 py-2 rounded-full'
+            ? 'bg-white/80 backdrop-blur-2xl border border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.06)] rounded-full px-6 py-2.5' 
+            : 'bg-white/50 backdrop-blur-xl border border-white/60 shadow-[0_4px_24px_rgba(0,0,0,0.04)] px-6 py-2.5 rounded-full'
         }`}
       >
         {/* Navigation Links */}
-        <div className="flex gap-1 sm:gap-4 items-center">
+        <div className="flex gap-2 sm:gap-6 items-center">
           <NavLink to="/" current={location.pathname === "/"}>Home</NavLink>
           
-          {/* Wiki Dropdown Link */}
+          {/* Wiki Multi-Level Nested Dropdown Menu */}
           <div 
             className="relative"
-            onMouseEnter={() => setIsWikiDropdownOpen(true)}
-            onMouseLeave={() => setIsWikiDropdownOpen(false)}
+            onMouseEnter={() => setIsWikiOpen(true)}
+            onMouseLeave={() => {
+              setIsWikiOpen(false);
+              setIsMbtiSubmenuOpen(false);
+            }}
           >
-            <NavLink to="/wiki" current={location.pathname === "/wiki"}>
-              <span className="flex items-center gap-1">
+            <NavLink to="/wiki" current={location.pathname.startsWith("/wiki")}>
+              <span className="flex items-center gap-1.5 font-semibold">
                 Wiki
-                <ChevronDown className="w-3.5 h-3.5 opacity-60 animate-none" />
+                <ChevronDown className={`w-3.5 h-3.5 opacity-60 transition-transform duration-300 ${isWikiOpen ? 'rotate-180' : ''}`} />
               </span>
             </NavLink>
+
+            {/* Level 1 Dropdown */}
             <AnimatePresence>
-              {isWikiDropdownOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+              {isWikiOpen && (
+                <Motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.96 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white border border-slate-100 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-2 flex flex-col pointer-events-auto z-50"
+                  exit={{ opacity: 0, y: 10, scale: 0.96 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="absolute top-full left-0 mt-2 w-64 bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.12)] p-2 pointer-events-auto z-50 flex flex-col gap-1"
                 >
-                  {wikiLinks.map((link, idx) => (
+                  {/* Nested Submenu Trigger Item */}
+                  <div 
+                    className="relative"
+                    onMouseEnter={() => setIsMbtiSubmenuOpen(true)}
+                    onMouseLeave={() => setIsMbtiSubmenuOpen(false)}
+                  >
                     <Link
-                      key={idx}
-                      to={link.to}
-                      className="px-4 py-2 hover:bg-slate-50 rounded-xl text-xs font-bold text-slate-700 transition"
+                      to="/coming-soon"
+                      onClick={() => setIsWikiOpen(false)}
+                      className="flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-indigo-50/70 text-xs font-bold text-slate-800 transition group"
                     >
-                      {link.label}
+                      <div className="flex items-center gap-2.5">
+                        <Brain className="w-4 h-4 text-indigo-500" />
+                        <span>16 Personality Types</span>
+                      </div>
+                      <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all" />
                     </Link>
-                  ))}
-                </motion.div>
+
+                    {/* Level 2 Sub-Dropdown (Flyout) */}
+                    <AnimatePresence>
+                      {isMbtiSubmenuOpen && (
+                        <Motion.div
+                          initial={{ opacity: 0, x: -10, scale: 0.96 }}
+                          animate={{ opacity: 1, x: 0, scale: 1 }}
+                          exit={{ opacity: 0, x: -10, scale: 0.96 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute left-full top-0 ml-2 w-64 bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-2xl shadow-[0_15px_40px_rgba(0,0,0,0.12)] p-3 grid grid-cols-2 gap-1.5 pointer-events-auto z-50 max-h-[75vh] overflow-y-auto"
+                        >
+                          {mbtiTypes.map((t) => (
+                            <Link
+                              key={t.code}
+                              to="/coming-soon"
+                              onClick={() => {
+                                setIsWikiOpen(false);
+                                setIsMbtiSubmenuOpen(false);
+                              }}
+                              className="px-2.5 py-2 rounded-xl bg-slate-50 hover:bg-indigo-600 hover:text-white border border-slate-100 transition text-center flex flex-col group"
+                            >
+                              <span className="text-xs font-black text-slate-800 group-hover:text-white">{t.code}</span>
+                              <span className="text-[0.6rem] text-slate-400 group-hover:text-indigo-100 font-medium truncate">{t.name}</span>
+                            </Link>
+                          ))}
+                        </Motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  <div className="h-px bg-slate-100 my-1" />
+
+                  {/* Standard Category Topic Links */}
+                  {topicItems.map((topic, idx) => {
+                    const IconComp = topic.icon;
+                    return (
+                      <Link
+                        key={idx}
+                        to={topic.to}
+                        onClick={() => setIsWikiOpen(false)}
+                        className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl hover:bg-indigo-50/70 text-xs font-bold text-slate-700 transition group"
+                      >
+                        <IconComp className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors" />
+                        <span className="group-hover:text-slate-900">{topic.label}</span>
+                      </Link>
+                    );
+                  })}
+                </Motion.div>
               )}
             </AnimatePresence>
           </div>
         </div>
-      </motion.nav>
+      </Motion.nav>
     </div>
   );
 }
@@ -114,16 +177,16 @@ function NavLink({ to, children, current }) {
   return (
     <Link 
       to={to} 
-      className={`relative inline-flex items-center px-4 py-2 text-[0.9rem] tracking-wide transition-colors duration-300 font-medium ${
+      className={`relative inline-flex items-center px-4 py-2 text-[0.95rem] tracking-wide transition-colors duration-300 font-medium ${
         current 
-          ? 'text-indigo-600' 
+          ? 'text-indigo-600 font-bold' 
           : 'text-slate-500 hover:text-slate-900'
       }`}
     >
       <span className="relative z-10">{children}</span>
       <AnimatePresence>
         {current && (
-          <motion.div
+          <Motion.div
             layoutId="nav-pill"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}

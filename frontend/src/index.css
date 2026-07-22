@@ -21,4 +21,45 @@
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r;
   }
+  
+  /* Custom scrollbar utilities */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Genre category visible sleek scrollbar */
+  .category-scroll::-webkit-scrollbar {
+    height: 4px;
+    display: block;
+  }
+  .category-scroll::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 9999px;
+  }
+  .category-scroll::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+  }
+  .category-scroll::-webkit-scrollbar-thumb:hover {
+    background: #818cf8;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
