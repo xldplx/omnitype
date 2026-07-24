@@ -100,8 +100,7 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.96 }}
                   transition={{ duration: 0.2, ease: "easeOut" }}
-                  style={{ WebkitBackdropFilter: 'blur(24px) saturate(180%)', backdropFilter: 'blur(24px) saturate(180%)' }}
-                  className="absolute top-full left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 mt-2.5 w-[calc(100vw-2.5rem)] sm:w-64 max-w-xs bg-white/65 backdrop-blur-2xl border border-white/80 rounded-2xl shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_20px_50px_rgba(0,0,0,0.12)] p-2 pointer-events-auto z-50 flex flex-col gap-1"
+                  className="absolute top-full left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 mt-2.5 w-[calc(100vw-2.5rem)] sm:w-64 max-w-xs bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.12)] p-2 pointer-events-auto z-50 flex flex-col gap-1"
                 >
                   {/* Nested Submenu Trigger Item */}
                   <div 
@@ -112,7 +111,7 @@ export default function Navbar() {
                     <button
                       type="button"
                       onClick={() => setIsMbtiSubmenuOpen(!isMbtiSubmenuOpen)}
-                      className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-white/60 text-xs font-bold text-slate-800 transition group cursor-pointer border border-transparent hover:border-white/50"
+                      className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-indigo-50/70 text-xs font-bold text-slate-800 transition group cursor-pointer"
                     >
                       <div className="flex items-center gap-2.5">
                         <Brain className="w-4 h-4 text-indigo-500" />
@@ -129,8 +128,7 @@ export default function Navbar() {
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: -5, scale: 0.96 }}
                           transition={{ duration: 0.2 }}
-                          style={{ WebkitBackdropFilter: 'blur(24px) saturate(180%)', backdropFilter: 'blur(24px) saturate(180%)' }}
-                          className="relative sm:absolute left-0 sm:left-full top-0 mt-2 sm:mt-0 sm:ml-2 w-full sm:w-64 bg-white/65 backdrop-blur-2xl border border-white/80 rounded-2xl shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_20px_50px_rgba(0,0,0,0.12)] p-3 grid grid-cols-2 gap-1.5 pointer-events-auto z-50 max-h-[60vh] overflow-y-auto"
+                          className="relative sm:absolute left-0 sm:left-full top-0 mt-2 sm:mt-0 sm:ml-2 w-full sm:w-64 bg-slate-50/90 sm:bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.12)] p-3 grid grid-cols-2 gap-1.5 pointer-events-auto z-50 max-h-[60vh] overflow-y-auto"
                         >
                           {mbtiTypes.map((t) => (
                             <Link
@@ -140,7 +138,7 @@ export default function Navbar() {
                                 setIsWikiOpen(false);
                                 setIsMbtiSubmenuOpen(false);
                               }}
-                              className="px-2.5 py-2 rounded-xl bg-white/40 hover:bg-indigo-600 hover:text-white border border-white/60 shadow-2xs backdrop-blur-md transition-all duration-200 text-center flex flex-col group cursor-pointer"
+                              className="px-2.5 py-2 rounded-xl bg-white hover:bg-indigo-600 hover:text-white border border-slate-100 shadow-2xs transition text-center flex flex-col group cursor-pointer"
                             >
                               <span className="text-xs font-black text-slate-800 group-hover:text-white">{t.code}</span>
                               <span className="text-[0.6rem] text-slate-400 group-hover:text-indigo-100 font-medium truncate">{t.name}</span>
@@ -151,7 +149,7 @@ export default function Navbar() {
                     </AnimatePresence>
                   </div>
 
-                  <div className="h-px bg-slate-200/60 my-1" />
+                  <div className="h-px bg-slate-100 my-1" />
 
                   {/* Standard Category Topic Links */}
                   {topicItems.map((topic, idx) => {
@@ -161,7 +159,7 @@ export default function Navbar() {
                         key={idx}
                         to={topic.to}
                         onClick={() => setIsWikiOpen(false)}
-                        className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl hover:bg-white/60 text-xs font-bold text-slate-700 transition group border border-transparent hover:border-white/50"
+                        className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl hover:bg-indigo-50/70 text-xs font-bold text-slate-700 transition group"
                       >
                         <IconComp className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors" />
                         <span className="group-hover:text-slate-900">{topic.label}</span>

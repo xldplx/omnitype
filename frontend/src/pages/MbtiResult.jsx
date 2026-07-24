@@ -439,22 +439,23 @@ export default function MbtiResult() {
           </button>
         </div>
 
-        {/* Tab Selector */}
+        {/* Tab Selector Buttons */}
         <div className="flex flex-wrap gap-2 md:gap-3 mb-12 border-b border-slate-200/60 pb-4">
           {tabs.map((tab) => {
             const TabIcon = tab.icon;
+            const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold text-xs md:text-sm uppercase tracking-wider transition-all duration-200 cursor-pointer ${
-                  activeTab === tab.id
-                    ? 'bg-slate-900 text-white shadow-md scale-105'
-                    : 'bg-white text-slate-500 hover:text-slate-900 hover:bg-slate-100/80 border border-slate-200/60 shadow-2xs'
+                className={`flex items-center gap-2 px-5 py-3 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                  isActive 
+                    ? 'bg-slate-900 text-white shadow-md' 
+                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50'
                 }`}
               >
-                <TabIcon className="w-4 h-4" />
+                <TabIcon className={`w-4 h-4 ${isActive ? 'text-indigo-400' : 'text-slate-400'}`} />
                 <span>{tab.label}</span>
               </button>
             );
