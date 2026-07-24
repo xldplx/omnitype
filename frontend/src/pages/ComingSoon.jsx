@@ -1,41 +1,49 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion as Motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Sparkles, Clock } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 export default function ComingSoon() {
+  const navigate = useNavigate();
+
   return (
-    <div className="w-full min-h-[100dvh] flex flex-col items-center justify-center relative z-10 px-6 pt-24 pb-32 text-slate-800 selection:bg-purple-200">
+    <div className="w-full min-h-screen bg-[#fafafa] flex flex-col items-center justify-center px-6 relative text-slate-800 font-sans selection:bg-indigo-100 overflow-hidden">
       
+      {/* Translucent Big Watermark in Background */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
+        <span className="text-[clamp(8rem,30vw,22rem)] font-black text-indigo-500/[0.03] tracking-tighter leading-none font-mono uppercase">
+          SOON
+        </span>
+      </div>
+
+      {/* Soft background glow accents */}
+      <div className="fixed top-[-10vh] left-[-10vw] w-[50vw] h-[50vw] bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="fixed bottom-[-10vh] right-[-10vw] w-[40vw] h-[40vw] bg-purple-500/5 rounded-full blur-[100px] pointer-events-none z-0" />
+
       <Motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="text-center max-w-xl flex flex-col items-center bg-white/80 backdrop-blur-2xl p-10 sm:p-14 rounded-[2.5rem] border border-white/90 shadow-[0_10px_40px_rgb(0,0,0,0.04)]"
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-sm text-center relative z-10 flex flex-col items-center space-y-6"
       >
-        <div className="w-16 h-16 rounded-3xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 mb-8 shadow-inner">
-          <Clock className="w-8 h-8 animate-pulse" />
+        {/* Simple COMING SOON Header & Description */}
+        <div className="space-y-3">
+          <h2 className="text-3xl font-black text-indigo-600 tracking-tight uppercase">COMING SOON!</h2>
+          <p className="text-slate-500 text-sm leading-relaxed font-semibold max-w-xs mx-auto">
+            This encyclopedia chapter is currently being drafted. Full detailed breakdowns will be live soon!
+          </p>
         </div>
 
-        <div className="inline-flex items-center gap-2 text-xs font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100 mb-6">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Knowledge Base Entry</span>
-        </div>
-
-        <h1 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight leading-none mb-4">
-          Under Construction
-        </h1>
-        
-        <p className="text-slate-500 text-base sm:text-lg font-medium leading-relaxed mb-10 text-balance">
-          We are currently drafting this detailed encyclopedia chapter. Full psychological breakdowns, history, and analytical metrics will be available soon.
-        </p>
-
-        <Link 
-          to="/wiki"
-          className="inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full font-bold text-sm uppercase tracking-widest hover:bg-slate-800 hover:scale-105 active:scale-95 transition-all duration-300 shadow-md"
+        {/* Premium Pill Action Button */}
+        <button
+          type="button"
+          onClick={() => navigate('/wiki')}
+          className="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-full font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2.5 transition duration-300 shadow-md hover:shadow-lg active:scale-95 cursor-pointer mt-4 border border-slate-950"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Return to Wiki Directory</span>
-        </Link>
+          <span>Return to Wiki</span>
+        </button>
+
       </Motion.div>
     </div>
   );

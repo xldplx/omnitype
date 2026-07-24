@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion as Motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
-  ArrowRight, Hexagon, Circle, Triangle, Square, Diamond, Pentagon, Layers, 
+  ArrowRight, ChevronLeft, ChevronRight, Hexagon, Circle, Triangle, Square, Diamond, Pentagon, Layers, 
   ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, 
   Compass, Binary, Skull, Brain, Fingerprint, Eye, Battery, Shield, UserMinus, 
   Swords, HeartHandshake, Waves, Sprout, LayoutGrid, Ghost, Flame, Flag, Coffee, 
@@ -543,8 +543,16 @@ const tests = [
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const categoryScrollRef = useRef(null);
 
   const activeCount = tests.filter(t => t.active).length;
+
+  const scrollCategories = (direction) => {
+    if (categoryScrollRef.current) {
+      const scrollAmount = direction === 'left' ? -280 : 280;
+      categoryScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
 
   const filteredCategories = categories.filter(cat => {
     if (cat.id === 'all') return false;
@@ -595,57 +603,91 @@ export default function Home() {
         <div className="flex flex-col gap-6 mb-16">
           
           {/* Status Filter Buttons */}
-          <div className="flex items-center justify-center gap-2 overflow-x-auto pb-1">
-            <button
-              onClick={() => setStatusFilter('all')}
-              className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer whitespace-nowrap ${
-                statusFilter === 'all' 
-                  ? 'bg-slate-900 text-white shadow-md' 
-                  : 'bg-white/80 text-slate-500 hover:bg-white hover:text-slate-800 border border-slate-200/60'
-              }`}
-            >
-              All Assessments ({tests.length})
-            </button>
-            <button
-              onClick={() => setStatusFilter('available')}
-              className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer whitespace-nowrap ${
-                statusFilter === 'available' 
-                  ? 'bg-indigo-600 text-white shadow-md' 
-                  : 'bg-white/80 text-slate-500 hover:bg-white hover:text-slate-800 border border-slate-200/60'
-              }`}
-            >
-              Available ({activeCount})
-            </button>
-            <button
-              onClick={() => setStatusFilter('coming-soon')}
-              className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer whitespace-nowrap ${
-                statusFilter === 'coming-soon' 
-                  ? 'bg-slate-700 text-white shadow-md' 
-                  : 'bg-white/80 text-slate-500 hover:bg-white hover:text-slate-800 border border-slate-200/60'
-              }`}
-            >
-              In Development ({tests.length - activeCount})
-            </button>
+          <div className="w-full overflow-x-auto no-scrollbar scrollbar-none py-1">
+            <div className="flex items-center justify-start sm:justify-center gap-2 min-w-max mx-auto px-4">
+              <button
+                type="button"
+                onClick={() => setStatusFilter('all')}
+                className={`px-4 sm:px-5 py-2 rounded-full text-[0.7rem] sm:text-xs font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer whitespace-nowrap shrink-0 ${
+                  statusFilter === 'all' 
+                    ? 'bg-slate-900 text-white shadow-md' 
+                    : 'bg-white/80 text-slate-500 hover:bg-white hover:text-slate-800 border border-slate-200/60'
+                }`}
+              >
+                All Assessments ({tests.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setStatusFilter('available')}
+                className={`px-4 sm:px-5 py-2 rounded-full text-[0.7rem] sm:text-xs font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer whitespace-nowrap shrink-0 ${
+                  statusFilter === 'available' 
+                    ? 'bg-indigo-600 text-white shadow-md' 
+                    : 'bg-white/80 text-slate-500 hover:bg-white hover:text-slate-800 border border-slate-200/60'
+                }`}
+              >
+                Available ({activeCount})
+              </button>
+              <button
+                type="button"
+                onClick={() => setStatusFilter('coming-soon')}
+                className={`px-4 sm:px-5 py-2 rounded-full text-[0.7rem] sm:text-xs font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer whitespace-nowrap shrink-0 ${
+                  statusFilter === 'coming-soon' 
+                    ? 'bg-slate-700 text-white shadow-md' 
+                    : 'bg-white/80 text-slate-500 hover:bg-white hover:text-slate-800 border border-slate-200/60'
+                }`}
+              >
+                In Development ({tests.length - activeCount})
+              </button>
+            </div>
           </div>
 
-          {/* Genre Category Scrollable Row */}
-          <div className="flex items-center gap-2 category-scroll overflow-x-auto w-full px-2 pb-3 pt-1">
-            {categories.map((cat) => {
-              const isSelected = selectedCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-4 py-1.5 rounded-full text-[0.72rem] font-semibold shrink-0 whitespace-nowrap transition-all duration-300 cursor-pointer ${
-                    isSelected 
-                      ? 'bg-slate-900 text-white font-bold shadow-sm' 
-                      : 'bg-white/80 text-slate-500 hover:text-slate-800 hover:bg-white border border-slate-200/60'
-                  }`}
-                >
-                  {cat.title}
-                </button>
-              );
-            })}
+          {/* Genre Category Scrollable Row with Navigation Controls */}
+          <div className="relative w-full flex items-center group">
+            {/* Scroll Left Button */}
+            <button
+              type="button"
+              onClick={() => scrollCategories('left')}
+              aria-label="Scroll categories left"
+              className="hidden sm:flex shrink-0 w-8 h-8 rounded-full bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-xs items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-white hover:border-slate-300 hover:scale-110 active:scale-95 transition-all duration-300 mr-2 cursor-pointer z-10"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            {/* Category Buttons Scroll Container */}
+            <div 
+              ref={categoryScrollRef}
+              className="w-full overflow-x-auto category-scroll py-2 scroll-smooth"
+            >
+              <div className="flex items-center justify-start md:justify-center gap-2 min-w-max mx-auto px-1">
+                {categories.map((cat) => {
+                  const isSelected = selectedCategory === cat.id;
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={`px-4 py-2 rounded-full text-xs font-semibold shrink-0 whitespace-nowrap transition-all duration-300 cursor-pointer ${
+                        isSelected 
+                          ? 'bg-slate-900 text-white font-bold shadow-sm' 
+                          : 'bg-white/80 text-slate-500 hover:text-slate-800 hover:bg-white border border-slate-200/60'
+                      }`}
+                    >
+                      {cat.title}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Scroll Right Button */}
+            <button
+              type="button"
+              onClick={() => scrollCategories('right')}
+              aria-label="Scroll categories right"
+              className="hidden sm:flex shrink-0 w-8 h-8 rounded-full bg-white/80 backdrop-blur-md border border-slate-200/80 shadow-xs items-center justify-center text-slate-600 hover:text-slate-900 hover:bg-white hover:border-slate-300 hover:scale-110 active:scale-95 transition-all duration-300 ml-2 cursor-pointer z-10"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
         </div>
 

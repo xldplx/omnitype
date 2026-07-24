@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { motion as Motion } from 'framer-motion';
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Compass, Brain, Shield, Heart, Activity, ArrowRight, Ghost } from 'lucide-react';
 import { typeDescriptions } from '../utils/mbtiResultLogic';
@@ -7,16 +6,22 @@ import { typeDescriptions } from '../utils/mbtiResultLogic';
 export default function Wiki() {
   const [searchQuery, setSearchQuery] = useState('');
   
-  const mbtiTypes = Object.entries(typeDescriptions).map(([key, value]) => ({
-    code: key,
-    ...value
-  }));
+  const mbtiTypes = useMemo(() => {
+    return Object.entries(typeDescriptions).map(([key, value]) => ({
+      code: key,
+      ...value
+    }));
+  }, []);
 
-  const filteredTypes = mbtiTypes.filter(t => 
-    t.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (t.desc && t.desc.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
+  const filteredTypes = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return mbtiTypes;
+    return mbtiTypes.filter(t => 
+      t.code.toLowerCase().includes(query) ||
+      t.title.toLowerCase().includes(query) ||
+      (t.desc && t.desc.toLowerCase().includes(query))
+    );
+  }, [mbtiTypes, searchQuery]);
 
   const categories = [
     {
@@ -84,7 +89,7 @@ export default function Wiki() {
             <Link 
               key={cat.id} 
               to={cat.link}
-              className="bg-white/80 backdrop-blur-xl border border-white/90 p-8 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 hover:border-indigo-200/80 transition-all duration-300 flex flex-col justify-between group cursor-pointer"
+              className="bg-white border border-slate-200/80 p-8 rounded-[2rem] shadow-[0_4px_20px_rgb(0,0,0,0.02)] hover:shadow-[0_12px_35px_rgb(0,0,0,0.06)] hover:-translate-y-1 hover:border-indigo-200/80 transition-all duration-300 flex flex-col justify-between group cursor-pointer"
             >
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100 mb-6 shadow-xs group-hover:scale-105 transition-transform">
@@ -125,41 +130,34 @@ export default function Wiki() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {filteredTypes.map((typeObj) => (
-              <Motion.div
-                key={typeObj.code} 
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
+              <Link
+                key={typeObj.code}
+                to="/coming-soon"
+                className="block h-full bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_20px_rgb(0,0,0,0.02)] hover:shadow-[0_12px_35px_rgb(0,0,0,0.06)] hover:-translate-y-1 hover:border-indigo-200/80 transition-all duration-300 flex flex-col justify-between group cursor-pointer"
               >
-                <Link
-                  to="/coming-soon"
-                  className="block h-full bg-white/80 backdrop-blur-xl border border-white/90 rounded-[2.5rem] p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 hover:border-indigo-200/80 transition-all duration-300 flex flex-col justify-between group cursor-pointer"
-                >
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors">{typeObj.code}</span>
-                      <span className="text-xs font-bold uppercase tracking-widest bg-indigo-50 text-indigo-600 px-4 py-1.5 rounded-full border border-indigo-100">
-                        {typeObj.title}
-                      </span>
-                    </div>
-                    <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium line-clamp-3">
-                      {typeObj.desc}
-                    </p>
-                  </div>
-                  
-                  <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                      {typeObj.mythologicalArchetype || "The Archetype"}
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors">{typeObj.code}</span>
+                    <span className="text-xs font-bold uppercase tracking-widest bg-indigo-50 text-indigo-600 px-4 py-1.5 rounded-full border border-indigo-100">
+                      {typeObj.title}
                     </span>
-
-                    <div className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-indigo-600 group-hover:text-indigo-700 transition-colors">
-                      <span>View Chapter</span>
-                      <ArrowRight className="w-4 h-4 text-indigo-500" />
-                    </div>
                   </div>
-                </Link>
-              </Motion.div>
+                  <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium line-clamp-3">
+                    {typeObj.desc}
+                  </p>
+                </div>
+                
+                <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    {typeObj.mythologicalArchetype || "The Archetype"}
+                  </span>
+
+                  <div className="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-indigo-600 group-hover:text-indigo-700 transition-colors">
+                    <span>View Chapter</span>
+                    <ArrowRight className="w-4 h-4 text-indigo-500" />
+                  </div>
+                </div>
+              </Link>
             ))}
           </div>
         </div>

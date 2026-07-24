@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 
 export default function ErrorPage() {
@@ -20,7 +20,7 @@ export default function ErrorPage() {
       <div className="fixed top-[-10vh] left-[-10vw] w-[50vw] h-[50vw] bg-rose-500/5 rounded-full blur-[120px] pointer-events-none z-0" />
       <div className="fixed bottom-[-10vh] right-[-10vw] w-[40vw] h-[40vw] bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none z-0" />
 
-      <motion.div 
+      <Motion.div 
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -43,7 +43,7 @@ export default function ErrorPage() {
           <span>Go back home</span>
         </button>
 
-      </motion.div>
+      </Motion.div>
     </div>
   );
 }

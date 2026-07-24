@@ -1,11 +1,13 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 // Eagerly loaded core routes
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import ComingSoon from './pages/ComingSoon';
 
 // Lazy loaded page components
 const MbtiPage = lazy(() => import('./pages/MbtiPage'));
@@ -45,7 +47,6 @@ const ImposterResult = lazy(() => import('./pages/ImposterResult'));
 
 const IdentityDashboard = lazy(() => import('./pages/IdentityDashboard'));
 const Wiki = lazy(() => import('./pages/Wiki'));
-const ComingSoon = lazy(() => import('./pages/ComingSoon'));
 const Login = lazy(() => import('./pages/Login'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
 
@@ -123,6 +124,7 @@ export default function App() {
               </Routes>
             </Suspense>
           </main>
+          <Footer />
         </div>
       </div>
     </Router>
