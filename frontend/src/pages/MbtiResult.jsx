@@ -480,7 +480,7 @@ export default function MbtiResult() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                   <div className="lg:col-span-8 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-center relative overflow-hidden">
                     <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b from-${primaryColor}-400 to-${secondaryColor}-400 opacity-80`} />
-                    <h1 className="text-4xl md:text-6xl font-black mb-4 text-slate-900 tracking-tight leading-none">
+                    <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 text-slate-900 tracking-tight leading-none">
                       {typeInfo.title}
                     </h1>
                     <p className="text-slate-600 max-w-4xl leading-relaxed font-medium text-base sm:text-lg md:text-xl">
@@ -488,8 +488,8 @@ export default function MbtiResult() {
                     </p>
                   </div>
 
-                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-10 flex flex-col items-center justify-center relative overflow-hidden">
-                     <h2 className={`text-[clamp(4.5rem,9vw,7rem)] leading-none font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-${primaryColor}-500 to-${secondaryColor}-600 z-10 drop-shadow-sm pb-1 whitespace-nowrap`}>
+                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 flex flex-col items-center justify-center relative overflow-hidden">
+                     <h2 className={`text-5xl sm:text-6xl md:text-7xl leading-none font-black tracking-tight text-transparent bg-clip-text bg-linear-to-b from-${primaryColor}-500 to-${secondaryColor}-600 z-10 drop-shadow-sm pb-1 whitespace-nowrap`}>
                        {upperType}
                      </h2>
                      <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-slate-400 mt-3 z-10 whitespace-nowrap">Personality Axis</span>

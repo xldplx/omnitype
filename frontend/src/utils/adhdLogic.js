@@ -177,6 +177,12 @@ export const calculateAdhdResult = (answers) => {
     const hyperPercent = Math.min(Math.round((hyperCount / 9) * 100), 100);
     const impulsePercent = Math.min(Math.round((impulseCount / 4) * 100), 100);
 
+    // Derived Executive Function Spectrum Metrics
+    const taskInitiation = Math.max(20, Math.min(100, Math.round(100 - (inPercent * 0.7 + hyperPercent * 0.3))));
+    const workingMemory = Math.max(25, Math.min(100, Math.round(100 - (inPercent * 0.85))));
+    const emotionalRegulation = Math.max(20, Math.min(100, Math.round(100 - (impulsePercent * 0.8 + hyperPercent * 0.2))));
+    const flexibility = Math.max(30, Math.min(100, Math.round(100 - (hyperPercent * 0.5 + inPercent * 0.3))));
+
     return {
         statusKey,
         fullTitle: statusKey.toLowerCase(),
@@ -184,7 +190,11 @@ export const calculateAdhdResult = (answers) => {
         breakdown: {
             inPercent,
             hyperPercent,
-            impulsePercent
+            impulsePercent,
+            taskInitiation,
+            workingMemory,
+            emotionalRegulation,
+            flexibility
         }
     };
 };

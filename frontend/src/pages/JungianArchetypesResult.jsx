@@ -176,62 +176,44 @@ export default function JungianArchetypesResult() {
                   <div className="lg:col-span-8 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
                     <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${primaryColor} opacity-90`} />
                     
-                    <div className="space-y-4">
-                      <span className="text-xs font-black tracking-[0.2em] uppercase text-indigo-600 bg-indigo-50 px-3.5 py-1.5 rounded-full border border-indigo-100 flex items-center gap-2 inline-flex">
-                        <Diamond className="w-3.5 h-3.5 text-indigo-500" />
-                        Primary Archetype
-                      </span>
-
-                      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-none">
+                    <div>
+                      <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 text-slate-900 tracking-tight leading-none">
                         {primaryInfo.name}
                       </h1>
                       
-                      <p className="text-slate-600 leading-relaxed font-medium text-base sm:text-lg">
+                      <p className="text-slate-600 max-w-4xl leading-relaxed font-medium text-base sm:text-lg md:text-xl">
                         {primaryInfo.description}
                       </p>
-                    </div>
-
-                    {/* Desire & Fear Pills */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-6 border-t border-slate-100">
-                      <div className="bg-emerald-50/60 border border-emerald-100/80 p-4 rounded-2xl space-y-1">
-                        <span className="text-[0.68rem] font-black uppercase tracking-wider text-emerald-600 flex items-center gap-1.5">
-                          <PackageOpen className="w-3.5 h-3.5" /> What Drives You
-                        </span>
-                        <p className="text-slate-800 text-xs sm:text-sm font-bold leading-snug">{primaryInfo.coreDesire}</p>
-                      </div>
-
-                      <div className="bg-rose-50/60 border border-rose-100/80 p-4 rounded-2xl space-y-1">
-                        <span className="text-[0.68rem] font-black uppercase tracking-wider text-rose-500 flex items-center gap-1.5">
-                          <AlertTriangle className="w-3.5 h-3.5" /> What You Avoid
-                        </span>
-                        <p className="text-slate-800 text-xs sm:text-sm font-bold leading-snug">{primaryInfo.coreFear}</p>
-                      </div>
                     </div>
                   </div>
 
                   {/* Secondary Archetype Layer (4 Cols - Visible Side-by-Side without scrolling!) */}
-                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 flex flex-col justify-between relative overflow-hidden">
-                    <div className="space-y-4">
-                      <span className="text-xs font-black tracking-[0.2em] uppercase text-sky-600 bg-sky-50 px-3.5 py-1.5 rounded-full border border-sky-100 inline-block">
-                        Secondary Layer
-                      </span>
-
-                      <h2 className="text-2xl sm:text-3xl font-black text-slate-900">
-                        {secondaryInfo.name}
-                      </h2>
-
-                      <p className="text-slate-500 font-medium text-xs sm:text-sm leading-relaxed">
-                        {secondaryInfo.description}
-                      </p>
-                    </div>
-
-                    <div className="bg-sky-50/60 border border-sky-100 p-4 rounded-2xl mt-4">
-                      <p className="text-slate-700 text-xs font-semibold leading-relaxed">
-                        💡 <strong className="text-slate-900">Synergy:</strong> Balances your main <strong className="text-slate-900">{primaryInfo.shortName}</strong> personality in daily situations.
-                      </p>
-                    </div>
+                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                     <h2 className="text-3xl sm:text-4xl md:text-5xl leading-none font-black tracking-tight text-slate-900 z-10 drop-shadow-sm pb-1 text-center">
+                       {secondaryInfo.name}
+                     </h2>
+                     <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-slate-400 mt-3 z-10 whitespace-nowrap">Secondary Layer</span>
                   </div>
 
+                </div>
+
+                {/* 2. Dedicated Core Motivations Section (What Drives You & What You Avoid) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                    <div className="flex items-center gap-2 text-emerald-600">
+                      <PackageOpen className="w-5 h-5" />
+                      <span className="text-xs font-black uppercase tracking-wider">What Drives You (Core Desire)</span>
+                    </div>
+                    <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{primaryInfo.coreDesire}</p>
+                  </div>
+
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                    <div className="flex items-center gap-2 text-rose-500">
+                      <AlertTriangle className="w-5 h-5" />
+                      <span className="text-xs font-black uppercase tracking-wider">What You Avoid (Core Fear)</span>
+                    </div>
+                    <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{primaryInfo.coreFear}</p>
+                  </div>
                 </div>
 
                 {/* 2. Your 12 Archetypes Breakdown (Positioned directly below Secondary Layer!) */}

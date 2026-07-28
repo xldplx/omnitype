@@ -1,14 +1,57 @@
-import { useEffect, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { motion as Motion } from 'framer-motion';
-import { ChevronLeft, Shield, Heart, Zap, AlertTriangle, Users, Briefcase, Target, TrendingUp, MessageCircle, Swords } from 'lucide-react';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
+import { 
+  ChevronLeft, Shield, Heart, Zap, AlertTriangle, Users, Briefcase, 
+  Target, TrendingUp, MessageCircle, Swords, Sparkles, CheckCircle2, Activity, Brain, ShieldAlert, Compass
+} from 'lucide-react';
 import { attachmentStylesTypes } from '../utils/attachmentStylesLogic';
+
+function formatMarkdown(text) {
+  if (!text) return "";
+  const parts = text.split(/\*\*([^*]+)\*\*/g);
+  return parts.map((part, idx) => {
+    if (idx % 2 === 1) {
+      return <strong key={idx} className="text-slate-900 font-extrabold">{part}</strong>;
+    }
+    return part;
+  });
+}
+
+function ResultBar({ label, value, color, isPrimary }) {
+  const displayVal = Math.min(Math.max(value || 0, 0), 100);
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between items-center text-sm font-bold text-slate-700">
+        <span className="flex items-center gap-2">
+          <span className={`w-2.5 h-2.5 rounded-full ${isPrimary ? 'bg-indigo-600 ring-4 ring-indigo-100' : 'bg-slate-300'}`} />
+          <span className={isPrimary ? 'text-slate-900 font-black' : 'text-slate-700'}>{label}</span>
+          {isPrimary && <span className="text-[0.65rem] uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 font-extrabold border border-indigo-100">Primary</span>}
+        </span>
+        <span className="font-mono text-slate-900 font-bold bg-slate-100 px-2.5 py-0.5 rounded-md text-xs">{displayVal}%</span>
+      </div>
+      <div className="h-3.5 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/60 shadow-inner">
+        <Motion.div
+          className={`h-full rounded-full ${color}`}
+          initial={{ width: 0 }}
+          animate={{ width: `${displayVal}%` }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function AttachmentStylesResult() {
   const { type } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  
+  const [activeTab, setActiveTab] = useState('overview');
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeTab]);
+
   const resultData = useMemo(() => {
     let stateData = location.state?.resultData;
     if (!stateData && type) {
@@ -39,7 +82,6 @@ export default function AttachmentStylesResult() {
   }, [location.state, type]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
     if (resultData) {
       localStorage.setItem('omnitype_attachment_styles', JSON.stringify(resultData));
     }
@@ -49,262 +91,369 @@ export default function AttachmentStylesResult() {
     return <Navigate to="/test/attachment-styles" replace />;
   }
 
-  const { info, breakdown } = resultData;
+  const { info, breakdown, type: primaryTypeNum } = resultData;
+  const primaryColor = info.color || 'from-indigo-500 to-purple-600';
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.3 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0.4, duration: 0.8 } }
-  };
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: Sparkles },
+    { id: 'spectrum', label: 'Spectrum Statistics', icon: Heart },
+    { id: 'relationships', label: 'Relationships & Conflict', icon: Users },
+    { id: 'growth', label: 'Growth & Healing', icon: Brain }
+  ];
 
   return (
-    <div className="w-full min-h-screen bg-[#fafafa] relative overflow-hidden flex flex-col items-center selection:bg-amber-200">
+    <div className="w-full min-h-screen bg-[#fafafa] relative overflow-hidden flex flex-col items-center selection:bg-indigo-200">
       
-      {/* Massive Editorial Background Typography */}
-      <Motion.div 
-        initial={{ scale: 1.1, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.03 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        className="fixed top-20 left-0 right-0 h-screen flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden"
-      >
-        <span className="font-black text-[18vw] tracking-tighter leading-none text-slate-800 text-center uppercase whitespace-pre-wrap">
-          {info.shortName.replace('-', '\n')}
-        </span>
-      </Motion.div>
-
-      {/* Decorative Modern Background Gradients */}
+      {/* Decorative Ambient Background Auras */}
       <div className={`fixed top-[-10vh] left-[-10vw] w-[50vw] h-[50vw] ${info.bgLight} rounded-full blur-[120px] pointer-events-none opacity-60 z-0`} />
       <div className={`fixed bottom-[-10vh] right-[-10vw] w-[50vw] h-[50vw] ${info.bgLight} rounded-full blur-[120px] pointer-events-none opacity-60 z-0`} />
 
-      <Motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-        className="w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-12 pt-32 pb-32 relative z-10"
-      >
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-12 pt-32 pb-32 relative z-10">
         
-        {/* Superior Navigation */}
-        <Motion.div variants={itemVariants} className="flex justify-between items-center mb-16 md:mb-24">
+        {/* Top Navigation - Return to Home */}
+        <div className="flex justify-between items-center mb-10">
           <button 
             type="button"
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-slate-400 font-semibold text-sm uppercase tracking-widest hover:text-slate-900 transition-colors group cursor-pointer"
+            className="flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-slate-900 transition-colors group cursor-pointer"
           >
-            <div className={`w-8 h-8 rounded-full ${info.bgLight} border ${info.borderLight} flex items-center justify-center group-hover:bg-white transition-colors`}>
-              <ChevronLeft className="w-4 h-4 text-slate-600" />
+            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
+              <ChevronLeft className="w-4 h-4 text-slate-700" />
             </div>
             <span>Home</span>
           </button>
-        </Motion.div>
+        </div>
 
-        {/* Hero Dashboard Section */}
-        <Motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
-          
-          {/* Main Title Card */}
-          <div className="lg:col-span-8 bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-16 flex flex-col justify-center relative overflow-hidden group">
-            <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${info.color} opacity-50 group-hover:opacity-100 transition-opacity duration-500`} />
-            
-            <h1 className="text-5xl md:text-6xl lg:text-[5.5rem] font-black mb-6 text-slate-900 tracking-tight leading-none bg-clip-text bg-linear-to-br from-slate-900 to-slate-600 pb-2">
-              {info.name}
-            </h1>
-            
-            <p className="text-lg md:text-[1.35rem] text-slate-500 max-w-4xl leading-relaxed tracking-wide font-medium mt-2">
-              {info.description}
-            </p>
-          </div>
+        {/* Tab Selector Buttons */}
+        <div className="flex flex-wrap gap-2 md:gap-3 mb-12 border-b border-slate-200/60 pb-4">
+          {tabs.map((tab) => {
+            const TabIcon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-5 py-3 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                  isActive 
+                    ? 'bg-slate-900 text-white shadow-md' 
+                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50'
+                }`}
+              >
+                <TabIcon className={`w-4 h-4 ${isActive ? 'text-indigo-400' : 'text-slate-400'}`} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
 
-          {/* Type Badge Card */}
-          <div className="lg:col-span-4 bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 flex flex-col items-center justify-center relative overflow-hidden group">
-             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] pointer-events-none" />
-             <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 ${info.bgLight} rounded-full blur-3xl pointer-events-none group-hover:scale-150 transition-transform duration-700`} />
-             
-             <h2 className={`text-[clamp(2.5rem,6vw,5rem)] leading-none font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-b ${info.color} z-10 relative drop-shadow-sm pb-1 whitespace-nowrap`}>
-               {info.shortName.length > 8 ? info.shortName.split('-')[0] : info.shortName}
-             </h2>
-          </div>
-        </Motion.div>
+        {/* Dynamic Tab Panel */}
+        <AnimatePresence mode="wait">
+          <Motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* ---------------------------------------------------- */}
+            {/* TAB 1: OVERVIEW */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'overview' && (
+              <div className="space-y-8">
+                
+                {/* 1. Side-by-Side Hero Section */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                  
+                  {/* Primary Attachment Style (Dominant 8 Cols) */}
+                  <div className="lg:col-span-8 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+                    <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${primaryColor} opacity-90`} />
+                    
+                    <div>
+                      <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 text-slate-900 tracking-tight leading-none">
+                        {info.name}
+                      </h1>
+                      
+                      <p className="text-slate-600 max-w-4xl leading-relaxed font-medium text-base sm:text-lg md:text-xl">
+                        {info.description}
+                      </p>
+                    </div>
+                  </div>
 
-        {/* Relational Spectrum Breakdown */}
-        <Motion.div variants={itemVariants} className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14 mb-8">
-          <div className="flex items-center gap-3 mb-10 border-b border-slate-100 pb-6">
-              <TrendingUp className="w-5 h-5 text-slate-400" />
-              <h4 className="text-xs font-bold tracking-[0.3em] text-slate-400 uppercase">Relational Spectrum Allocation</h4>
-          </div>
+                  {/* Standardized 2nd Box (4 Cols - Prominent & Centered) */}
+                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                     <h2 className={`text-4xl sm:text-5xl md:text-6xl leading-none font-black tracking-tight text-transparent bg-clip-text bg-linear-to-b ${primaryColor} z-10 drop-shadow-sm pb-1 whitespace-nowrap`}>
+                       {info.shortName}
+                     </h2>
+                     <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-slate-400 mt-3 z-10 whitespace-nowrap">Attachment Style</span>
+                  </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {Object.entries(attachmentStylesTypes).map(([numStr, typeObj]) => {
-                  const num = parseInt(numStr);
-                  const score = breakdown[num] || 0;
-                  const isPrimary = num === resultData.type;
-
-                  return (
-                      <div key={num} className={`flex flex-col justify-between p-6 rounded-3xl border transition-all duration-500 ${isPrimary ? 'bg-white border-slate-300 shadow-md scale-105' : 'bg-slate-50/50 border-slate-100 opacity-70'}`}>
-                          <div>
-                              <div className="flex justify-between items-start mb-4">
-                                  <span className="text-xs font-bold tracking-widest text-slate-400 uppercase">Style {num}</span>
-                                  {isPrimary && <span className={`text-[0.65rem] font-black uppercase tracking-widest px-3 py-1 rounded-full bg-linear-to-r ${typeObj.color} text-white`}>Primary</span>}
-                              </div>
-                              <h5 className="font-bold text-slate-800 text-lg mb-1">{typeObj.name}</h5>
-                          </div>
-
-                          <div className="mt-8">
-                              <div className="flex justify-between items-center mb-2">
-                                  <span className="text-xs font-semibold text-slate-400">Match</span>
-                                  <span className="text-lg font-black text-slate-800">{score}%</span>
-                              </div>
-                              <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                  <Motion.div 
-                                      initial={{ width: 0 }}
-                                      animate={{ width: `${score}%` }}
-                                      transition={{ duration: 1, ease: "easeOut" }}
-                                      className={`h-full bg-linear-to-r ${typeObj.color}`} 
-                                  />
-                              </div>
-                          </div>
-                      </div>
-                  );
-              })}
-          </div>
-        </Motion.div>
-
-        {/* Core Motives & Fears Grid */}
-        <Motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14 hover:-translate-y-1 transition-transform">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-6 border-b border-slate-100 pb-4">
-              <Target className="w-4 h-4 text-emerald-500" />
-              Core Relational Desire
-            </h4>
-            <p className="text-slate-800 font-bold leading-relaxed text-2xl tracking-tight">{info.coreDesire}</p>
-          </div>
-
-          <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14 hover:-translate-y-1 transition-transform">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-6 border-b border-slate-100 pb-4">
-              <AlertTriangle className="w-4 h-4 text-rose-400" />
-              Hidden Attachment Fear
-            </h4>
-            <p className="text-slate-800 font-bold leading-relaxed text-2xl tracking-tight">{info.coreFear}</p>
-          </div>
-        </Motion.div>
-
-        {/* Attachment Triggers & Dynamic Under Stress */}
-        <Motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-6 border-b border-slate-100 pb-4">
-              <Zap className="w-4 h-4 text-amber-500" />
-              Relational Triggers
-            </h4>
-            <p className="text-slate-700 leading-relaxed text-lg font-medium">{info.triggers}</p>
-          </div>
-
-          <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-6 border-b border-slate-100 pb-4">
-              <Swords className="w-4 h-4 text-purple-500" />
-              Conflict Behavior
-            </h4>
-            <p className="text-slate-700 leading-relaxed text-lg font-medium">{info.conflictStyle}</p>
-          </div>
-        </Motion.div>
-
-        {/* Growth & Healing Path */}
-        <Motion.div variants={itemVariants} className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.2)] rounded-[2.5rem] p-10 md:p-16 mb-8 text-white relative overflow-hidden">
-            <div className={`absolute top-0 right-0 w-96 h-96 bg-linear-to-bl ${info.color} rounded-full blur-[100px] opacity-20 pointer-events-none`} />
-            
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-white/50 mb-8 border-b border-white/10 pb-6 relative z-10">
-              <Shield className="w-5 h-5 text-indigo-400" />
-              Path to Secure Attachment
-            </h4>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 relative z-10">
-              <div>
-                <h5 className="text-2xl font-bold mb-4 tracking-tight">Healing Focus</h5>
-                <p className="text-slate-300 text-lg leading-relaxed font-medium">{info.growthStrategy}</p>
-              </div>
-
-              <div>
-                <h5 className="text-2xl font-bold mb-4 tracking-tight">Ideal Partner Dynamic</h5>
-                <p className="text-slate-300 text-lg leading-relaxed font-medium">{info.idealPartner}</p>
-              </div>
-            </div>
-        </Motion.div>
-
-        {/* Professional & Social Communication Styles */}
-        <Motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-6 border-b border-slate-100 pb-4">
-              <Briefcase className="w-4 h-4 text-indigo-500" />
-              Workplace Dynamic
-            </h4>
-            <p className="text-slate-700 leading-relaxed text-lg font-medium">{info.workplace}</p>
-          </div>
-
-          <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-6 border-b border-slate-100 pb-4">
-              <MessageCircle className="w-4 h-4 text-emerald-500" />
-              Communication Needs
-            </h4>
-            <p className="text-slate-700 leading-relaxed text-lg font-medium">{info.communication}</p>
-          </div>
-        </Motion.div>
-
-        {/* High-Contrast Pros & Cons */}
-        <Motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-12">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-6 border-b border-slate-100 pb-4">
-              <Shield className="w-4 h-4 text-emerald-500" />
-              Relational Strengths
-            </h4>
-            <ul className="space-y-4">
-              {info.pros?.map((item) => (
-                <li key={item} className="flex gap-4 items-start bg-emerald-50/50 p-4 rounded-2xl border border-emerald-100/50">
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0 mt-2" />
-                  <p className="text-slate-700 font-semibold text-base leading-relaxed">{item}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-12">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-6 border-b border-slate-100 pb-4">
-              <AlertTriangle className="w-4 h-4 text-rose-500" />
-              Relational Vulnerabilities
-            </h4>
-            <ul className="space-y-4">
-              {info.cons?.map((item) => (
-                <li key={item} className="flex gap-4 items-start bg-rose-50/50 p-4 rounded-2xl border border-rose-100/50">
-                  <div className="w-2.5 h-2.5 rounded-full bg-rose-400 shrink-0 mt-2" />
-                  <p className="text-slate-700 font-semibold text-base leading-relaxed">{item}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Motion.div>
-
-        {/* Compatible & Friction Attachment Styles */}
-        <Motion.div variants={itemVariants} className="bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-8 border-b border-slate-100 pb-4">
-              <Users className="w-5 h-5 text-indigo-500" />
-              Relational Dynamics with Other Attachment Styles
-            </h4>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {info.compatibility?.map((comp) => (
-                <div key={comp.style} className="bg-slate-50/80 border border-slate-100 rounded-3xl p-6 hover:bg-white hover:shadow-sm transition">
-                  <span className="text-xs font-bold tracking-widest text-indigo-500 uppercase block mb-2">{comp.style}</span>
-                  <h6 className="font-bold text-slate-900 text-lg mb-2">{comp.dynamic}</h6>
-                  <p className="text-slate-500 text-sm font-medium leading-relaxed">{comp.note}</p>
                 </div>
-              ))}
-            </div>
-        </Motion.div>
 
-      </Motion.div>
+                {/* 2. Dedicated Core Motivations Section (What Drives You & What You Avoid) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                    <div className="flex items-center gap-2 text-emerald-600">
+                      <Shield className="w-5 h-5" />
+                      <span className="text-xs font-black uppercase tracking-wider">What Drives You (Core Desire)</span>
+                    </div>
+                    <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreDesire}</p>
+                  </div>
+
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                    <div className="flex items-center gap-2 text-rose-500">
+                      <Heart className="w-5 h-5" />
+                      <span className="text-xs font-black uppercase tracking-wider">What You Avoid (Core Fear)</span>
+                    </div>
+                    <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreFear}</p>
+                  </div>
+                </div>
+
+                {/* 3. Attachment Spectrum Allocation Statistics */}
+                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-black text-slate-900">Attachment Spectrum Allocation Statistics</h3>
+                    <p className="text-slate-500 text-sm font-medium">
+                      Calculated distribution score across all four relational attachment patterns.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                    {[1, 2, 3, 4].map((num) => {
+                      const styleObj = attachmentStylesTypes[num];
+                      const val = breakdown[num] || 0;
+                      const isPrimary = num === primaryTypeNum;
+
+                      return (
+                        <ResultBar
+                          key={num}
+                          label={styleObj.name}
+                          value={val}
+                          color={`bg-linear-to-r ${styleObj.color}`}
+                          isPrimary={isPrimary}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 4. Strengths & Challenges Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  
+                  {/* Strengths Card */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                      <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center">
+                        <CheckCircle2 className="w-5 h-5 text-indigo-600" />
+                      </div>
+                      <h3 className="text-xl font-black text-slate-900">Key Strengths</h3>
+                    </div>
+                    <ul className="space-y-4">
+                      {info.strengths?.map((item, idx) => (
+                        <li key={idx} className="flex gap-4 items-start bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                          <div className="mt-2 w-2.5 h-2.5 rounded-full bg-indigo-600 shrink-0" />
+                          <p className="text-slate-700 font-medium text-sm sm:text-base leading-relaxed">{formatMarkdown(item)}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Challenges Card */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                      <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center">
+                        <AlertTriangle className="w-5 h-5 text-amber-500" />
+                      </div>
+                      <h3 className="text-xl font-black text-slate-900">Things to Watch Out For</h3>
+                    </div>
+                    <ul className="space-y-4">
+                      {info.weaknesses?.map((item, idx) => (
+                        <li key={idx} className="flex gap-4 items-start bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                          <div className="mt-2 w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
+                          <p className="text-slate-700 font-medium text-sm sm:text-base leading-relaxed">{formatMarkdown(item)}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                </div>
+
+              </div>
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB 2: SPECTRUM STATISTICS */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'spectrum' && (
+              <div className="space-y-8">
+                <div className="space-y-2">
+                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Attachment Spectrum Statistics</h3>
+                  <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
+                    Detailed distribution across all attachment styles and core emotional triggers.
+                  </p>
+                </div>
+
+                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                    {[1, 2, 3, 4].map((num) => {
+                      const styleObj = attachmentStylesTypes[num];
+                      const val = breakdown[num] || 0;
+                      const isPrimary = num === primaryTypeNum;
+
+                      return (
+                        <ResultBar
+                          key={num}
+                          label={styleObj.name}
+                          value={val}
+                          color={`bg-linear-to-r ${styleObj.color}`}
+                          isPrimary={isPrimary}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Core Triggers Card */}
+                {info.triggers && info.triggers.length > 0 && (
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                      <div className="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center">
+                        <ShieldAlert className="w-5 h-5 text-rose-500" />
+                      </div>
+                      <h4 className="text-xl font-black text-slate-900">Relational Triggers</h4>
+                    </div>
+                    <ul className="space-y-4">
+                      {info.triggers.map((trigger, idx) => (
+                        <li key={idx} className="flex gap-4 items-start bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                          <div className="mt-2 w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0" />
+                          <p className="text-slate-700 font-medium text-sm sm:text-base leading-relaxed">{trigger}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB 3: RELATIONSHIPS & CONFLICT */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'relationships' && (
+              <div className="space-y-8">
+                <div className="space-y-2">
+                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Interpersonal & Conflict Dynamics</h3>
+                  <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
+                    How {info.name} operates in romantic relationships, conflict resolution, and communication.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Relationship Dynamics Card */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
+                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                      <Heart className="w-5 h-5 text-rose-500" />
+                      <h4 className="text-xl font-black text-slate-900">Romantic Relationship Dynamics</h4>
+                    </div>
+                    <p className="text-slate-600 font-medium text-base leading-relaxed">
+                      {info.relationshipDynamics}
+                    </p>
+                  </div>
+
+                  {/* Conflict Resolution Card */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
+                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                      <Swords className="w-5 h-5 text-indigo-600" />
+                      <h4 className="text-xl font-black text-slate-900">Conflict Resolution Style</h4>
+                    </div>
+                    <p className="text-slate-600 font-medium text-base leading-relaxed">
+                      {info.conflictResolution}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Communication Style Card */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
+                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                      <MessageCircle className="w-5 h-5 text-emerald-600" />
+                      <h4 className="text-xl font-black text-slate-900">Communication Style</h4>
+                    </div>
+                    <p className="text-slate-600 font-medium text-base leading-relaxed">
+                      {info.communicationStyle}
+                    </p>
+                  </div>
+
+                  {/* Dating & Partner Advice Card */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
+                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                      <Compass className="w-5 h-5 text-amber-500" />
+                      <h4 className="text-xl font-black text-slate-900">Dating & Partner Selection Advice</h4>
+                    </div>
+                    <p className="text-slate-600 font-medium text-base leading-relaxed">
+                      {info.datingAdvice}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB 4: GROWTH & HEALING */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'growth' && (
+              <div className="space-y-8">
+                <div className="space-y-2">
+                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Growth Path & Workplace Boundaries</h3>
+                  <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
+                    Actionable steps to move toward earned security and healthy professional boundary setting.
+                  </p>
+                </div>
+
+                {/* Growth Path Card */}
+                {info.growthPath && info.growthPath.length > 0 && (
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                      <TrendingUp className="w-5 h-5 text-indigo-600" />
+                      <h4 className="text-xl font-black text-slate-900">Path Toward Earned Security</h4>
+                    </div>
+                    <ul className="space-y-4">
+                      {info.growthPath.map((step, idx) => (
+                        <li key={idx} className="flex gap-4 items-start bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                          <div className="mt-2 w-2.5 h-2.5 rounded-full bg-indigo-600 shrink-0" />
+                          <p className="text-slate-700 font-medium text-sm sm:text-base leading-relaxed">{step}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Workplace Behavior Card */}
+                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
+                  <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                    <Briefcase className="w-5 h-5 text-emerald-600" />
+                    <h4 className="text-xl font-black text-slate-900">Workplace Behavior & Collaboration</h4>
+                  </div>
+                  <p className="text-slate-600 font-medium text-base leading-relaxed">
+                    {info.workplaceBehavior}
+                  </p>
+                </div>
+
+                {/* Self-Regulation Protocol Card */}
+                <div className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.2)] rounded-[2.5rem] p-10 md:p-14 text-white space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Brain className="w-6 h-6 text-indigo-400" />
+                    <h4 className="text-2xl font-black">Self-Soothing Protocol</h4>
+                  </div>
+                  <p className="text-slate-300 text-base md:text-lg leading-relaxed font-medium max-w-4xl">
+                    Attachment styles are adaptable neurological pathways, not lifelong sentences. When you feel a relational trigger, pause to differentiate between present reality and past attachment fear. With conscious self-regulation and consistent communication, anyone can cultivate earned security.
+                  </p>
+                </div>
+              </div>
+            )}
+          </Motion.div>
+        </AnimatePresence>
+
+      </div>
     </div>
   );
 }

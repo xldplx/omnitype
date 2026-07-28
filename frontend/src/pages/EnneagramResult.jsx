@@ -171,76 +171,47 @@ export default function EnneagramResult() {
                   <div className="lg:col-span-8 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
                     <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${primaryColor} opacity-90`} />
                     
-                    <div className="space-y-4">
-                      <div className="flex flex-wrap items-center gap-3">
-                        <span className="text-xs font-black tracking-[0.2em] uppercase text-indigo-600 bg-indigo-50 px-3.5 py-1.5 rounded-full border border-indigo-100 flex items-center gap-2">
-                          <Activity className="w-3.5 h-3.5 text-indigo-500" />
-                          Type {primaryTypeNum}
-                        </span>
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/60">
-                          {info.center} Center
-                        </span>
-                      </div>
-
-                      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-none">
+                    <div>
+                      <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 text-slate-900 tracking-tight leading-none">
                         {info.name}
                       </h1>
                       
-                      <p className="text-slate-600 leading-relaxed font-medium text-base sm:text-lg">
+                      <p className="text-slate-600 max-w-4xl leading-relaxed font-medium text-base sm:text-lg md:text-xl">
                         {info.description}
                       </p>
                     </div>
-
-                    {/* Desire & Fear Pills */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-6 border-t border-slate-100">
-                      <div className="bg-emerald-50/60 border border-emerald-100/80 p-4 rounded-2xl space-y-1">
-                        <span className="text-[0.68rem] font-black uppercase tracking-wider text-emerald-600 flex items-center gap-1.5">
-                          <Shield className="w-3.5 h-3.5" /> What Drives You
-                        </span>
-                        <p className="text-slate-800 text-xs sm:text-sm font-bold leading-snug">{info.coreDesire}</p>
-                      </div>
-
-                      <div className="bg-rose-50/60 border border-rose-100/80 p-4 rounded-2xl space-y-1">
-                        <span className="text-[0.68rem] font-black uppercase tracking-wider text-rose-500 flex items-center gap-1.5">
-                          <Heart className="w-3.5 h-3.5" /> What You Avoid
-                        </span>
-                        <p className="text-slate-800 text-xs sm:text-sm font-bold leading-snug">{info.coreFear}</p>
-                      </div>
-                    </div>
                   </div>
 
-                  {/* Wing & Classification Card (4 Cols - Visible Side-by-Side without scrolling!) */}
-                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 flex flex-col justify-between relative overflow-hidden">
-                    <div className="space-y-4">
-                      <span className="text-xs font-black tracking-[0.2em] uppercase text-rose-600 bg-rose-50 px-3.5 py-1.5 rounded-full border border-rose-100 inline-block">
-                        Classification
-                      </span>
-
-                      <h2 className={`text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-linear-to-b ${primaryColor}`}>
-                        {fullTitle}
-                      </h2>
-
-                      {wingInfo ? (
-                        <p className="text-slate-600 font-medium text-xs sm:text-sm leading-relaxed">
-                          Your core <strong className="text-slate-900">Type {primaryTypeNum}</strong> is influenced by a <strong className="text-slate-900">Type {wingTypeNum} ({wingInfo.name})</strong> wing.
-                        </p>
-                      ) : (
-                        <p className="text-slate-600 font-medium text-xs sm:text-sm leading-relaxed">
-                          Full Enneagram classification score distribution.
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="bg-indigo-50/60 border border-indigo-100 p-4 rounded-2xl mt-4">
-                      <p className="text-slate-700 text-xs font-semibold leading-relaxed">
-                        💡 <strong className="text-slate-900">Wing Synergy:</strong> Wings add nuance to your core personality, shaping how your instincts express.
-                      </p>
-                    </div>
+                  {/* Centered Classification Card (4 Cols - Prominent & Centered) */}
+                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                     <h2 className={`text-5xl sm:text-6xl md:text-7xl leading-none font-black tracking-tight text-transparent bg-clip-text bg-linear-to-b ${primaryColor} z-10 drop-shadow-sm pb-1 whitespace-nowrap`}>
+                       {fullTitle}
+                     </h2>
+                     <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-slate-400 mt-3 z-10 whitespace-nowrap">Classification</span>
                   </div>
 
                 </div>
 
-                {/* 2. Enneagram Type Allocation Statistics (Fixed Heading & Explicit Values!) */}
+                {/* 2. Dedicated Core Motivations Section (What Drives You & What You Avoid) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                    <div className="flex items-center gap-2 text-emerald-600">
+                      <Shield className="w-5 h-5" />
+                      <span className="text-xs font-black uppercase tracking-wider">What Drives You (Core Desire)</span>
+                    </div>
+                    <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreDesire}</p>
+                  </div>
+
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                    <div className="flex items-center gap-2 text-rose-500">
+                      <Heart className="w-5 h-5" />
+                      <span className="text-xs font-black uppercase tracking-wider">What You Avoid (Core Fear)</span>
+                    </div>
+                    <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreFear}</p>
+                  </div>
+                </div>
+
+                {/* 3. Enneagram Type Allocation Statistics */}
                 <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
                   <div className="space-y-2">
                     <h3 className="text-2xl font-black text-slate-900">Enneagram Type Allocation Statistics</h3>
@@ -270,7 +241,7 @@ export default function EnneagramResult() {
                   </div>
                 </div>
 
-                {/* 3. Strengths & Growth Areas Grid */}
+                {/* 4. Strengths & Growth Areas Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   
                   {/* Strengths Card */}
