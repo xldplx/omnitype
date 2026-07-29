@@ -47,6 +47,7 @@ const ImposterResult = lazy(() => import('./pages/ImposterResult'));
 
 const IdentityDashboard = lazy(() => import('./pages/IdentityDashboard'));
 const Wiki = lazy(() => import('./pages/Wiki'));
+const MbtiWikiDetail = lazy(() => import('./pages/MbtiWikiDetail'));
 const Login = lazy(() => import('./pages/Login'));
 const ErrorPage = lazy(() => import('./pages/ErrorPage'));
 
@@ -118,6 +119,8 @@ export default function App() {
                 <Route path="/result/imposter/:type" element={<ImposterResult />} />
                 <Route path="/dashboard" element={<LocalhostRoute><IdentityDashboard /></LocalhostRoute>} />
                 <Route path="/wiki" element={<Wiki />} />
+                <Route path="/wiki/mbti/:type" element={<MbtiWikiDetail />} />
+                <Route path="/wiki/:type" element={<MbtiWikiDetail />} />
                 <Route path="/coming-soon" element={<ComingSoon />} />
                 <Route path="/login" element={<LocalhostRoute><Login /></LocalhostRoute>} />
                 <Route path="/error" element={<ErrorPage />} />

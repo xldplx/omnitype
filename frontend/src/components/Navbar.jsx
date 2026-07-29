@@ -133,7 +133,7 @@ export default function Navbar() {
                           {mbtiTypes.map((t) => (
                             <Link
                               key={t.code}
-                              to="/coming-soon"
+                              to={`/wiki/mbti/${t.code.toLowerCase()}`}
                               onClick={() => {
                                 setIsWikiOpen(false);
                                 setIsMbtiSubmenuOpen(false);
