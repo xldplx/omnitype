@@ -25,7 +25,7 @@ export const imposterStatuses = {
         name: 'The Secure Achiever',
         subName: 'Low Imposter Syndrome',
         description: 'You have a healthy relationship with your own competence. You understand that you are not perfect, but you don\'t let that make you feel like a fraud. You can accept praise and handle criticism gracefully.',
-        color: 'from-emerald-400 to-teal-500',
+        color: 'from-emerald-500 to-teal-600',
         bgLight: 'bg-emerald-50',
         borderLight: 'border-emerald-200',
         coreDesire: 'Continuous, steady growth and honest feedback.',
@@ -34,7 +34,10 @@ export const imposterStatuses = {
         cons: ['May occasionally underestimate the anxiety of peers', 'Might be perceived as over-confident by highly insecure people'],
         specificLie: '"I am only as good as my last achievement." (Though you mostly overcome this)',
         triggerCondition: 'Entering an entirely new field where you are a true beginner.',
-        objectiveEvidence: 'Look at your track record. You have learned new things before and succeeded. Being a beginner does not make you a fraud; it makes you a student.'
+        objectiveEvidence: 'Look at your track record. You have learned new things before and succeeded. Being a beginner does not make you a fraud; it makes you a student.',
+        cognitiveOverhead: 'Low. You process feedback without internalizing systemic self-doubt.',
+        reframingMantra: '"I am worthy of success regardless of temporary mistakes."',
+        somaticProtocol: 'Maintain open body posture and celebrate micro-wins in real-time.'
     },
     'PERFECTIONIST': {
         id: 'perfectionist',
@@ -50,7 +53,10 @@ export const imposterStatuses = {
         cons: ['Chronic burnout from overworking', 'Misses deadlines due to endless tweaking', 'Cannot enjoy successes because they focus on the 1% that went wrong'],
         specificLie: '"If it\'s not perfect, it\'s worthless, and I deceived them into liking it."',
         triggerCondition: 'Submitting a final project or receiving a performance review.',
-        objectiveEvidence: 'Perfection is mathematically impossible in creative/complex work. The fact that others are thrilled with your 95% means the work is genuinely good. You are moving the goalposts on yourself.'
+        objectiveEvidence: 'Perfection is mathematically impossible in creative/complex work. The fact that others are thrilled with your 95% means the work is genuinely good. You are moving the goalposts on yourself.',
+        cognitiveOverhead: 'Very High. Constant background audits scanning for microscopic mistakes.',
+        reframingMantra: '"Done with 90% excellence is infinitely better than unreleased perfection."',
+        somaticProtocol: 'Intentionally submit a task at 90% completion and observe that safety remains.'
     },
     'EXPERT': {
         id: 'expert',
@@ -66,7 +72,10 @@ export const imposterStatuses = {
         cons: ['Stuck in "tutorial hell" or endless preparation', 'Misses opportunities because they don\'t feel "ready" yet', 'Downplays significant expertise'],
         specificLie: '"I cannot start or speak up until I know absolutely everything about this topic."',
         triggerCondition: 'Being asked for your professional opinion or stepping into a new role.',
-        objectiveEvidence: 'Real experts don\'t know everything; they know how to find the answers. The fact that you understand the complexity of the topic proves your competence. A true novice wouldn\'t even know what to research.'
+        objectiveEvidence: 'Real experts don\'t know everything; they know how to find the answers. The fact that you understand the complexity of the topic proves your competence. A true novice wouldn\'t even know what to research.',
+        cognitiveOverhead: 'High. Endless research subroutines preventing decisive execution.',
+        reframingMantra: '"I don\'t need to know everything to provide immediate, valuable insight."',
+        somaticProtocol: 'Say "I don\'t know the exact answer, but I will find out" with calm confidence.'
     },
     'SOLOIST': {
         id: 'soloist',
@@ -82,7 +91,10 @@ export const imposterStatuses = {
         cons: ['Becomes a massive bottleneck by refusing to delegate', 'Suffers in silence when overwhelmed', 'Pushes away people who genuinely want to help'],
         specificLie: '"If I can\'t do it entirely by myself, I don\'t deserve the credit and I am a fake."',
         triggerCondition: 'Hitting a roadblock or feeling overwhelmed by workload.',
-        objectiveEvidence: 'Every major human achievement required a team. Asking for help is a sign of secure leadership and resource management, not a lack of personal skill. Independence is not a metric for worth.'
+        objectiveEvidence: 'Every major human achievement required a team. Asking for help is a sign of secure leadership and resource management, not a lack of personal skill. Independence is not a metric for worth.',
+        cognitiveOverhead: 'High. Carrying 100% of workload weight alone without emotional relief.',
+        reframingMantra: '"Asking for help is strategic collaboration, not personal failure."',
+        somaticProtocol: 'Delegate one minor task today and accept the support without apologizing.'
     }
 };
 
@@ -95,10 +107,10 @@ export const calculateImposterResult = (answers) => {
     let soloistScore = 0;
 
     answersArray.forEach(a => {
-        totalScore += a.value;
-        if (a.type === 'perfectionist') perfectionistScore += a.value;
-        if (a.type === 'expert') expertScore += a.value;
-        if (a.type === 'soloist') soloistScore += a.value;
+        totalScore += a.value || 0;
+        if (a.type === 'perfectionist') perfectionistScore += a.value || 0;
+        if (a.type === 'expert') expertScore += a.value || 0;
+        if (a.type === 'soloist') soloistScore += a.value || 0;
     });
 
     let statusKey = 'SECURE';
@@ -113,7 +125,7 @@ export const calculateImposterResult = (answers) => {
             statusKey = 'SOLOIST';
         }
     } else {
-        statusKey = 'SECURE'; // Low imposter syndrome
+        statusKey = 'SECURE';
     }
 
     const perfectionistPercent = Math.min(Math.round(((perfectionistScore - 6) / 36) * 100), 100);
@@ -125,9 +137,9 @@ export const calculateImposterResult = (answers) => {
         fullTitle: statusKey.toLowerCase(),
         info: imposterStatuses[statusKey],
         breakdown: {
-            perfectionistPercent: Math.max(0, perfectionistPercent),
-            expertPercent: Math.max(0, expertPercent),
-            soloistPercent: Math.max(0, soloistPercent)
+            perfectionistPercent: Math.max(0, perfectionistPercent || 0),
+            expertPercent: Math.max(0, expertPercent || 0),
+            soloistPercent: Math.max(0, soloistPercent || 0)
         }
     };
 };

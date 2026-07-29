@@ -1,98 +1,27 @@
 export const colorPsychologyQuestions = [
-  {
-    id: 1,
-    text: "I often feel a surge of intense, restless energy that I need to channel into action.",
-    type: "vibrant_warm" // Favors Crimson, Fuchsia, Gold
-  },
-  {
-    id: 2,
-    text: "I am drawn to quiet, dimly lit spaces where I can lose myself in thought.",
-    type: "deep_cool" // Favors Indigo, Obsidian, Forest
-  },
-  {
-    id: 3,
-    text: "I prefer everything in my life to feel airy, light, and free of heavy emotional burdens.",
-    type: "light_cool" // Favors Cyan, Lavender
-  },
-  {
-    id: 4,
-    text: "I find beauty in the bittersweet, melancholic, and complex aspects of life.",
-    type: "muted_cool" // Favors Lavender, Indigo, Sage
-  },
-  {
-    id: 5,
-    text: "I thrive when I am at the center of attention, bringing warmth and joy to the room.",
-    type: "light_warm" // Favors Gold, Terracotta
-  },
-  {
-    id: 6,
-    text: "I am deeply grounded and prefer things that are natural, traditional, and enduring.",
-    type: "muted_warm" // Favors Sage, Forest, Terracotta
-  },
-  {
-    id: 7,
-    text: "I embrace radical change and love standing out from the crowd with boldness.",
-    type: "neon" // Favors Fuchsia, Lime, Cyan
-  },
-  {
-    id: 8,
-    text: "My emotions run incredibly deep, often feeling like a bottomless ocean.",
-    type: "deep_cool" // Favors Sapphire, Indigo
-  },
-  {
-    id: 9,
-    text: "I have a highly analytical mind and prefer logic and structure over pure feeling.",
-    type: "deep_neutral" // Favors Obsidian, Indigo
-  },
-  {
-    id: 10,
-    text: "I am fiercely protective of my loved ones and will fight for what I believe in.",
-    type: "vibrant_warm" // Favors Crimson
-  },
-  {
-    id: 11,
-    text: "I am a mediator, always seeking harmony, peace, and balance in my environment.",
-    type: "muted_cool" // Favors Sage, Lavender
-  },
-  {
-    id: 12,
-    text: "I feel most myself when I am exploring new ideas, concepts, and futuristic possibilities.",
-    type: "neon" // Favors Cyan, Lime
-  },
-  {
-    id: 13,
-    text: "I feel a deep connection to the earth, the changing seasons, and organic growth.",
-    type: "muted_warm" // Favors Forest, Sage, Terracotta
-  },
-  {
-    id: 14,
-    text: "I experience feelings of immense joy and optimism that easily rub off on others.",
-    type: "light_warm" // Favors Gold, Lime
-  },
-  {
-    id: 15,
-    text: "I am fiercely independent and prefer to carve out my own path, regardless of the rules.",
-    type: "vibrant_cool" // Favors Sapphire, Fuchsia
-  },
-  {
-    id: 16,
-    text: "I often feel a sense of detachment, observing the world as if from a distance.",
-    type: "deep_neutral" // Favors Obsidian, Lavender
-  },
-  {
-    id: 17,
-    text: "I am highly empathetic and easily absorb the emotional atmosphere of a room.",
-    type: "light_cool" // Favors Cyan, Lavender, Sage
-  },
-  {
-    id: 18,
-    text: "My willpower is unrelenting; when I set a goal, nothing can stop me.",
-    type: "vibrant_warm" // Favors Crimson, Obsidian
-  }
+  { id: 1, text: "I often feel a surge of intense, restless energy that I need to channel into action.", type: "vibrant_warm" },
+  { id: 2, text: "I am drawn to quiet, dimly lit spaces where I can lose myself in thought.", type: "deep_cool" },
+  { id: 3, text: "I prefer everything in my life to feel airy, light, and free of heavy emotional burdens.", type: "light_cool" },
+  { id: 4, text: "I find beauty in the bittersweet, melancholic, and complex aspects of life.", type: "muted_cool" },
+  { id: 5, text: "I thrive when I am at the center of attention, bringing warmth and joy to the room.", type: "light_warm" },
+  { id: 6, text: "I am deeply grounded and prefer things that are natural, traditional, and enduring.", type: "muted_warm" },
+  { id: 7, text: "I embrace radical change and love standing out from the crowd with boldness.", type: "neon" },
+  { id: 8, text: "My emotions run incredibly deep, often feeling like a bottomless ocean.", type: "deep_cool" },
+  { id: 9, text: "I have a highly analytical mind and prefer logic and structure over pure feeling.", type: "deep_neutral" },
+  { id: 10, text: "I am fiercely protective of my loved ones and will fight for what I believe in.", type: "vibrant_warm" },
+  { id: 11, text: "I am a mediator, always seeking harmony, peace, and balance in my environment.", type: "muted_cool" },
+  { id: 12, text: "I feel most myself when I am exploring new ideas, concepts, and futuristic possibilities.", type: "neon" },
+  { id: 13, text: "I feel a deep connection to the earth, the changing seasons, and organic growth.", type: "muted_warm" },
+  { id: 14, text: "I experience feelings of immense joy and optimism that easily rub off on others.", type: "light_warm" },
+  { id: 15, text: "I am fiercely independent and prefer to carve out my own path, regardless of the rules.", type: "vibrant_cool" },
+  { id: 16, text: "I often feel a sense of detachment, observing the world as if from a distance.", type: "deep_neutral" },
+  { id: 17, text: "I am highly empathetic and easily absorb the emotional atmosphere of a room.", type: "light_cool" },
+  { id: 18, text: "My willpower is unrelenting; when I set a goal, nothing can stop me.", type: "vibrant_warm" }
 ];
 
 export const colorArchetypes = {
   "crimson": {
+    id: "crimson",
     name: "Crimson Passion",
     hex: "#D9042B",
     gradient: "from-red-600 to-rose-700",
@@ -101,14 +30,25 @@ export const colorArchetypes = {
     color: "from-red-600 to-rose-700",
     description: "Your aura burns with immense intensity and power. You are driven by deep desires, strong convictions, and a relentless life force. You feel things fully and act with absolute certainty.",
     keywords: ["Intensity", "Power", "Desire", "Vitality", "Action"],
+    coreDesire: "Unstoppable momentum, passion, and tangible impact.",
+    coreFear: "Powerlessness, stagnation, and passive surrender.",
+    chakra: "Root (Muladhara) - 432 Hz",
+    complementaryColor: "sapphire",
+    shadowColor: "obsidian",
+    temperature: "High Voltage Warm",
     traits: [
       "Fiercely protective of those you love.",
       "Unrelenting willpower and determination.",
       "A natural leader who commands attention.",
       "Experiences emotion as physical energy."
-    ]
+    ],
+    pros: ["Magnetic charisma", "Fearless in high-stakes crises", "Decisive executive action"],
+    cons: ["Prone to impulsive anger", "Struggles with slow-paced environments", "Can intimidate others"],
+    decorTherapy: "Warm accent walls, leather textures, and bold statement art.",
+    communicationStyle: "Direct, energetic, and uncompromisingly honest."
   },
   "indigo": {
+    id: "indigo",
     name: "Midnight Indigo",
     hex: "#1A1B41",
     gradient: "from-indigo-900 to-slate-900",
@@ -117,14 +57,25 @@ export const colorArchetypes = {
     color: "from-indigo-600 to-blue-800",
     description: "Deep, mysterious, and profoundly intuitive. Your emotional state is like a midnight ocean—calm on the surface but containing infinite depth and complexity underneath.",
     keywords: ["Intuition", "Depth", "Mystery", "Wisdom", "Introspection"],
+    coreDesire: "Uncovering hidden truths and mastering complex inner worlds.",
+    coreFear: "Superficiality, noise, and emotional invasion.",
+    chakra: "Third Eye (Ajna) - 852 Hz",
+    complementaryColor: "gold",
+    shadowColor: "slate",
+    temperature: "Deep Cool",
     traits: [
       "Highly perceptive to hidden truths.",
       "Requires substantial alone time to recharge.",
       "Guided by a strong inner compass and intuition.",
       "Comfortable navigating the shadows of the psyche."
-    ]
+    ],
+    pros: ["Deep psychological insight", "Impenetrable emotional focus", "Wise strategic planning"],
+    cons: ["Can seem aloof or secretive", "Prone to over-thinking", "Struggles with casual small talk"],
+    decorTherapy: "Deep blue velvet, soft ambient lamps, and soundproof study spaces.",
+    communicationStyle: "Subtle, deliberate, and deeply insightful."
   },
   "cyan": {
+    id: "cyan",
     name: "Ethereal Cyan",
     hex: "#00F0FF",
     gradient: "from-cyan-400 to-blue-500",
@@ -133,14 +84,25 @@ export const colorArchetypes = {
     color: "from-cyan-400 to-blue-500",
     description: "Your aura is bright, clear, and electric. You are a forward-thinker, often living in the realm of ideas, concepts, and futuristic possibilities. Your energy is refreshing and untethered.",
     keywords: ["Clarity", "Innovation", "Freedom", "Electric", "Visionary"],
+    coreDesire: "Boundless intellectual freedom and visionary discovery.",
+    coreFear: "Rigid bureaucracy, monotony, and mental confinement.",
+    chakra: "Throat (Vishuddha) - 741 Hz",
+    complementaryColor: "amber",
+    shadowColor: "pearl",
+    temperature: "Electric Cool",
     traits: [
       "Quick-witted and mentally agile.",
       "Values truth, logic, and pure ideas above heavy emotions.",
       "A visionary who sees the vast potential of the future.",
       "Struggles with feeling tied down or restricted."
-    ]
+    ],
+    pros: ["Rapid problem solving", "Unbiased conceptual clarity", "Inspires breakthrough innovation"],
+    cons: ["Can detach from emotional realities", "Impatient with tradition", "Restless focus"],
+    decorTherapy: "Minimalist glass desks, cool LED accents, and open airy layouts.",
+    communicationStyle: "Articulate, fast-paced, and conceptually precise."
   },
   "gold": {
+    id: "gold",
     name: "Golden Dawn",
     hex: "#FFB800",
     gradient: "from-amber-400 to-orange-500",
@@ -149,14 +111,25 @@ export const colorArchetypes = {
     color: "from-amber-400 to-orange-500",
     description: "Warm, radiant, and endlessly optimistic. Your emotional baseline is one of hope and expansion. People are naturally drawn to your light and the genuine joy you bring to spaces.",
     keywords: ["Warmth", "Optimism", "Radiance", "Joy", "Expansion"],
+    coreDesire: "Spreading warmth, uplifting others, and fostering abundance.",
+    coreFear: "Cynicism, dark atmosphere, and emotional coldness.",
+    chakra: "Solar Plexus (Manipura) - 528 Hz",
+    complementaryColor: "indigo",
+    shadowColor: "terracotta",
+    temperature: "Radiant Warm",
     traits: [
       "Naturally lifts the spirits of those around them.",
       "Sees the best potential in people and situations.",
       "Driven by a desire to create harmony and happiness.",
       "Can border on idealism, ignoring harsher realities."
-    ]
+    ],
+    pros: ["Infectious positivity", "Generous spirit", "Builds thriving communities"],
+    cons: ["May suppress personal sadness", "Risk of toxic positivity", "Over-extending help"],
+    decorTherapy: "Natural sunlight, brass accents, warm wood finishes, and yellow florals.",
+    communicationStyle: "Encouraging, expansive, and warmly open."
   },
   "lavender": {
+    id: "lavender",
     name: "Lavender Haze",
     hex: "#C4B5FD",
     gradient: "from-violet-300 to-fuchsia-300",
@@ -165,14 +138,25 @@ export const colorArchetypes = {
     color: "from-violet-400 to-purple-500",
     description: "Soft, empathetic, and uniquely perceptive. Your aura is gentle and highly sensitive to the vibrations of the world. You exist in the dreamy liminal space between reality and imagination.",
     keywords: ["Empathy", "Dreams", "Sensitivity", "Gentleness", "Imagination"],
+    coreDesire: "Peaceful emotional resonance and creative sanctuary.",
+    coreFear: "Harsh confrontation, sensory overload, and emotional cruelty.",
+    chakra: "Crown (Sahasrara) - 963 Hz",
+    complementaryColor: "emerald",
+    shadowColor: "slate",
+    temperature: "Muted Cool",
     traits: [
       "Incredibly attuned to the feelings of others.",
       "Finds deep solace in art, music, or spiritual practices.",
       "Tends to absorb the energy of their environment.",
       "A natural mediator who desires peaceful outcomes."
-    ]
+    ],
+    pros: ["Profound creative imagination", "Gentle healing presence", "High intuitive empathy"],
+    cons: ["Absorbs ambient stress", "Prone to escapism", "Requires frequent solitude"],
+    decorTherapy: "Diffused lighting, lavender linen sheets, aromatherapy, and soft pastel art.",
+    communicationStyle: "Soft-spoken, empathetic, and poetically evocative."
   },
   "sage": {
+    id: "sage",
     name: "Sage Serenity",
     hex: "#9CAF88",
     gradient: "from-emerald-400 to-teal-500",
@@ -181,14 +165,25 @@ export const colorArchetypes = {
     color: "from-emerald-500 to-teal-600",
     description: "Grounded, balanced, and enduring. You possess a quiet strength that doesn't need to be loud to be felt. Your aura reflects the tranquility of nature and the wisdom of patience.",
     keywords: ["Balance", "Grounding", "Tranquility", "Growth", "Patience"],
+    coreDesire: "Steady equilibrium, organic growth, and peaceful endurance.",
+    coreFear: "Chaotic upheaval, artificial environments, and rush.",
+    chakra: "Heart (Anahata) - 639 Hz",
+    complementaryColor: "coral",
+    shadowColor: "obsidian",
+    temperature: "Balanced Neutral",
     traits: [
       "Provides a calming presence during chaotic times.",
       "Values consistency, loyalty, and slow, steady growth.",
       "Deeply connected to the physical, natural world.",
       "Can be resistant to sudden, uncalculated change."
-    ]
+    ],
+    pros: ["Unshakeable composure", "Practical wisdom", "Fosters long-term stability"],
+    cons: ["Resistant to rapid change", "May suppress urgent feelings", "Overly cautious"],
+    decorTherapy: "Indoor house plants, linen drapes, stone ceramics, and natural timber.",
+    communicationStyle: "Calm, grounded, reassuring, and measured."
   },
   "obsidian": {
+    id: "obsidian",
     name: "Obsidian Void",
     hex: "#0F0F0F",
     gradient: "from-slate-800 to-black",
@@ -197,14 +192,25 @@ export const colorArchetypes = {
     color: "from-slate-700 to-slate-900",
     description: "Aesthetic, detached, and formidable. Your aura absorbs light, keeping your true self heavily guarded. You are deeply analytical, favoring logic and absolute independence.",
     keywords: ["Independence", "Logic", "Formidable", "Guarded", "Aesthetic"],
+    coreDesire: "Absolute autonomy, unyielding protection, and mastery.",
+    coreFear: "Vulnerability, loss of control, and emotional intrusion.",
+    chakra: "Sub-Root (Earth Star) - 174 Hz",
+    complementaryColor: "coral",
+    shadowColor: "crimson",
+    temperature: "Deep Neutral",
     traits: [
       "Highly selective about who they let into their inner circle.",
       "Approaches problems with cold, calculated logic.",
       "Possesses a minimalist, refined aesthetic sense.",
       "Often feels distinctly separate from the rest of society."
-    ]
+    ],
+    pros: ["Fearless boundary enforcement", "Minimalist precision", "Immune to emotional manipulation"],
+    cons: ["Appears emotionally cold", "Hard to connect with deeply", "Guarded isolation"],
+    decorTherapy: "Matte black fixtures, industrial steel, monochrome art, and minimal clutter.",
+    communicationStyle: "Brief, logical, stoic, and precise."
   },
   "fuchsia": {
+    id: "fuchsia",
     name: "Neon Fuchsia",
     hex: "#D946EF",
     gradient: "from-fuchsia-500 to-pink-600",
@@ -213,17 +219,242 @@ export const colorArchetypes = {
     color: "from-fuchsia-500 to-pink-600",
     description: "Rebellious, magnetic, and fiercely expressive. You refuse to be ignored or categorized. Your energy is a disruptive force of creativity and unapologetic authenticity.",
     keywords: ["Rebellion", "Magnetism", "Expression", "Disruptive", "Authentic"],
+    coreDesire: "Unapologetic self-expression and groundbreaking originality.",
+    coreFear: "Conformity, invisibility, and rigid social expectations.",
+    chakra: "Sacral (Svadhisthana) - 285 Hz",
+    complementaryColor: "sage",
+    shadowColor: "violet",
+    temperature: "High Voltage Neon",
     traits: [
       "Completely unafraid to challenge the status quo.",
       "Thrives on intense, varied, and novel experiences.",
       "A highly magnetic personality that draws strong reactions.",
       "Struggles with routine, boredom, or strict rules."
-    ]
+    ],
+    pros: ["Unstoppable original creativity", "Commands immediate attention", "Empowers others to be authentic"],
+    cons: ["Short attention span for routine", "Provocative friction", "Restless search for novelty"],
+    decorTherapy: "Neon sign lighting, vibrant velvet furniture, and eclectic pop art.",
+    communicationStyle: "Bold, passionate, theatrical, and unfiltered."
+  },
+  "emerald": {
+    id: "emerald",
+    name: "Verdant Emerald",
+    hex: "#059669",
+    gradient: "from-emerald-600 to-teal-700",
+    bgLight: "bg-emerald-50",
+    borderLight: "border-emerald-100",
+    color: "from-emerald-600 to-teal-700",
+    description: "Vibrant, prosperous, and deeply restorative. You radiate vitality, growth, and abundant regenerative energy. You are a natural builder who nurtures talent and manifests results.",
+    keywords: ["Vitality", "Prosperity", "Abundance", "Renewal", "Growth"],
+    coreDesire: "Abundant growth, systemic prosperity, and health.",
+    coreFear: "Scarcity, decay, and stagnant environments.",
+    chakra: "Heart (Anahata) - 528 Hz",
+    complementaryColor: "coral",
+    shadowColor: "amber",
+    temperature: "Balanced Warm",
+    traits: [
+      "Nurtures teams and projects into full bloom.",
+      "Possesses an innate sense of physical and financial health.",
+      "Strives for sustainable long-term success.",
+      "Deeply connected to natural renewal cycles."
+    ],
+    pros: ["Generative leadership", "Fosters team growth", "Calm prosperity mindset"],
+    cons: ["Over-investing in failing causes", "Possessive over growth", "Slow to pivot"],
+    decorTherapy: "Rich emerald velvet, lush indoor botanicals, and gold leaf accents.",
+    communicationStyle: "Encouraging, constructive, and growth-oriented."
+  },
+  "amber": {
+    id: "amber",
+    name: "Resin Amber",
+    hex: "#D97706",
+    gradient: "from-amber-600 to-yellow-600",
+    bgLight: "bg-amber-50",
+    borderLight: "border-amber-100",
+    color: "from-amber-600 to-yellow-600",
+    description: "Preserved, warm, and rich with ancient wisdom. You act as a keeper of stories, traditions, and deep historical resonance. Your energy feels timeless, comforting, and deeply grounded.",
+    keywords: ["Wisdom", "Heritage", "Preservation", "Comfort", "Depth"],
+    coreDesire: "Preserving truth, honoring heritage, and timeless connection.",
+    coreFear: "Loss of memory, superficial trends, and shallow values.",
+    chakra: "Sacral-Solar Nexus - 396 Hz",
+    complementaryColor: "cyan",
+    shadowColor: "obsidian",
+    temperature: "Warm Nostalgic",
+    traits: [
+      "Values deep heritage and historical context.",
+      "Provides comforting, time-tested counsel.",
+      "Patiently preserves what is valuable in life.",
+      "Sees beauty in vintage and aged materials."
+    ],
+    pros: ["Deep storytelling ability", "Timeless perspective", "Warm comforting presence"],
+    cons: ["Nostalgic reluctance to modernize", "Sentimental attachment", "Stubbornness"],
+    decorTherapy: "Antique wood furniture, amber glass bottles, leather books, and warm tungsten lighting.",
+    communicationStyle: "Warm, reflective, narrative, and wise."
+  },
+  "violet": {
+    id: "violet",
+    name: "Mystic Violet",
+    hex: "#7C3AED",
+    gradient: "from-violet-600 to-purple-800",
+    bgLight: "bg-purple-50",
+    borderLight: "border-purple-100",
+    color: "from-violet-600 to-purple-800",
+    description: "Majestic, spiritual, and visionary. You operate on a higher wavelength of consciousness, bridging the gap between practical reality and transcendent ideals. You command quiet reverence.",
+    keywords: ["Royalty", "Transcendence", "Spiritual", "Visionary", "Majesty"],
+    coreDesire: "Transcendent understanding and noble purpose.",
+    coreFear: "Banal materialism, vulgarity, and spiritual emptiness.",
+    chakra: "Crown (Sahasrara) - 963 Hz",
+    complementaryColor: "gold",
+    shadowColor: "fuchsia",
+    temperature: "High Cool",
+    traits: [
+      "Commands respect through quiet dignity.",
+      "Deeply interested in esoteric or philosophical systems.",
+      "Refuses to settle for mundane explanations.",
+      "Possesses a regal, refined presence."
+    ],
+    pros: ["High spiritual awareness", "Noble moral integrity", "Inspires deep reverence"],
+    cons: ["Can seem elitist or detached", "Perfectionist expectations", "Impatience with mundanity"],
+    decorTherapy: "Deep violet drapery, amethyst crystals, dark mahogany, and atmospheric lighting.",
+    communicationStyle: "Dignified, eloquent, and philosophically elevated."
+  },
+  "terracotta": {
+    id: "terracotta",
+    name: "Earthy Terracotta",
+    hex: "#C2410C",
+    gradient: "from-orange-700 to-amber-800",
+    bgLight: "bg-orange-50",
+    borderLight: "border-orange-100",
+    color: "from-orange-700 to-amber-800",
+    description: "Raw, organic, and warmly hospitable. You are connected to the clay of the earth and the heat of the hearth. People feel instantly welcomed, safe, and nourished in your presence.",
+    keywords: ["Earthiness", "Hospitality", "Warmth", "Rawness", "Nourishment"],
+    coreDesire: "Creating warm, hospitable, and organic community spaces.",
+    coreFear: "Sterility, pretentiousness, and emotional distance.",
+    chakra: "Root-Sacral Nexus - 432 Hz",
+    complementaryColor: "cyan",
+    shadowColor: "gold",
+    temperature: "Warm Earthy",
+    traits: [
+      "Incredible talent for culinary or spatial hospitality.",
+      "Values authenticity over polished perfection.",
+      "Grounded in physical senses and tangible crafts.",
+      "Fosters genuine, unpretentious relationships."
+    ],
+    pros: ["Unbeatable warmth", "Creates welcoming homes", "Grounded sensory craft"],
+    cons: ["Can be stubborn", "Resistant to abstract theories", "Over-indulgent"],
+    decorTherapy: "Terracotta tiles, unglazed clay pottery, warm linen, and rustic wooden dining tables.",
+    communicationStyle: "Warm, sensory-rich, inviting, and practical."
+  },
+  "sapphire": {
+    id: "sapphire",
+    name: "Deep Sapphire",
+    hex: "#1E40AF",
+    gradient: "from-blue-700 to-indigo-900",
+    bgLight: "bg-blue-50",
+    borderLight: "border-blue-100",
+    color: "from-blue-700 to-indigo-900",
+    description: "Steadfast, loyal, and crystal-clear. Your aura represents unwavering truth, mental clarity, and profound loyalty. You are an anchor of integrity in a sea of changing opinions.",
+    keywords: ["Integrity", "Truth", "Loyalty", "Clarity", "Anchor"],
+    coreDesire: "Unwavering truth, structural integrity, and loyal bonds.",
+    coreFear: "Deceit, betrayal, and chaotic instability.",
+    chakra: "Throat-Third Eye Nexus - 741 Hz",
+    complementaryColor: "crimson",
+    shadowColor: "obsidian",
+    temperature: "Cool Steady",
+    traits: [
+      "Extremely loyal and dependable ally.",
+      "Seeks absolute truth and logical clarity.",
+      "Stands firm against falsehoods and manipulation.",
+      "Cool-headed under intense operational pressure."
+    ],
+    pros: ["Unshakable integrity", "Clear analytical mind", "Deeply trustworthy"],
+    cons: ["Can be rigid", "Struggles to forgive betrayal", "Strict standards"],
+    decorTherapy: "Deep sapphire accents, clean architectural lines, silver trim, and glass displays.",
+    communicationStyle: "Clear, authoritative, honest, and precise."
+  },
+  "coral": {
+    id: "coral",
+    name: "Radiant Coral",
+    hex: "#F43F5E",
+    gradient: "from-rose-500 to-orange-400",
+    bgLight: "bg-rose-50",
+    borderLight: "border-rose-100",
+    color: "from-rose-500 to-orange-400",
+    description: "Vibrant, playful, and socially magnetic. You bring energy, laughter, and spontaneous warmth into every room. You bridge different groups together through pure relational joy.",
+    keywords: ["Playfulness", "Social Warmth", "Joy", "Connection", "Spontaneity"],
+    coreDesire: "Spontaneous joy, playful creation, and rich social harmony.",
+    coreFear: "Boredom, isolation, and clinical formality.",
+    chakra: "Sacral (Svadhisthana) - 285 Hz",
+    complementaryColor: "sage",
+    shadowColor: "fuchsia",
+    temperature: "Warm Playful",
+    traits: [
+      "Natural social connector who breaks the ice effortlessly.",
+      "Thrives on playful spontaneous adventures.",
+      "Brings color and excitement to monotonous routines.",
+      "Spontaneously creative and expressive."
+    ],
+    pros: ["Effortless social warmth", "Uplifting playfulness", "Spontaneous ideation"],
+    cons: ["Struggles with heavy routines", "Can avoid serious conflict", "Restless attention"],
+    decorTherapy: "Coral cushions, playful art prints, open patio spaces, and bright warm textiles.",
+    communicationStyle: "Playful, enthusiastic, animated, and friendly."
+  },
+  "slate": {
+    id: "slate",
+    name: "Storm Slate",
+    hex: "#475569",
+    gradient: "from-slate-600 to-slate-800",
+    bgLight: "bg-slate-50",
+    borderLight: "border-slate-200",
+    color: "from-slate-600 to-slate-800",
+    description: "Neutral, resilient, and objectively balanced. You are the storm wall that absorbs pressure without cracking. You provide calm, objective evaluation unclouded by emotional hysteria.",
+    keywords: ["Objectivity", "Resilience", "Neutrality", "Balance", "Shield"],
+    coreDesire: "Objective balance, clear truth, and emotional protection.",
+    coreFear: "Emotional chaos, bias, and dramatic breakdown.",
+    chakra: "Root-Throat Axis - 174 Hz",
+    complementaryColor: "gold",
+    shadowColor: "obsidian",
+    temperature: "Cool Neutral",
+    traits: [
+      "Objective mediator who evaluates all facts impartially.",
+      "High emotional endurance under heavy pressure.",
+      "Minimalist and unpretentious in lifestyle.",
+      "Maintains composure when others panic."
+    ],
+    pros: ["Unbiased judgment", "High stress resilience", "Calm emotional shield"],
+    cons: ["May appear emotionally suppressed", "Reserved warmth", "Overly cautious"],
+    decorTherapy: "Slate stone tiles, neutral gray linen, minimalist steel desks, and clean monochrome styling.",
+    communicationStyle: "Neutral, factual, objective, and calm."
+  },
+  "pearl": {
+    id: "pearl",
+    name: "Iridescent Pearl",
+    hex: "#F8FAFC",
+    gradient: "from-slate-100 to-sky-100",
+    bgLight: "bg-sky-50",
+    borderLight: "border-sky-100",
+    color: "from-slate-400 to-sky-500",
+    description: "Luminous, pure, and multi-faceted. Your aura reflects all colors of the spectrum, adapting fluidly to whatever energy is needed. You hold high spiritual clarity and pure potential.",
+    keywords: ["Illumination", "Purity", "Adaptability", "Potential", "Clarity"],
+    coreDesire: "Purity of intention, spiritual illumination, and holistic synthesis.",
+    coreFear: "Contamination, corruption, and narrowing limitations.",
+    chakra: "Crown-Etheric (Soul Star) - 1080 Hz",
+    complementaryColor: "crimson",
+    shadowColor: "obsidian",
+    temperature: "Pure Ethereal",
+    traits: [
+      "Highly adaptable to diverse people and places.",
+      "Possesses a rare, translucent clarity of vision.",
+      "Synthesizes multiple perspectives effortlessly.",
+      "Reflects the best qualities of those around them."
+    ],
+    pros: ["Transcendent adaptability", "Pure holistic insight", "Inspires spiritual clarity"],
+    cons: ["Can lose personal identity", "Overly sensitive to corruption", "Vague boundaries"],
+    decorTherapy: "White linen, mother-of-pearl accents, sheer curtains, and natural sunlight reflections.",
+    communicationStyle: "Luminous, reflective, fluid, and serene."
   }
 };
 
 export function calculateColorPsychology(answers) {
-  // Initialize scores
   const scores = {
     crimson: 0,
     indigo: 0,
@@ -232,38 +463,45 @@ export function calculateColorPsychology(answers) {
     lavender: 0,
     sage: 0,
     obsidian: 0,
-    fuchsia: 0
+    fuchsia: 0,
+    emerald: 0,
+    amber: 0,
+    violet: 0,
+    terracotta: 0,
+    sapphire: 0,
+    coral: 0,
+    slate: 0,
+    pearl: 0
   };
 
-  // Map answer types to score increments
   const typeMap = {
-    "vibrant_warm": ["crimson", "gold", "fuchsia"],
-    "deep_cool": ["indigo", "obsidian"],
-    "light_cool": ["cyan", "lavender"],
-    "muted_cool": ["lavender", "sage", "indigo"],
-    "light_warm": ["gold", "cyan"],
-    "muted_warm": ["sage", "gold"],
-    "neon": ["fuchsia", "cyan"],
-    "deep_neutral": ["obsidian", "indigo"],
-    "vibrant_cool": ["fuchsia", "cyan", "indigo"]
+    "vibrant_warm": ["crimson", "gold", "fuchsia", "coral", "terracotta"],
+    "deep_cool": ["indigo", "obsidian", "sapphire", "violet", "slate"],
+    "light_cool": ["cyan", "lavender", "pearl", "sage"],
+    "muted_cool": ["lavender", "sage", "indigo", "slate"],
+    "light_warm": ["gold", "cyan", "coral", "emerald"],
+    "muted_warm": ["sage", "gold", "terracotta", "amber"],
+    "neon": ["fuchsia", "cyan", "coral"],
+    "deep_neutral": ["obsidian", "indigo", "slate", "sapphire"],
+    "vibrant_cool": ["fuchsia", "cyan", "indigo", "violet"]
   };
 
-  // Tally scores
   colorPsychologyQuestions.forEach(q => {
     const score = answers[q.id] || 0;
     if (score !== 0) {
       const targetColors = typeMap[q.type];
       if (targetColors) {
         targetColors.forEach(color => {
-          scores[color] += score; // Can be positive or negative
+          if (scores[color] !== undefined) {
+            scores[color] += score;
+          }
         });
       }
     }
   });
 
-  // Find the highest scoring color
   let maxScore = -Infinity;
-  let dominantColor = "indigo"; // default fallback
+  let dominantColor = "indigo";
 
   for (const [color, score] of Object.entries(scores)) {
     if (score > maxScore) {
@@ -272,7 +510,6 @@ export function calculateColorPsychology(answers) {
     }
   }
 
-  // Calculate percentages for the breakdown (normalize lowest score to 0)
   const scoreValues = Object.values(scores);
   const minScore = Math.min(...scoreValues);
   const adjustedScores = {};
@@ -288,7 +525,7 @@ export function calculateColorPsychology(answers) {
   for (const color in adjustedScores) {
       breakdown[color] = totalAdjusted > 0 
           ? Math.round((adjustedScores[color] / totalAdjusted) * 100) 
-          : Math.round(100 / 8);
+          : Math.round(100 / 16);
   }
 
   return {

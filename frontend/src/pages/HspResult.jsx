@@ -1,312 +1,496 @@
-import { useEffect } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ChevronLeft, Shield, Heart, Activity, Target, AlertTriangle, MessageSquare, Zap, Eye, BatteryCharging, Leaf, VolumeX, Home } from 'lucide-react';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
+import { 
+  ChevronLeft, Shield, Heart, Activity, Target, AlertTriangle, 
+  Zap, Eye, BatteryCharging, Leaf, VolumeX, Home, CheckCircle2, RefreshCw, Lock, Sparkles, Scale
+} from 'lucide-react';
 import { hspStatuses } from '../utils/hspLogic';
+
+function formatMarkdown(text) {
+  if (!text) return "";
+  const parts = text.split(/\*\*([^*]+)\*\*/g);
+  return parts.map((part, idx) => {
+    if (idx % 2 === 1) {
+      return <strong key={idx} className="text-slate-900 font-extrabold">{part}</strong>;
+    }
+    return part;
+  });
+}
+
+function ResultBar({ label, value, color, isPrimary }) {
+  const displayVal = Math.min(Math.max(value || 0, 0), 100);
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between items-center text-sm font-bold text-slate-700">
+        <span className="flex items-center gap-2">
+          <span className={`w-2.5 h-2.5 rounded-full ${isPrimary ? 'bg-pink-500 ring-4 ring-pink-100' : 'bg-slate-300'}`} />
+          <span className={isPrimary ? 'text-slate-900 font-black' : 'text-slate-700'}>{label}</span>
+          {isPrimary && <span className="text-[0.65rem] uppercase tracking-wider px-2 py-0.5 rounded-full bg-pink-50 text-pink-600 font-extrabold border border-pink-100">Dominant Channel</span>}
+        </span>
+        <span className="font-mono text-slate-900 font-bold bg-slate-100 px-2.5 py-0.5 rounded-md text-xs">{displayVal}%</span>
+      </div>
+      <div className="h-3.5 w-full bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/60 shadow-inner">
+        <Motion.div
+          className={`h-full rounded-full ${color}`}
+          initial={{ width: 0 }}
+          animate={{ width: `${displayVal}%` }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function HspResult() {
   const { type } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  
-  // We passed the full result object through router state
-  let resultData = location.state?.resultData;
+  const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo(0, 0);
+  }, [activeTab]);
+
+  const resultData = useMemo(() => {
+    let stateData = location.state?.resultData;
+    if (!stateData && type) {
+      const statusKey = type.toUpperCase();
+      if (hspStatuses[statusKey]) {
+        stateData = {
+          statusKey,
+          fullTitle: type,
+          info: hspStatuses[statusKey],
+          breakdown: { sensoryPercent: 85, empathyPercent: 90, processingPercent: 75 }
+        };
+      }
+    }
+    return stateData;
+  }, [location.state, type]);
+
+  useEffect(() => {
     if (resultData) {
       localStorage.setItem('omnitype_hsp', JSON.stringify(resultData));
     }
   }, [resultData]);
-
-  // If accessed directly via URL, reconstruct resultData
-  if (!resultData && type) {
-    const statusKey = type.toUpperCase();
-    if (hspStatuses[statusKey]) {
-        resultData = {
-           statusKey,
-           fullTitle: type,
-           info: hspStatuses[statusKey],
-           breakdown: { sensoryPercent: 85, empathyPercent: 90, processingPercent: 75 } // Simulated
-        };
-    }
-  }
 
   if (!resultData) {
     return <Navigate to="/test/hsp" replace />;
   }
 
   const { info, breakdown } = resultData;
+  const primaryColor = info.color || 'from-rose-400 to-pink-500';
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.2 }
-    }
-  };
+  const tabs = [
+    { id: 'overview', label: 'Overview' },
+    { id: 'metrics', label: 'Sensory Metrics' },
+    { id: 'sanctuary', label: 'Sanctuary & Environment' },
+    { id: 'recharge', label: 'Recharge Protocol' }
+  ];
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 40 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0.4, duration: 0.8 } }
-  };
+  const maxVal = Math.max(breakdown.sensoryPercent || 0, breakdown.empathyPercent || 0, breakdown.processingPercent || 0);
 
   return (
-    <div className="w-full min-h-screen bg-[#fafafa] relative overflow-hidden flex flex-col items-center selection:bg-pink-200 uppercase-none">
+    <div className="w-full min-h-screen bg-[#fafafa] relative overflow-hidden flex flex-col items-center selection:bg-pink-200">
       
-      {/* Massive Editorial Background Typography */}
-      <motion.div 
-        initial={{ scale: 1.1, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.03 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-        className="fixed top-20 left-0 right-0 h-screen flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden"
-      >
-        <span className="font-black text-[40vw] tracking-tighter leading-none text-slate-800">
-          HSP
-        </span>
-      </motion.div>
-
-      {/* Decorative Modern Background Gradients */}
+      {/* Decorative Ambient Background Auras */}
       <div className={`fixed top-[-10vh] left-[-10vw] w-[50vw] h-[50vw] ${info.bgLight} rounded-full blur-[120px] pointer-events-none opacity-60 z-0`} />
       <div className={`fixed bottom-[-10vh] right-[-10vw] w-[50vw] h-[50vw] ${info.bgLight} rounded-full blur-[120px] pointer-events-none opacity-60 z-0`} />
 
-      <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-        className="w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-12 pt-32 pb-32 relative z-10"
-      >
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-12 pt-32 pb-32 relative z-10">
         
-        {/* Superior Navigation */}
-        <motion.div variants={itemVariants} className="flex justify-between items-center mb-16 md:mb-24">
+        {/* Top Navigation - Return to Home */}
+        <div className="flex justify-between items-center mb-10">
           <button 
+            type="button"
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-slate-400 font-semibold text-sm uppercase tracking-widest hover:text-slate-900 transition-colors group"
+            className="flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-slate-900 transition-colors group cursor-pointer"
           >
-            <div className={`w-8 h-8 rounded-full ${info.bgLight} border ${info.borderLight} flex items-center justify-center group-hover:bg-white transition-colors`}>
-              <ChevronLeft className="w-4 h-4 text-slate-600" />
+            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
+              <ChevronLeft className="w-4 h-4 text-slate-700" />
             </div>
             <span>Home</span>
           </button>
-        </motion.div>
+        </div>
 
-        {/* The Big Reveal Hero Section */}
-        <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
-          
-          {/* Main Title Card */}
-          <div className="lg:col-span-8 bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_40px_rgb(0,0,0,0.06)] rounded-[2.5rem] p-10 md:p-16 flex flex-col justify-center relative overflow-hidden group">
-            <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${info.color} opacity-50 group-hover:opacity-100 transition-opacity duration-700`} />
-            
-            <h3 className="text-xs font-bold tracking-[0.4em] uppercase mb-6 text-slate-500 flex items-center gap-3">
-              <Eye className="w-4 h-4 text-pink-500" />
-              Sensory Profile Reveal
-            </h3>
-            
-            <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-black mb-6 text-slate-900 tracking-tighter leading-none bg-clip-text bg-linear-to-br from-slate-900 to-slate-600 pb-2">
-              {info.name}
-            </h1>
-            
-            <p className="text-lg md:text-[1.35rem] text-slate-500 max-w-4xl leading-relaxed tracking-wide font-medium mt-2 lowercase-none">
-              {info.description}
-            </p>
-          </div>
+        {/* Tab Selector Buttons (Text-Only) */}
+        <div className="flex flex-wrap gap-2 md:gap-3 mb-12 border-b border-slate-200/60 pb-4">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-5 py-3 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                  isActive 
+                    ? 'bg-slate-900 text-white shadow-md' 
+                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50'
+                }`}
+              >
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
 
-          {/* Persona Card */}
-          <div className="lg:col-span-4 bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_40px_rgb(0,0,0,0.06)] rounded-[2.5rem] p-10 flex flex-col items-center justify-center relative overflow-hidden group text-center hover:-translate-y-2 transition-transform duration-500">
-             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] pointer-events-none" />
-             <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 ${info.bgLight} rounded-full blur-3xl pointer-events-none group-hover:scale-150 transition-transform duration-700`} />
-             
-             <h2 className={`text-3xl md:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-linear-to-b ${info.color} z-10 relative leading-tight drop-shadow-sm`}>
-               {info.subName}
-             </h2>
-             <span className="text-xs md:text-sm font-bold tracking-widest uppercase text-slate-600 mt-6 z-10 whitespace-nowrap bg-white/50 px-4 py-2 rounded-full border border-white/80">Sensitivity Level</span>
-          </div>
-        </motion.div>
-
-        {/* Sensory Metrics Breakdown (High-Tech Bar Gauges) */}
-        <motion.div variants={itemVariants} className="bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_40px_rgb(0,0,0,0.06)] rounded-[2.5rem] p-10 md:p-16 mb-8">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-12 border-b border-slate-100 pb-8 gap-4">
-            <div className="flex items-center gap-3">
-                <Activity className="w-6 h-6 text-pink-500" />
-                <h4 className="text-sm font-bold tracking-[0.3em] text-slate-500 uppercase">Sensory Processing Metrics</h4>
-            </div>
-            <div className="flex items-center gap-2 bg-slate-100 px-5 py-2.5 rounded-full border border-slate-200">
-                <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" />
-                <span className="text-xs font-black text-slate-600 uppercase tracking-widest">HSP Matrix</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16">
-              <MetricGauge label="Sensory Input" value={breakdown.sensoryPercent} color={info.color} icon={Target} delay={0.2} />
-              <MetricGauge label="Emotional Empathy" value={breakdown.empathyPercent} color={info.color} icon={Heart} delay={0.4} />
-              <MetricGauge label="Depth of Processing" value={breakdown.processingPercent} color={info.color} icon={Activity} delay={0.6} />
-          </div>
-        </motion.div>
-
-        {/* NEW: Environmental & Recovery Strategy (Dark Mode Section) */}
-        <motion.div variants={itemVariants} className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.3)] rounded-[2.5rem] p-10 md:p-16 mb-8 relative overflow-hidden group">
-            <div className={`absolute top-0 right-0 w-[40rem] h-[40rem] bg-linear-to-bl ${info.color} rounded-full blur-[120px] opacity-10 pointer-events-none transition-transform duration-1000 group-hover:scale-110`} />
-            
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-white/50 mb-12 border-b border-white/10 pb-6 relative z-10">
-              <Leaf className="w-5 h-5 text-emerald-400" />
-              Environmental & Recovery Strategy
-            </h4>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
-                {/* Recharge Mode */}
-                <div className="flex flex-col">
-                    <div className="flex items-center gap-4 mb-6">
-                        <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${info.color} flex items-center justify-center shadow-lg`}>
-                            <BatteryCharging className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                            <span className="text-[0.65rem] font-bold tracking-widest text-white/50 uppercase block mb-1">Recharge Mode</span>
-                            <h5 className="text-2xl font-bold text-white tracking-tight leading-none">{info.rechargeMode}</h5>
-                        </div>
+        {/* Dynamic Tab Panel */}
+        <AnimatePresence mode="wait">
+          <Motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* ---------------------------------------------------- */}
+            {/* TAB 1: OVERVIEW */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'overview' && (
+              <div className="space-y-8">
+                
+                {/* 1. Side-by-Side Hero Section */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                  
+                  {/* Primary Archetype (Dominant 8 Cols) */}
+                  <div className="lg:col-span-8 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+                    <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${primaryColor} opacity-90`} />
+                    
+                    <div>
+                      <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 text-slate-900 tracking-tight leading-none">
+                        {info.name}
+                      </h1>
+                      
+                      <p className="text-slate-600 max-w-4xl leading-relaxed font-medium text-base sm:text-lg md:text-xl">
+                        {info.description}
+                      </p>
                     </div>
-                    <p className="text-slate-400 text-lg leading-relaxed font-medium pl-16">
-                        {info.rechargeDesc}
+                  </div>
+
+                  {/* Standardized 2nd Box (4 Cols - Prominent & Centered) */}
+                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                     <h2 className={`text-3xl sm:text-4xl md:text-5xl leading-tight font-black tracking-tight text-transparent bg-clip-text bg-linear-to-b ${primaryColor} z-10 drop-shadow-sm pb-1`}>
+                       {info.subName}
+                     </h2>
+                     <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-slate-400 mt-3 z-10 whitespace-nowrap">Sensitivity Profile</span>
+                  </div>
+
+                </div>
+
+                {/* 2. Dedicated Core Motivations Section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                    <div className="flex items-center gap-2 text-emerald-600">
+                      <Shield className="w-5 h-5" />
+                      <span className="text-xs font-black uppercase tracking-wider">What Drives You (Core Desire)</span>
+                    </div>
+                    <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreDesire}</p>
+                  </div>
+
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                    <div className="flex items-center gap-2 text-rose-500">
+                      <Heart className="w-5 h-5" />
+                      <span className="text-xs font-black uppercase tracking-wider">What You Avoid (Hidden Fear)</span>
+                    </div>
+                    <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreFear}</p>
+                  </div>
+                </div>
+
+                {/* 3. Sensory Metrics Allocation */}
+                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                  <div className="space-y-2">
+                    <h3 className="text-2xl font-black text-slate-900">Sensory Processing Statistics</h3>
+                    <p className="text-slate-500 text-sm font-medium">
+                      Calculated sensitivity across environmental inputs, emotional empathy, and depth of processing.
                     </p>
+                  </div>
+
+                  <div className="space-y-6">
+                    <ResultBar
+                      label="Sensory Input Sensitivity"
+                      value={breakdown.sensoryPercent}
+                      color={`bg-linear-to-r ${primaryColor}`}
+                      isPrimary={breakdown.sensoryPercent === maxVal}
+                    />
+                    <ResultBar
+                      label="Emotional Empathy & Resonant Attunement"
+                      value={breakdown.empathyPercent}
+                      color={`bg-linear-to-r ${primaryColor}`}
+                      isPrimary={breakdown.empathyPercent === maxVal}
+                    />
+                    <ResultBar
+                      label="Depth of Cognitive & Emotional Processing"
+                      value={breakdown.processingPercent}
+                      color={`bg-linear-to-r ${primaryColor}`}
+                      isPrimary={breakdown.processingPercent === maxVal}
+                    />
+                  </div>
                 </div>
 
-                {/* Sensory Triggers */}
-                <div className="flex flex-col">
-                    <div className="flex items-center gap-4 mb-6">
-                        <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${info.color} flex items-center justify-center shadow-lg`}>
-                            <VolumeX className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                            <span className="text-[0.65rem] font-bold tracking-widest text-white/50 uppercase block mb-1">Sensory Triggers</span>
-                            <h5 className="text-2xl font-bold text-white tracking-tight leading-none">Primary Drains</h5>
-                        </div>
+                {/* 4. Strategic Assets & System Vulnerabilities */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  
+                  {/* Superpowers */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                      <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center">
+                        <CheckCircle2 className="w-5 h-5 text-indigo-600" />
+                      </div>
+                      <h3 className="text-xl font-black text-slate-900">Sensory Superpowers (Pros)</h3>
                     </div>
-                    <p className="text-slate-400 text-lg leading-relaxed font-medium pl-16">
-                        {info.sensoryTriggers}
+                    <ul className="space-y-4">
+                      {info.pros?.map((item, idx) => (
+                        <li key={idx} className="flex gap-4 items-start bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                          <div className="mt-2 w-2.5 h-2.5 rounded-full bg-indigo-600 shrink-0" />
+                          <p className="text-slate-700 font-medium text-sm sm:text-base leading-relaxed">{formatMarkdown(item)}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Friction Points */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                      <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center">
+                        <AlertTriangle className="w-5 h-5 text-amber-500" />
+                      </div>
+                      <h3 className="text-xl font-black text-slate-900">Friction Points (Cons)</h3>
+                    </div>
+                    <ul className="space-y-4">
+                      {info.cons?.map((item, idx) => (
+                        <li key={idx} className="flex gap-4 items-start bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                          <div className="mt-2 w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
+                          <p className="text-slate-700 font-medium text-sm sm:text-base leading-relaxed">{formatMarkdown(item)}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                </div>
+
+              </div>
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB 2: SENSORY METRICS */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'metrics' && (
+              <div className="space-y-8">
+                <div className="space-y-2">
+                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Sensory Processing Breakdown</h3>
+                  <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
+                    Detailed breakdown across sensory input tolerance, emotional absorption, and internal processing depth.
+                  </p>
+                </div>
+
+                {/* Main Progress Bars */}
+                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                  <div className="space-y-6">
+                    <ResultBar
+                      label="Sensory Input Sensitivity"
+                      value={breakdown.sensoryPercent}
+                      color={`bg-linear-to-r ${primaryColor}`}
+                      isPrimary={breakdown.sensoryPercent === maxVal}
+                    />
+                    <ResultBar
+                      label="Emotional Empathy & Resonant Attunement"
+                      value={breakdown.empathyPercent}
+                      color={`bg-linear-to-r ${primaryColor}`}
+                      isPrimary={breakdown.empathyPercent === maxVal}
+                    />
+                    <ResultBar
+                      label="Depth of Cognitive & Emotional Processing"
+                      value={breakdown.processingPercent}
+                      color={`bg-linear-to-r ${primaryColor}`}
+                      isPrimary={breakdown.processingPercent === maxVal}
+                    />
+                  </div>
+                </div>
+
+                {/* 3 Pillar Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  
+                  {/* Sensory Input Card */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-4">
+                    <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                      <Target className="w-5 h-5 text-pink-500" />
+                      <h4 className="text-lg font-black text-slate-900">Sensory Input</h4>
+                    </div>
+                    <p className="text-slate-600 font-medium text-sm leading-relaxed">
+                      {info.traits?.sensory || "Attuned to environmental details, lights, sounds, and ambient stimulation."}
                     </p>
+                  </div>
+
+                  {/* Emotional Empathy Card */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-4">
+                    <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                      <Heart className="w-5 h-5 text-rose-500" />
+                      <h4 className="text-lg font-black text-slate-900">Emotional Empathy</h4>
+                    </div>
+                    <p className="text-slate-600 font-medium text-sm leading-relaxed">
+                      {info.traits?.empathy || "Deeply absorbs social atmosphere and non-verbal emotional cues from others."}
+                    </p>
+                  </div>
+
+                  {/* Depth of Processing Card */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-4">
+                    <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                      <Activity className="w-5 h-5 text-indigo-500" />
+                      <h4 className="text-lg font-black text-slate-900">Depth of Processing</h4>
+                    </div>
+                    <p className="text-slate-600 font-medium text-sm leading-relaxed">
+                      {info.traits?.processing || "Internalizes experiences deeply, reflecting thoroughly before acting."}
+                    </p>
+                  </div>
+
                 </div>
 
-                {/* Ideal Workspace */}
-                <div className="flex flex-col md:col-span-2 mt-4 bg-white/5 p-8 rounded-3xl border border-white/10">
-                    <div className="flex items-center gap-4 mb-4">
-                        <Home className="w-6 h-6 text-sky-400" />
-                        <h5 className="text-xl font-bold text-white tracking-tight">Ideal Workspace & Environmental Needs</h5>
-                    </div>
-                    <div className="pl-10 grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <span className="text-xs font-bold text-white/40 uppercase tracking-widest block mb-2">Space Required</span>
-                            <p className="text-slate-300 text-[1.05rem] leading-relaxed">{info.environmentalNeeds}</p>
-                        </div>
-                        <div>
-                            <span className="text-xs font-bold text-white/40 uppercase tracking-widest block mb-2">Optimal Setup</span>
-                            <p className="text-slate-300 text-[1.05rem] leading-relaxed">{info.idealWorkspace}</p>
-                        </div>
-                    </div>
+                {/* Primary Sensory Triggers Card */}
+                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                    <VolumeX className="w-5 h-5 text-rose-500" />
+                    <h4 className="text-xl font-black text-slate-900">Primary Sensory Triggers</h4>
+                  </div>
+                  <p className="text-slate-700 font-bold text-base md:text-lg leading-relaxed">
+                    {info.sensoryTriggers}
+                  </p>
                 </div>
-            </div>
-        </motion.div>
 
-        {/* Core Traits Layer */}
-        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            <div className="bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14 flex flex-col h-full hover:-translate-y-2 transition-transform duration-500 group">
-                <h4 className="text-xs font-bold tracking-[0.3em] text-slate-400 uppercase mb-8 flex items-center gap-3 border-b border-slate-100 pb-4">
-                <Shield className="w-5 h-5 text-emerald-500 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12" />
-                Core Desire
-                </h4>
-                <p className="text-slate-800 font-bold leading-relaxed text-2xl md:text-[2rem] tracking-tight">{info.coreDesire}</p>
-            </div>
+              </div>
+            )}
 
-            <div className="bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-14 flex flex-col h-full hover:-translate-y-2 transition-transform duration-500 group">
-                <h4 className="text-xs font-bold tracking-[0.3em] text-slate-400 uppercase mb-8 flex items-center gap-3 border-b border-slate-100 pb-4">
-                <AlertTriangle className="w-5 h-5 text-rose-500 transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-12" />
-                Hidden Fear
-                </h4>
-                <p className="text-slate-800 font-bold leading-relaxed text-2xl md:text-[2rem] tracking-tight">{info.coreFear}</p>
-            </div>
-        </motion.div>
+            {/* ---------------------------------------------------- */}
+            {/* TAB 3: SANCTUARY & ENVIRONMENT */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'sanctuary' && (
+              <div className="space-y-8">
+                <div className="space-y-2">
+                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Environmental Needs & Sanctuary</h3>
+                  <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
+                    Curating an optimal physical and psychological environment for your sensitive nervous system.
+                  </p>
+                </div>
 
-        {/* Expanded Pros & Cons */}
-        <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-12 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-8 border-b border-slate-100 pb-4">
-              <Zap className="w-5 h-5 text-indigo-500" />
-              The Superpowers (Pros)
-            </h4>
-            <ul className="grid grid-cols-1 gap-5">
-              {info.pros?.map((item, idx) => (
-                <li key={idx} className="flex gap-5 items-start bg-indigo-50/50 p-5 rounded-2xl border border-indigo-100/50 hover:bg-indigo-50 transition-colors">
-                  <div className={`w-3 h-3 rounded-full bg-indigo-400 shrink-0 mt-1.5 shadow-sm`} />
-                  <p className="text-slate-700 font-semibold text-[1.1rem] leading-relaxed">{item}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-12 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-8 border-b border-slate-100 pb-4">
-              <AlertTriangle className="w-5 h-5 text-rose-500" />
-              The Friction Points (Cons)
-            </h4>
-            <ul className="grid grid-cols-1 gap-5">
-              {info.cons?.map((item, idx) => (
-                <li key={idx} className="flex gap-5 items-start bg-rose-50/50 p-5 rounded-2xl border border-rose-100/50 hover:bg-rose-50 transition-colors">
-                  <div className="w-3 h-3 rounded-full bg-rose-400 shrink-0 mt-1.5 shadow-sm" />
-                  <p className="text-slate-700 font-semibold text-[1.1rem] leading-relaxed">{item}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </motion.div>
-        
-        {/* Traits Summary */}
-        <motion.div variants={itemVariants} className="bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[2.5rem] p-10 md:p-16 mb-8 hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] transition-all duration-500">
-            <h4 className="flex items-center gap-3 text-xs font-bold tracking-[0.3em] uppercase text-slate-400 mb-8 border-b border-slate-100 pb-4">
-              <MessageSquare className="w-5 h-5 text-sky-500" />
-              Trait Manifestations
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-               <div className="bg-slate-50 border border-slate-100 rounded-2xl p-6">
-                  <h5 className="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2"><Target className="w-4 h-4 text-slate-400"/> Sensory Reaction</h5>
-                  <p className="text-slate-600 text-[1.05rem] leading-relaxed">{info.traits?.sensory}</p>
-               </div>
-               <div className="bg-slate-50 border border-slate-100 rounded-2xl p-6">
-                  <h5 className="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2"><Heart className="w-4 h-4 text-slate-400"/> Empathy Style</h5>
-                  <p className="text-slate-600 text-[1.05rem] leading-relaxed">{info.traits?.empathy}</p>
-               </div>
-               <div className="bg-slate-50 border border-slate-100 rounded-2xl p-6">
-                  <h5 className="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2"><Activity className="w-4 h-4 text-slate-400"/> Processing Style</h5>
-                  <p className="text-slate-600 text-[1.05rem] leading-relaxed">{info.traits?.processing}</p>
-               </div>
-            </div>
-        </motion.div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Space Requirements */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                      <Home className="w-5 h-5 text-sky-500" />
+                      <h4 className="text-xl font-black text-slate-900">Environmental Needs</h4>
+                    </div>
+                    <p className="text-slate-600 font-medium text-base leading-relaxed">
+                      {info.environmentalNeeds}
+                    </p>
+                  </div>
 
-      </motion.div>
+                  {/* Ideal Workspace */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                    <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                      <Leaf className="w-5 h-5 text-emerald-500" />
+                      <h4 className="text-xl font-black text-slate-900">Optimal Workspace Setup</h4>
+                    </div>
+                    <p className="text-slate-600 font-medium text-base leading-relaxed">
+                      {info.idealWorkspace}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Sensory Sanctuary Rules Card */}
+                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <h4 className="text-xl font-black text-slate-900">Sanctuary Design Checklist</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-medium text-slate-600">
+                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-1">
+                      <span className="font-extrabold text-slate-900 block">1. Lighting & Optics</span>
+                      <p>Warm ambient lighting, avoidance of fluorescent tubes, and dimmable lamps.</p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-1">
+                      <span className="font-extrabold text-slate-900 block">2. Acoustic Insulation</span>
+                      <p>Noise-canceling headphones, soft textures, and quiet decompression zones.</p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-1">
+                      <span className="font-extrabold text-slate-900 block">3. Tactile Comfort</span>
+                      <p>Natural fabrics, ergonomic seating, and clutter-free surfaces.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ---------------------------------------------------- */}
+            {/* TAB 4: RECHARGE PROTOCOL */}
+            {/* ---------------------------------------------------- */}
+            {activeTab === 'recharge' && (
+              <div className="space-y-8">
+                <div className="space-y-2">
+                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Recharge Mode & Decompression Hacks</h3>
+                  <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
+                    Customized strategies to restore your energy reserves and protect your nervous system.
+                  </p>
+                </div>
+
+                {/* Primary Recharge Mode Card */}
+                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
+                    <BatteryCharging className="w-5 h-5 text-pink-500" />
+                    <h4 className="text-xl font-black text-slate-900">Prescribed Recharge Mode</h4>
+                  </div>
+                  <h5 className="text-lg font-bold text-slate-900">{info.rechargeMode}</h5>
+                  <p className="text-slate-600 font-medium text-base leading-relaxed">
+                    {info.rechargeDesc}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Hack 1 */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-3">
+                    <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-2">
+                      <Scale className="w-5 h-5" />
+                    </div>
+                    <h4 className="text-xl font-black text-slate-900">Empathy Un-Merging</h4>
+                    <p className="text-slate-600 font-medium text-sm leading-relaxed">
+                      Visualize an energetic boundary separating your internal emotional state from the feelings of others.
+                    </p>
+                  </div>
+
+                  {/* Hack 2 */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-3">
+                    <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-500 mb-2">
+                      <RefreshCw className="w-5 h-5" />
+                    </div>
+                    <h4 className="text-xl font-black text-slate-900">Sensory Buffer Zone</h4>
+                    <p className="text-slate-600 font-medium text-sm leading-relaxed">
+                      Schedule 15 minutes of zero-input quiet solitude immediately following intense social or work events.
+                    </p>
+                  </div>
+
+                  {/* Hack 3 */}
+                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-3">
+                    <div className="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 mb-2">
+                      <Lock className="w-5 h-5" />
+                    </div>
+                    <h4 className="text-xl font-black text-slate-900">Overstimulation Brake</h4>
+                    <p className="text-slate-600 font-medium text-sm leading-relaxed">
+                      Give yourself explicit permission to step away from crowded spaces when sensory static becomes overwhelming.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Protocol Card */}
+                <div className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.2)] rounded-[2.5rem] p-10 md:p-14 text-white space-y-4">
+                  <div className="flex items-center gap-3">
+                    <Eye className="w-6 h-6 text-pink-400" />
+                    <h4 className="text-2xl font-black">Sensory Gift Mandate</h4>
+                  </div>
+                  <p className="text-slate-300 text-base md:text-lg leading-relaxed font-medium max-w-4xl italic">
+                    High sensitivity is not a vulnerability to be cured; it is a refined perceptual gift that allows you to feel the richness of life, art, and connection deeply. Protect your sanctuary so your gift can shine.
+                  </p>
+                </div>
+              </div>
+            )}
+          </Motion.div>
+        </AnimatePresence>
+
+      </div>
     </div>
   );
-}
-
-function MetricGauge({ label, value, color, icon: Icon, delay }) {
-    return (
-        <div className="flex flex-col gap-6 group">
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                        <Icon className="w-5 h-5 text-slate-500" />
-                    </div>
-                    <span className="font-bold text-slate-800 tracking-tight text-lg">{label}</span>
-                </div>
-                <span className={`font-black text-3xl tracking-tighter text-transparent bg-clip-text bg-linear-to-b ${color}`}>{value}%</span>
-            </div>
-            
-            <div className="relative h-6 w-full bg-slate-100 rounded-full overflow-hidden shadow-inner border border-slate-200/50 p-1">
-                <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: `${value}%` }}
-                    transition={{ duration: 1.5, ease: [0.33, 1, 0.68, 1], delay: delay }}
-                    className={`h-full bg-linear-to-r ${color} rounded-full relative overflow-hidden`}
-                >
-                    {/* Glossy inner shine */}
-                    <div className="absolute top-0 left-0 right-0 h-1/2 bg-white/20 rounded-full" />
-                </motion.div>
-            </div>
-        </div>
-    );
 }
