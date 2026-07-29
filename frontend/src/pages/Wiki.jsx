@@ -29,7 +29,7 @@ export default function Wiki() {
       title: "16 Personality Archetypes",
       icon: <Brain className="w-6 h-6 text-indigo-500" />,
       desc: "Detailed cognitive classifications explaining how you gather details, process logic, and make life choices.",
-      link: "/coming-soon"
+      link: "/wiki/mbti/intp"
     },
     {
       id: 'enneagram',
@@ -132,7 +132,7 @@ export default function Wiki() {
             {filteredTypes.map((typeObj) => (
               <Link
                 key={typeObj.code}
-                to="/coming-soon"
+                to={`/wiki/mbti/${typeObj.code.toLowerCase()}`}
                 className="block h-full bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_20px_rgb(0,0,0,0.02)] hover:shadow-[0_12px_35px_rgb(0,0,0,0.06)] hover:-translate-y-1 hover:border-indigo-200/80 transition-all duration-300 flex flex-col justify-between group cursor-pointer"
               >
                 <div className="space-y-4">
