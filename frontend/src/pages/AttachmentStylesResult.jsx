@@ -96,7 +96,7 @@ export default function AttachmentStylesResult() {
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: Sparkles },
-    { id: 'spectrum', label: 'Spectrum Statistics', icon: Heart },
+    { id: 'spectrum', label: 'Spectrum Statistics', icon: Activity },
     { id: 'relationships', label: 'Relationships & Conflict', icon: Users },
     { id: 'growth', label: 'Growth & Healing', icon: Brain }
   ];
@@ -127,20 +127,18 @@ export default function AttachmentStylesResult() {
         {/* Tab Selector Buttons */}
         <div className="flex flex-wrap gap-2 md:gap-3 mb-12 border-b border-slate-200/60 pb-4">
           {tabs.map((tab) => {
-            const TabIcon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                className={`px-5 py-3 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
                   isActive 
                     ? 'bg-slate-900 text-white shadow-md' 
                     : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50'
                 }`}
               >
-                <TabIcon className={`w-4 h-4 ${isActive ? 'text-indigo-400' : 'text-slate-400'}`} />
                 <span>{tab.label}</span>
               </button>
             );
