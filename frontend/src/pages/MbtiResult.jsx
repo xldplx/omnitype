@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useParams, Navigate, useNavigate } from 'react-router-dom';
+import { useEffect, useState, useMemo, useRef } from 'react';
+import { useParams, Navigate, useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronLeft,
@@ -9,114 +9,23 @@ import {
   Heart,
   Compass,
   Briefcase,
-  Brain,
   Layers,
   Quote,
   Sparkles,
   ShieldAlert,
-  Award
+  Download,
+  RefreshCw,
+  ArrowRight,
+  BookOpen,
+  CheckCircle2
 } from 'lucide-react';
+import { toPng } from 'html-to-image';
 import { typeDescriptions } from '../utils/mbtiResultLogic';
-
-// Cognitive Function Stacks for all 16 MBTI Types
-const COGNITIVE_STACKS = {
-  INTJ: [
-    { role: "Dominant", code: "Ni", title: "Introverted Intuition", desc: "Perceives long-term pattern shifts, macro vision trajectories, and subconscious synthesis." },
-    { role: "Auxiliary", code: "Te", title: "Extraverted Thinking", desc: "Organizes external environments, optimizes systems, and executes strategic logic." },
-    { role: "Tertiary", code: "Fi", title: "Introverted Feeling", desc: "Internal ethical compass, authentic personal values, and deep integrity." },
-    { role: "Inferior", code: "Se", title: "Extraverted Sensing", desc: "Real-time physical observation and sensory engagement under acute stress." }
-  ],
-  INTP: [
-    { role: "Dominant", code: "Ti", title: "Introverted Thinking", desc: "Deep analytical logic, internal framework building, and precision conceptual deconstruction." },
-    { role: "Auxiliary", code: "Ne", title: "Extraverted Intuition", desc: "Generates novel ideas, explores speculative possibilities, and sees hidden links." },
-    { role: "Tertiary", code: "Si", title: "Introverted Sensing", desc: "Memory storage, past experience comparison, and historical consistency." },
-    { role: "Inferior", code: "Fe", title: "Extraverted Feeling", desc: "Reading group emotions and seeking social harmony under acute pressure." }
-  ],
-  ENTJ: [
-    { role: "Dominant", code: "Te", title: "Extraverted Thinking", desc: "Strategic direction, decisive executive action, and objective system optimization." },
-    { role: "Auxiliary", code: "Ni", title: "Introverted Intuition", desc: "Macro vision forecasting and identifying single core leverage points for growth." },
-    { role: "Tertiary", code: "Se", title: "Extraverted Sensing", desc: "Real-time tactical adaptation, environmental presence, and swift execution." },
-    { role: "Inferior", code: "Fi", title: "Introverted Feeling", desc: "Private personal values and vulnerable emotional processing." }
-  ],
-  ENTP: [
-    { role: "Dominant", code: "Ne", title: "Extraverted Intuition", desc: "Limitless conceptual exploration, rapid pattern creation, and dialectic debate." },
-    { role: "Auxiliary", code: "Ti", title: "Introverted Thinking", desc: "Rigorous internal logical validation and dismantling flawed assumptions." },
-    { role: "Tertiary", code: "Fe", title: "Extraverted Feeling", desc: "Social charisma, reading audience moods, and persuasive influence." },
-    { role: "Inferior", code: "Si", title: "Introverted Sensing", desc: "Routine detail maintenance and historical data tracking under pressure." }
-  ],
-  INFJ: [
-    { role: "Dominant", code: "Ni", title: "Introverted Intuition", desc: "Deep symbolic insight, future envisioning, and subconscious pattern recognition." },
-    { role: "Auxiliary", code: "Fe", title: "Extraverted Feeling", desc: "Empathetic emotional resonance, group alignment, and interpersonal caregiving." },
-    { role: "Tertiary", code: "Ti", title: "Introverted Thinking", desc: "Analytical framework checking and internal logical consistency." },
-    { role: "Inferior", code: "Se", title: "Extraverted Sensing", desc: "Sensory grounding and present-moment physical awareness under stress." }
-  ],
-  INFP: [
-    { role: "Dominant", code: "Fi", title: "Introverted Feeling", desc: "Uncompromising personal authenticity, ethical depth, and core values." },
-    { role: "Auxiliary", code: "Ne", title: "Extraverted Intuition", desc: "Creative imagination, poetic expression, and exploring alternative pathways." },
-    { role: "Tertiary", code: "Si", title: "Introverted Sensing", desc: "Nostalgic memory retention, personal traditions, and comfortable routines." },
-    { role: "Inferior", code: "Te", title: "Extraverted Thinking", desc: "Directing external structure and assertive logical confrontation under stress." }
-  ],
-  ENFJ: [
-    { role: "Dominant", code: "Fe", title: "Extraverted Feeling", desc: "Catalyzing human potential, inspiring group unity, and emotional guidance." },
-    { role: "Auxiliary", code: "Ni", title: "Introverted Intuition", desc: "Discerning long-term growth visions for people and communities." },
-    { role: "Tertiary", code: "Se", title: "Extraverted Sensing", desc: "Charismatic physical presence and engaging real-time environments." },
-    { role: "Inferior", code: "Ti", title: "Introverted Thinking", desc: "Detached critical analysis and cold objective logic validation." }
-  ],
-  ENFP: [
-    { role: "Dominant", code: "Ne", title: "Extraverted Intuition", desc: "Infectious enthusiasm for new horizons, possibilities, and creative sparks." },
-    { role: "Auxiliary", code: "Fi", title: "Introverted Feeling", desc: "Deep personal conviction, emotional empathy, and individual truth." },
-    { role: "Tertiary", code: "Te", title: "Extraverted Thinking", desc: "Organizing steps to bring visionary creative ideas into real implementation." },
-    { role: "Inferior", code: "Si", title: "Introverted Sensing", desc: "Attention to repetitive micro-details and historical record keeping." }
-  ],
-  ISTJ: [
-    { role: "Dominant", code: "Si", title: "Introverted Sensing", desc: "Unrivaled memory accuracy, reliability, procedural duty, and factual precision." },
-    { role: "Auxiliary", code: "Te", title: "Extraverted Thinking", desc: "Systematic organization, clear scheduling, and logical enforcement." },
-    { role: "Tertiary", code: "Fi", title: "Introverted Feeling", desc: "Steadfast moral code, loyalty to principles, and quiet integrity." },
-    { role: "Inferior", code: "Ne", title: "Extraverted Intuition", desc: "Anticipating unknown future contingencies and speculative risks under stress." }
-  ],
-  ISFJ: [
-    { role: "Dominant", code: "Si", title: "Introverted Sensing", desc: "Preserving traditions, remembering personal details, and loyal support." },
-    { role: "Auxiliary", code: "Fe", title: "Extraverted Feeling", desc: "Attending to others' emotional comfort, harmony, and warm hospitality." },
-    { role: "Tertiary", code: "Ti", title: "Introverted Thinking", desc: "Quiet practical logic and structured troubleshooting." },
-    { role: "Inferior", code: "Ne", title: "Extraverted Intuition", desc: "Navigating sudden unpredictable changes and unproven theories." }
-  ],
-  ESTJ: [
-    { role: "Dominant", code: "Te", title: "Extraverted Thinking", desc: "Decisive leadership, operational efficiency, and clear rule structure." },
-    { role: "Auxiliary", code: "Si", title: "Introverted Sensing", desc: "Respect for proven protocols, historical benchmarks, and orderly habits." },
-    { role: "Tertiary", code: "Ne", title: "Extraverted Intuition", desc: "Exploring practical improvements and alternative business strategies." },
-    { role: "Inferior", code: "Fi", title: "Introverted Feeling", desc: "Processing internal personal feelings and individual vulnerability." }
-  ],
-  ESFJ: [
-    { role: "Dominant", code: "Fe", title: "Extraverted Feeling", desc: "Fostering community warmth, organizing social unity, and caregiving." },
-    { role: "Auxiliary", code: "Si", title: "Introverted Sensing", desc: "Honoring group customs, reliable hospitality, and memory for needs." },
-    { role: "Tertiary", code: "Ne", title: "Extraverted Intuition", desc: "Connecting people and sparking enjoyable group activities." },
-    { role: "Inferior", code: "Ti", title: "Introverted Thinking", desc: "Objective analytical critique and detached logic scrutiny." }
-  ],
-  ISTP: [
-    { role: "Dominant", code: "Ti", title: "Introverted Thinking", desc: "Precision troubleshooting, mechanical logic, and system dissection." },
-    { role: "Auxiliary", code: "Se", title: "Extraverted Sensing", desc: "Tactile environmental mastery, quick reflexes, and practical action." },
-    { role: "Tertiary", code: "Ni", title: "Introverted Intuition", desc: "Internal flashes of sudden insight and underlying cause detection." },
-    { role: "Inferior", code: "Fe", title: "Extraverted Feeling", desc: "Navigating complex social nuances and group emotional expectations." }
-  ],
-  ISFP: [
-    { role: "Dominant", code: "Fi", title: "Introverted Feeling", desc: "Quiet artistic sensibility, deep personal harmony, and true authenticity." },
-    { role: "Auxiliary", code: "Se", title: "Extraverted Sensing", desc: "Keen aesthetic awareness, sensory immersion, and living in the now." },
-    { role: "Tertiary", code: "Ni", title: "Introverted Intuition", desc: "Subtle symbolic vision and sensing deeper underlying currents." },
-    { role: "Inferior", code: "Te", title: "Extraverted Thinking", desc: "Organizing structured plans and asserting objective demands." }
-  ],
-  ESTP: [
-    { role: "Dominant", code: "Se", title: "Extraverted Sensing", desc: "Adrenaline-charged crisis action, environmental mastery, and charm." },
-    { role: "Auxiliary", code: "Ti", title: "Introverted Thinking", desc: "Rapid pragmatic analysis and real-time tactical calculations." },
-    { role: "Tertiary", code: "Fe", title: "Extraverted Feeling", desc: "Reading crowd dynamics and utilizing persuasive social influence." },
-    { role: "Inferior", code: "Ni", title: "Introverted Intuition", desc: "Foreseeing far-off future consequences and long-term implications." }
-  ],
-  ESFP: [
-    { role: "Dominant", code: "Se", title: "Extraverted Sensing", desc: "Vibrant sensory charisma, spontaneous energy, and captivating presence." },
-    { role: "Auxiliary", code: "Fi", title: "Introverted Feeling", desc: "Genuinely empathetic warmth, personal ethics, and open heart." },
-    { role: "Tertiary", code: "Te", title: "Extraverted Thinking", desc: "Mobilizing resources to turn fun creative ideas into live realities." },
-    { role: "Inferior", code: "Ni", title: "Introverted Intuition", desc: "Reflecting on long-range vision and subconscious life patterns." }
-  ]
-};
+import { 
+  mbtiCognitiveStacks, 
+  getTypeTemperament, 
+  mbtiTypeGuides 
+} from '../utils/mbtiWikiData';
 
 // Famous Archetypal Figures & Inspirational Quotes
 const ARCHETYPE_FIGURES = {
@@ -186,59 +95,59 @@ const ARCHETYPE_FIGURES = {
   ]
 };
 
-// Clear explanation of each letter trait for pros, cons, and why
+// Explanations for the 4 MBTI dichotomy pairs
 const DIMENSION_DETAILS = {
   E: {
     title: "Extraverted",
-    why: "You feel charged up when interacting with other people and participating in external activities.",
-    pros: ["Great at collaborative work", "Outspoken and active communicator", "Builds networks easily"],
-    cons: ["Can find prolonged isolation difficult", "May act before fully thinking through consequences"]
+    why: "You feel energized by engaging with the external world, participating in lively discussions, and collaborating with others.",
+    pros: ["Natural collaborative communicator", "Easily initiates social interactions", "Energized by dynamic environments"],
+    cons: ["Can feel restless during prolonged isolation", "May speak before fully internalizing conclusions"]
   },
   I: {
     title: "Introverted",
-    why: "You feel most energized when spending time in quiet reflection or focusing on your inner thoughts.",
-    pros: ["Independent worker", "Thoughtful listener who processes deeply", "Strong self-reliance"],
-    cons: ["May hold back ideas too much", "Can easily exhaust social energy"]
+    why: "You recharge your mental battery through quiet solitary reflection and deep one-on-one interactions.",
+    pros: ["Deeply thoughtful and self-reliant", "Processes complex ideas internally with high focus", "Excellent active listener"],
+    cons: ["Can experience rapid social burnout", "May hesitate to share brilliant insights in large groups"]
   },
   N: {
     title: "Intuitive",
-    why: "You naturally look for patterns, abstract concepts, and future possibilities rather than just looking at concrete data.",
-    pros: ["Excellent at big-picture planning", "Creative problem solver", "Enjoys exploring theoretical concepts"],
-    cons: ["Can overlook practical details", "May struggle with repetitive execution tasks"]
+    why: "You naturally spot overarching patterns, imagine future possibilities, and enjoy conceptual exploration.",
+    pros: ["Visionary strategic thinking", "Effortlessly connects novel abstract concepts", "Enjoys creative innovation"],
+    cons: ["Can overlook tedious administrative details", "May lose patience with repetitive routine execution"]
   },
   S: {
     title: "Sensing",
-    why: "You focus on concrete details, factual evidence, and immediate realities.",
-    pros: ["Grounded, practical and highly realistic", "Great attention to detail", "Relies on proven methods"],
-    cons: ["Can resist new, unproven changes", "May miss broader future trends"]
+    why: "You ground yourself in concrete reality, factual evidence, and tangible, practical experience.",
+    pros: ["High realism and situational awareness", "Mastery of procedural and factual details", "Trusts proven, reliable methodologies"],
+    cons: ["May resist unproven theoretical changes", "Can dismiss speculative possibilities too early"]
   },
   T: {
     title: "Thinking",
-    why: "You prioritize objective logic, fairness, and rational reasoning when making choices.",
-    pros: ["Makes objective, unbiased judgments", "Clairvoyant problem solver", "Stays calm under emotional pressure"],
-    cons: ["Can seem detached or insensitive", "May overlook emotional elements of situations"]
+    why: "You prioritize objective logic, rational fairness, and systemic consistency when making decisions.",
+    pros: ["Unbiased, objective problem-solving", "Stays calm and level-headed under pressure", "Detects systemic flaws and fallacies"],
+    cons: ["Can come across as blunt or detached", "May underestimate the importance of emotional validation"]
   },
   F: {
     title: "Feeling",
-    why: "You place high value on personal principles, emotional harmony, and how choices impact other people.",
-    pros: ["Empathetic and supportive", "Builds cohesive, friendly environments", "Strong value system"],
-    cons: ["May avoid necessary conflicts", "Can take objective feedback personally"]
+    why: "You make decisions guided by core personal values, empathy, and the emotional well-being of others.",
+    pros: ["Deep empathy and emotional intelligence", "Fosters group harmony and mutual trust", "Strong loyalty to human values"],
+    cons: ["May take objective critique personally", "Prone to avoiding necessary, healthy conflict"]
   },
   J: {
     title: "Judging",
-    why: "You prefer a structured, organized life with clear timelines and finalized plans.",
-    pros: ["Highly organized and reliable", "Great at meeting milestones", "Brings order to chaos"],
-    cons: ["Can struggle with sudden changes", "May rush decisions just to settle them"]
+    why: "You prefer structure, organized timelines, and having decisions clearly settled in advance.",
+    pros: ["Disciplined, organized, and highly reliable", "Thrives at meeting deadlines and milestones", "Brings clarity and order to chaos"],
+    cons: ["Can feel unsettled by sudden disruptions", "May rush decisions just to achieve closure"]
   },
   P: {
     title: "Prospecting",
-    why: "You prefer to keep your schedule open and flexible to adapt to new choices.",
-    pros: ["Adaptable and highly open-minded", "Thrives in spontaneous situations", "Finds creative workarounds"],
-    cons: ["Can struggle with strict timelines", "May leave projects unfinished"]
+    why: "You thrive on spontaneity, keeping your options open, and adapting flexibly to real-time changes.",
+    pros: ["Highly adaptable and agile", "Embraces creative improvisations and pivots", "Thrives in fast-changing circumstances"],
+    cons: ["Can struggle with strict rigid schedules", "May postpone final choices until the last minute"]
   }
 };
 
-// Helper to dynamically calculate compatibility and incompatibility lists
+// Calculate compatibility lists
 function getCompatibilityLists(userType) {
   if (!userType || userType.length < 4) return { compatibleIntroverts: [], compatibleExtroverts: [], incompatibleIntroverts: [], incompatibleExtroverts: [] };
   const allTypes = ["INTJ", "INTP", "INFJ", "INFP", "ISTJ", "ISTP", "ISFJ", "ISFP", "ENTJ", "ENTP", "ENFJ", "ENFP", "ESTJ", "ESTP", "ESFJ", "ESFP"];
@@ -280,9 +189,8 @@ function getCompatibilityLists(userType) {
   };
 }
 
-// Explains why two types match or clash
 function getSynergyExplanation(userType, partnerType, isCompatible) {
-  if (!userType || !partnerType || userType.length < 2 || partnerType.length < 2) return "";
+  if (!userType || !partnerType) return "";
   const userI = userType[0];
   const userN = userType[1];
   const partI = partnerType[0];
@@ -290,42 +198,93 @@ function getSynergyExplanation(userType, partnerType, isCompatible) {
 
   if (isCompatible) {
     if (userN === partN && userI !== partI) {
-      return `Both share the **Intuitive (${userN})** vision, while the opposite **Extravert/Introvert** traits bring a **natural balance** of outgoing energy and calm reflection.`;
+      return `Both share the intuitive vision, while the opposite Extravert/Introvert traits bring natural balance.`;
     }
     if (userN === partN) {
-      return `Shared **Intuitive (${userN})** perspective allows you to connect instantly through **deep conversations** and future-focused concepts.`;
+      return `Shared conceptual perspective allows you to connect instantly through deep conversations.`;
     }
-    return `Shared decision-making priorities bring **harmonious alignment** and mutual support.`;
+    return `Shared decision-making priorities bring harmonious alignment and mutual support.`;
   } else {
     if (userN !== partN) {
-      return `Opposite **Intuitive/Sensing** values can cause friction, as one focuses on **abstract theories** while the other values **practical facts**.`;
+      return `Opposite Intuitive/Sensing perspectives can cause friction between abstract concepts and concrete facts.`;
     }
-    return `Friction may arise between **objective logic** and **personal feelings** when resolving issues together.`;
+    return `Different cognitive styles require conscious patience and communication when resolving disputes.`;
   }
 }
 
-function formatMarkdown(text) {
-  if (!text) return "";
-  const parts = text.split(/\*\*([^*]+)\*\*/g);
-  return parts.map((part, idx) => {
-    if (idx % 2 === 1) {
-      return <strong key={idx} className="text-slate-900 font-extrabold">{part}</strong>;
-    }
-    return part;
-  });
+function ResultBar({ left, right, leftCode, rightCode, leftValue, rightValue, color }) {
+  const isLeftDominant = leftValue >= rightValue;
+
+  return (
+    <div className="space-y-3">
+      {/* Top Labels with Circular Letter Badges */}
+      <div className="flex justify-between items-center text-xs sm:text-sm font-bold">
+        <div className="flex items-center gap-2">
+          <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-mono font-black transition-all ${
+            isLeftDominant ? `${color} text-white shadow-xs` : 'bg-slate-200 text-slate-500'
+          }`}>
+            {leftCode}
+          </span>
+          <span className={`transition-colors ${isLeftDominant ? 'text-slate-900 font-extrabold' : 'text-slate-400 font-medium'}`}>
+            {left}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className={`transition-colors ${!isLeftDominant ? 'text-slate-900 font-extrabold' : 'text-slate-400 font-medium'}`}>
+            {right}
+          </span>
+          <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-mono font-black transition-all ${
+            !isLeftDominant ? `${color} text-white shadow-xs` : 'bg-slate-200 text-slate-500'
+          }`}>
+            {rightCode}
+          </span>
+        </div>
+      </div>
+
+      {/* Progress Track */}
+      <div className="h-3.5 w-full bg-slate-100 rounded-full overflow-hidden flex p-0.5 border border-slate-200/60 shadow-inner">
+        <Motion.div
+          className={`h-full rounded-full transition-all duration-700 ${isLeftDominant ? color : 'bg-transparent'}`}
+          initial={{ width: 0 }}
+          animate={{ width: `${leftValue}%` }}
+          transition={{ duration: 1.0, ease: "easeOut" }}
+        />
+        <Motion.div
+          className={`h-full rounded-full transition-all duration-700 ${!isLeftDominant ? color : 'bg-transparent'}`}
+          initial={{ width: 0 }}
+          animate={{ width: `${rightValue}%` }}
+          transition={{ duration: 1.0, ease: "easeOut" }}
+        />
+      </div>
+
+      {/* Bottom Percentages */}
+      <div className="flex justify-between items-center text-xs font-bold px-1">
+        <span className={isLeftDominant ? 'text-slate-900 font-extrabold' : 'text-slate-400'}>{leftValue}%</span>
+        <span className={!isLeftDominant ? 'text-slate-900 font-extrabold' : 'text-slate-400'}>{rightValue}%</span>
+      </div>
+    </div>
+  );
 }
 
 export default function MbtiResult() {
   const { type } = useParams();
   const navigate = useNavigate();
-  const upperType = type ? type.toUpperCase() : '';
+  const location = useLocation();
+  const upperType = type ? type.toUpperCase() : 'INTP';
   const [activeTab, setActiveTab] = useState('overview');
+  const [isExporting, setIsExporting] = useState(false);
+  const cardRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [activeTab]);
 
   const typeInfo = typeDescriptions[upperType];
+  const temperament = getTypeTemperament(upperType);
+  const cogStack = mbtiCognitiveStacks[upperType] || [];
+  const guide = mbtiTypeGuides[upperType] || {};
+  const famousFigures = ARCHETYPE_FIGURES[upperType] || [];
 
   useEffect(() => {
     if (upperType) {
@@ -337,44 +296,46 @@ export default function MbtiResult() {
     return <Navigate to="/test/mbti" replace />;
   }
 
-  const primaryColor = typeInfo.colors?.[0] || 'indigo';
-  const secondaryColor = typeInfo.colors?.[1] || 'purple';
+  // Calculate real percentages from location state or simulated fallback
+  const percentages = useMemo(() => {
+    if (location.state?.percentages) {
+      return location.state.percentages;
+    }
+    return {
+      EI: upperType.includes('E') ? 78 : 22,
+      SN: upperType.includes('S') ? 75 : 25,
+      TF: upperType.includes('T') ? 72 : 28,
+      JP: upperType.includes('J') ? 68 : 32
+    };
+  }, [location.state, upperType]);
+
+  const handleDownloadCard = async () => {
+    if (!cardRef.current) return;
+    try {
+      setIsExporting(true);
+      const dataUrl = await toPng(cardRef.current, { quality: 0.95 });
+      const link = document.createElement('a');
+      link.download = `omnitype-mbti-${upperType.toLowerCase()}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Failed to export card image', err);
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   const tabs = [
-    { id: 'overview', label: 'Overview', icon: Target },
+    { id: 'overview', label: 'Overview & Habits', icon: Target },
     { id: 'cognitive', label: 'Cognitive Architecture', icon: Layers },
-    { id: 'traits', label: 'Traits & Figures', icon: Activity },
+    { id: 'traits', label: 'Superpowers & Careers', icon: Briefcase },
     { id: 'synergy', label: 'Compatibility & Stress', icon: Heart }
   ];
 
-  const getSimulatedScores = (typeStr) => {
-    return {
-      EI: typeStr.includes('E') ? 78 : 22,
-      SN: typeStr.includes('N') ? 15 : 85, 
-      TF: typeStr.includes('T') ? 71 : 29, 
-      JP: typeStr.includes('J') ? 65 : 35, 
-    };
-  };
-
-  const percentages = getSimulatedScores(upperType);
-  const cogStack = COGNITIVE_STACKS[upperType] || [];
-  const famousFigures = ARCHETYPE_FIGURES[upperType] || [];
-
-  const mbtiBreakdown = {
-    E: { title: "Extraversion", desc: "Gets energy from social activity." },
-    I: { title: "Introversion", desc: "Refuels in quiet solitude." },
-    N: { title: "Intuition", desc: "Focuses on concepts and future ideas." },
-    S: { title: "Sensing", desc: "Relies on concrete details and facts." },
-    T: { title: "Thinking", desc: "Prioritizes logic and reasoning." },
-    F: { title: "Feeling", desc: "Weighs values and group harmony." },
-    J: { title: "Judging", desc: "Prefers plans and structure." },
-    P: { title: "Prospecting", desc: "Thrives in open schedules." }
-  };
-
-  const letterExplainer = upperType.split('').map(char => ({
-    letter: char,
-    ...(mbtiBreakdown[char] || { title: char, desc: "" })
-  }));
+  const letterExplainer = upperType.split('').map(char => {
+    const details = DIMENSION_DETAILS[char] || { title: char, why: '' };
+    return { letter: char, title: details.title, why: details.why };
+  });
 
   const activeDimensions = upperType.split('').map(char => {
     const details = DIMENSION_DETAILS[char] || { title: char, why: '', pros: [], cons: [] };
@@ -398,577 +359,555 @@ export default function MbtiResult() {
     incompatibleExtroverts
   } = getCompatibilityLists(upperType);
 
-  const highlightSentence = (text) => {
-    if (!text) return "";
-    const fillers = /^(they\s+possess\s+an\s+|they\s+can\s+easily\s+|they\s+frequently\s+|their\s+|they\s+exhibit\s+|once\s+they\s+|they\s+|despite\s+their\s+)/i;
-    let cleanText = text.replace(fillers, '');
-    cleanText = cleanText.charAt(0).toUpperCase() + cleanText.slice(1);
-    
-    const words = cleanText.split(' ');
-    const boldCount = Math.min(words.length, 4);
-    const boldPart = words.slice(0, boldCount).join(' ');
-    const regularPart = words.slice(boldCount).join(' ');
-    
-    return (
-      <span>
-        <strong className="text-slate-900 font-extrabold">{boldPart}</strong> {regularPart}
-      </span>
-    );
-  };
-
   return (
-    <div className="w-full min-h-screen bg-[#fafafa] relative overflow-hidden flex flex-col items-center selection:bg-indigo-200">
+    <div className="w-full min-h-screen bg-[#fafafa] pb-32 pt-28 md:pt-36 px-4 sm:px-8 md:px-12 relative text-slate-800 font-sans selection:bg-indigo-100">
       
-      {/* Decorative Background Auras */}
-      <div className={`fixed top-[-10vh] left-[-10vw] w-[50vw] h-[50vw] bg-${primaryColor}-100/45 rounded-full blur-[120px] pointer-events-none z-0`} />
-      <div className={`fixed bottom-[-10vh] right-[-10vw] w-[50vw] h-[50vw] bg-${secondaryColor}-100/45 rounded-full blur-[120px] pointer-events-none z-0`} />
+      {/* Background ambient lighting */}
+      <div className="fixed top-[-15vh] left-[-10vw] w-[60vw] h-[60vw] bg-indigo-500/5 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="fixed bottom-[-10vh] right-[-10vw] w-[60vw] h-[60vw] bg-purple-500/5 rounded-full blur-[140px] pointer-events-none z-0" />
 
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-12 pt-32 pb-32 relative z-10">
+      <div className="max-w-7xl mx-auto space-y-10 relative z-10">
         
-        {/* Navigation - Return to Home */}
-        <div className="flex justify-between items-center mb-10">
+        {/* Navigation Toolbar */}
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
           <button 
             type="button"
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-slate-900 transition-colors group cursor-pointer"
+            className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-slate-400 hover:text-slate-900 transition cursor-pointer"
           >
-            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
-              <ChevronLeft className="w-4 h-4 text-slate-700" />
-            </div>
-            <span>Home</span>
+            <ChevronLeft className="w-4 h-4" />
+            <span>Test Directory</span>
           </button>
+
+          <div className="flex items-center gap-2.5">
+            <Link
+              to={`/wiki/mbti/${upperType.toLowerCase()}`}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200/80 hover:bg-slate-50 text-xs font-black uppercase tracking-wider text-indigo-600 shadow-2xs transition"
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>Wiki Chapter</span>
+            </Link>
+
+            <button
+              type="button"
+              onClick={handleDownloadCard}
+              disabled={isExporting}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200/80 hover:bg-slate-50 text-xs font-black uppercase tracking-wider text-slate-700 shadow-2xs transition cursor-pointer"
+            >
+              <Download className="w-3.5 h-3.5 text-indigo-500" />
+              <span>{isExporting ? 'Exporting...' : 'Export Card'}</span>
+            </button>
+
+            <Link
+              to="/test/mbti"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-xs font-black uppercase tracking-wider text-white shadow-xs transition"
+            >
+              <RefreshCw className="w-3.5 h-3.5 text-slate-300" />
+              <span>Retake Test</span>
+            </Link>
+          </div>
         </div>
 
-        {/* Tab Selector Buttons */}
-        <div className="flex flex-wrap gap-2 md:gap-3 mb-12 border-b border-slate-200/60 pb-4">
+        {/* Hero Result Card (Captured for Export) */}
+        <div 
+          ref={cardRef}
+          className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.03)] rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden group space-y-8"
+        >
+          {/* Left Gradient Strip */}
+          <div className={`absolute top-0 left-0 w-3 h-full bg-linear-to-b ${temperament.color}`} />
+
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
+            <div className="space-y-4 max-w-3xl">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className={`text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border ${temperament.themeBg} ${temperament.themeBorder} ${temperament.themeText}`}>
+                  {temperament.badge}
+                </span>
+                <span className="text-xs font-bold text-slate-400">
+                  {typeInfo.mythologicalArchetype || "The Master Archetype"}
+                </span>
+              </div>
+
+              <div className="space-y-2">
+                <h1 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight font-mono">
+                  {upperType}
+                  <span className="text-indigo-600 font-sans italic text-3xl sm:text-4xl ml-3 font-normal">
+                    — {typeInfo.title}
+                  </span>
+                </h1>
+                <p className="text-sm sm:text-base font-bold text-indigo-600 uppercase tracking-wide">
+                  {temperament.tagline}
+                </p>
+              </div>
+
+              <p className="text-slate-600 text-base sm:text-lg font-medium leading-relaxed">
+                {guide.simpleSummary || typeInfo.desc}
+              </p>
+            </div>
+
+            {/* Quick Stats Pill Matrix */}
+            <div className="w-full lg:w-96 p-6 rounded-3xl bg-slate-50/90 border border-slate-200/80 space-y-3 shrink-0">
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
+                Cognitive Function Architecture
+              </span>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {cogStack.map((s, idx) => (
+                  <span key={idx} className="font-mono text-xs font-black px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-800 shadow-2xs">
+                    {s.function}
+                  </span>
+                ))}
+              </div>
+              <p className="text-xs font-bold text-slate-600 pt-1">
+                Dominant: <strong className="text-indigo-600">{cogStack[0]?.name}</strong> ({cogStack[0]?.role})
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Tab Navigation Grid (Full width on Desktop, responsive wrap on Mobile) */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 pb-2 pt-1 border-b border-slate-200/80">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.id;
+            const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-5 py-3 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                className={`flex items-center justify-center gap-2 py-3 px-3 sm:px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 cursor-pointer ${
                   isActive 
-                    ? 'bg-slate-900 text-white shadow-md' 
-                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50'
+                    ? 'bg-slate-900 text-white shadow-md scale-[1.01]' 
+                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50 shadow-2xs'
                 }`}
               >
-                <span>{tab.label}</span>
+                <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-indigo-400' : 'text-slate-400'}`} />
+                <span className="truncate">{tab.label}</span>
               </button>
             );
           })}
         </div>
 
-        {/* Dynamic Tab Panel */}
+        {/* Dynamic Tab Contents */}
         <AnimatePresence mode="wait">
-          <Motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.3 }}
-          >
-            {/* ---------------------------------------------------- */}
-            {/* TAB 1: OVERVIEW */}
-            {/* ---------------------------------------------------- */}
-            {activeTab === 'overview' && (
-              <div className="space-y-8">
-                {/* Hero Profile Card */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                  <div className="lg:col-span-8 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-center relative overflow-hidden">
-                    <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b from-${primaryColor}-400 to-${secondaryColor}-400 opacity-80`} />
-                    <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 text-slate-900 tracking-tight leading-none">
-                      {typeInfo.title}
-                    </h1>
-                    <p className="text-slate-600 max-w-4xl leading-relaxed font-medium text-base sm:text-lg md:text-xl">
-                      {typeInfo.desc}
-                    </p>
-                  </div>
 
-                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 flex flex-col items-center justify-center relative overflow-hidden">
-                     <h2 className={`text-5xl sm:text-6xl md:text-7xl leading-none font-black tracking-tight text-transparent bg-clip-text bg-linear-to-b from-${primaryColor}-500 to-${secondaryColor}-600 z-10 drop-shadow-sm pb-1 whitespace-nowrap`}>
-                       {upperType}
-                     </h2>
-                     <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-slate-400 mt-3 z-10 whitespace-nowrap">Personality Axis</span>
-                  </div>
+          {/* ========================================================= */}
+          {/* TAB 1: OVERVIEW & HABITS */}
+          {/* ========================================================= */}
+          {activeTab === 'overview' && (
+            <Motion.div
+              key="overview-tab"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.25 }}
+              className="space-y-8"
+            >
+              {/* Cognitive Balance Spectrum Sliders */}
+              <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-12 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-8">
+                <div className="space-y-1">
+                  <h3 className="text-2xl font-black text-slate-900">Your Cognitive Polarity Spectrum</h3>
+                  <p className="text-slate-500 text-sm font-medium">Visual balance across the four Jungian psychological polarities.</p>
                 </div>
 
-                {/* Cognitive Balance Layer (User Statistics) */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-10">
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-slate-900">Cognitive Balance Statistics</h3>
-                    <p className="text-slate-500 text-sm md:text-base font-medium">Visual spectrum allocation across four major cognitive polarities.</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <ResultBar left="Extraverted" right="Introverted" leftCode="E" rightCode="I" leftValue={percentages.EI} rightValue={100 - percentages.EI} color={`bg-${primaryColor}-500`} />
-                    <ResultBar left="Intuitive" right="Observant" leftCode="N" rightCode="S" leftValue={100 - percentages.SN} rightValue={percentages.SN} color={`bg-${secondaryColor}-500`} />
-                    <ResultBar left="Thinking" right="Feeling" leftCode="T" rightCode="F" leftValue={percentages.TF} rightValue={100 - percentages.TF} color={`bg-${primaryColor}-400`} />
-                    <ResultBar left="Judging" right="Prospecting" leftCode="J" rightCode="P" leftValue={percentages.JP} rightValue={100 - percentages.JP} color={`bg-${secondaryColor}-400`} />
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                  <ResultBar left="Extraverted" right="Introverted" leftCode="E" rightCode="I" leftValue={percentages.EI} rightValue={100 - percentages.EI} color="bg-linear-to-r from-indigo-500 to-indigo-600" />
+                  <ResultBar left="Sensing" right="Intuitive" leftCode="S" rightCode="N" leftValue={percentages.SN} rightValue={100 - percentages.SN} color="bg-linear-to-r from-amber-500 to-amber-600" />
+                  <ResultBar left="Thinking" right="Feeling" leftCode="T" rightCode="F" leftValue={percentages.TF} rightValue={100 - percentages.TF} color="bg-linear-to-r from-sky-500 to-sky-600" />
+                  <ResultBar left="Judging" right="Prospecting" leftCode="J" rightCode="P" leftValue={percentages.JP} rightValue={100 - percentages.JP} color="bg-linear-to-r from-purple-500 to-purple-600" />
                 </div>
+              </div>
 
-                {/* Core Motive & Daily Habits */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-2xs">
-                    <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full inline-block mb-4">Core Motive</span>
-                    <h4 className="text-xl font-black text-slate-900 mb-3">What drives you most</h4>
-                    <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium">
-                      You are naturally driven to make sense of the world, solve complex concepts, and build systems that work. You value competency, clear logic, and independence in execution.
-                    </p>
-                  </div>
-                  
-                  <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-2xs">
-                    <span className="text-xs font-bold text-amber-600 uppercase tracking-widest bg-amber-50 px-3 py-1 rounded-full inline-block mb-4">Daily Habits</span>
-                    <h4 className="text-xl font-black text-slate-900 mb-3">How you interact daily</h4>
-                    <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium">
-                      {typeInfo.habits}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Letter Breakdowns */}
-                <div className="space-y-4">
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest border-l-2 border-slate-300 pl-3">Letter Breakdown</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                    {letterExplainer.map((item, idx) => (
-                      <div key={idx} className="bg-white border border-slate-100 rounded-3xl p-6 shadow-2xs hover:shadow-xs transition">
-                        <div className="flex justify-between items-center mb-3">
-                          <span className="text-3xl font-black text-slate-900 leading-none">{item.letter}</span>
-                          <span className="text-xs font-bold text-indigo-500 uppercase tracking-widest bg-indigo-50 px-2.5 py-1 rounded-full">{item.title}</span>
-                        </div>
-                        <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">{item.desc}</p>
-                      </div>
+              {/* Core Motives & Daily Habits */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
+                  <span className="text-xs font-black uppercase tracking-wider text-indigo-600 block">Core Motive & Driving Force</span>
+                  <h4 className="text-2xl font-black text-slate-900">What Drives Your Mind</h4>
+                  <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
+                    You are naturally driven to make sense of the world, analyze underlying systems, and build frameworks that work. You value competency, intellectual autonomy, and integrity in execution.
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 pt-2">
+                    {typeInfo.coreValues?.map((val, idx) => (
+                      <span key={idx} className="text-xs font-bold px-3 py-1 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-100">
+                        {val}
+                      </span>
                     ))}
                   </div>
                 </div>
 
-                {/* Roles & Dreams */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-2xs relative overflow-hidden">
-                    <span className="text-xs font-bold text-purple-600 uppercase tracking-widest bg-purple-50 px-3 py-1 rounded-full inline-block mb-4">Social Persona</span>
-                    <h4 className="text-xl font-black text-slate-900 mb-3">{typeInfo.mythologicalArchetype || "The Cosmic Observer"}</h4>
-                    <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium">Your underlying persona acts as a vital pillar in team architectures and relationships.</p>
-                  </div>
-                  <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-2xs relative overflow-hidden">
-                    <span className="text-xs font-bold text-rose-600 uppercase tracking-widest bg-rose-50 px-3 py-1 rounded-full inline-block mb-4">Core Dreams</span>
-                    <h4 className="text-xl font-black text-slate-900 mb-3">{typeInfo.secretDreams || "To find alignment in values"}</h4>
-                    <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium">{typeInfo.hiddenFears || "You thrive when given autonomy and space to think."}</p>
+                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
+                  <span className="text-xs font-black uppercase tracking-wider text-amber-600 block">Daily Interactions & Rhythms</span>
+                  <h4 className="text-2xl font-black text-slate-900">How You Interact Daily</h4>
+                  <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
+                    {typeInfo.habits || "You navigate daily life by processing information internally, solving complex problems, and optimizing workflows for maximum personal efficiency."}
+                  </p>
+                  <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-100 text-xs text-amber-950 font-semibold">
+                    💡 <strong>Pro Tip:</strong> Balance your deep internal focus by scheduling regular breaks to engage physically with your environment.
                   </div>
                 </div>
               </div>
-            )}
 
-            {/* ---------------------------------------------------- */}
-            {/* TAB 2: COGNITIVE ARCHITECTURE & FUNCTION STACK */}
-            {/* ---------------------------------------------------- */}
-            {activeTab === 'cognitive' && (
-              <div className="space-y-12">
-                
-                {/* 4-Tier Cognitive Function Stack Cards */}
-                <div className="space-y-6">
-                  <div className="space-y-2">
-                    <h3 className="text-3xl font-black text-slate-900 tracking-tight">Cognitive Function Stack</h3>
-                    <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
-                      Jungian analytical breakdown showing how your mind prioritizes processing information and making decisions.
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {cogStack.map((fn, idx) => (
-                      <div 
-                        key={idx} 
-                        className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:border-indigo-100 transition-all duration-300 relative overflow-hidden flex flex-col justify-between group"
-                      >
-                        <div>
-                          <div className="flex justify-between items-center mb-6">
-                            <span className={`text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full border ${
-                              idx === 0 ? 'bg-indigo-50 text-indigo-600 border-indigo-100' :
-                              idx === 1 ? 'bg-emerald-50 text-emerald-600 border-emerald-100' :
-                              idx === 2 ? 'bg-amber-50 text-amber-600 border-amber-100' :
-                              'bg-rose-50 text-rose-600 border-rose-100'
-                            }`}>
-                              {fn.role} Function
-                            </span>
-
-                            <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white font-black text-lg flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-                              {fn.code}
-                            </div>
-                          </div>
-
-                          <h4 className="text-xl font-black text-slate-900 mb-2">{fn.title}</h4>
-                          <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium mb-4">{fn.desc}</p>
-                        </div>
-
-                        <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-400">
-                          <span>Hierarchy Position #{idx + 1}</span>
-                          <span>{idx === 0 ? '100% Core Focus' : idx === 1 ? '75% Support' : idx === 2 ? '50% Balance' : 'Stress Trigger'}</span>
-                        </div>
+              {/* Letter Explanations */}
+              <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-6">
+                <span className="text-xs font-black uppercase tracking-wider text-slate-400 block">Dichotomy Letters Breakdown</span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                  {letterExplainer.map((item, idx) => (
+                    <div key={idx} className="p-5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-3xl font-black text-slate-900 font-mono">{item.letter}</span>
+                        <span className="text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white text-indigo-600 border border-slate-200">
+                          {item.title}
+                        </span>
                       </div>
-                    ))}
-                  </div>
+                      <p className="text-xs text-slate-600 font-medium leading-relaxed">{item.why}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Secret Dreams & Hidden Fears */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-3">
+                  <span className="text-xs font-black uppercase tracking-wider text-purple-600 block">Core Aspirations</span>
+                  <h4 className="text-xl font-black text-slate-900">Secret Dreams</h4>
+                  <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
+                    {typeInfo.secretDreams}
+                  </p>
                 </div>
 
-                {/* Polarities Sliders */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-10">
-                  <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-slate-900">Cognitive Balance Layer</h3>
-                    <p className="text-slate-500 text-sm">Visual spectrum allocation across four major cognitive polarities.</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <ResultBar left="Extraverted" right="Introverted" leftCode="E" rightCode="I" leftValue={percentages.EI} rightValue={100 - percentages.EI} color={`bg-${primaryColor}-500`} />
-                    <ResultBar left="Intuitive" right="Observant" leftCode="N" rightCode="S" leftValue={100 - percentages.SN} rightValue={percentages.SN} color={`bg-${secondaryColor}-500`} />
-                    <ResultBar left="Thinking" right="Feeling" leftCode="T" rightCode="F" leftValue={percentages.TF} rightValue={100 - percentages.TF} color={`bg-${primaryColor}-400`} />
-                    <ResultBar left="Judging" right="Prospecting" leftCode="J" rightCode="P" leftValue={percentages.JP} rightValue={100 - percentages.JP} color={`bg-${secondaryColor}-400`} />
-                  </div>
+                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-3">
+                  <span className="text-xs font-black uppercase tracking-wider text-rose-600 block">Vulnerabilities</span>
+                  <h4 className="text-xl font-black text-slate-900">Hidden Fears</h4>
+                  <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
+                    {typeInfo.hiddenFears}
+                  </p>
+                </div>
+              </div>
+            </Motion.div>
+          )}
+
+          {/* ========================================================= */}
+          {/* TAB 2: COGNITIVE ARCHITECTURE */}
+          {/* ========================================================= */}
+          {activeTab === 'cognitive' && (
+            <Motion.div
+              key="cognitive-tab"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.25 }}
+              className="space-y-8"
+            >
+              {/* 4 Cognitive Functions */}
+              <div className="space-y-6">
+                <div className="space-y-1">
+                  <h3 className="text-2xl font-black text-slate-900">4-Tier Cognitive Function Stack</h3>
+                  <p className="text-slate-500 text-sm font-medium">Carl Jung's cognitive hierarchy explaining how your brain prioritizes perception and judgment.</p>
                 </div>
 
-                {/* Explanations Grid */}
-                <div className="space-y-6">
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest border-l-2 border-slate-300 pl-3">Understanding Your Preferences</h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {activeDimensions.map((dim, idx) => (
-                      <div key={idx} className="bg-white border border-slate-100 rounded-[2rem] p-6 shadow-2xs space-y-4">
-                        <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                          <h4 className="text-base font-black text-slate-800">{dim.activeTitle} <span className="text-xs text-slate-400 font-bold">({dim.activeChar})</span></h4>
-                          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">vs {dim.opposingTitle} ({dim.opposingChar})</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {cogStack.map((fn, idx) => (
+                    <div 
+                      key={idx}
+                      className="bg-white border border-slate-200/80 rounded-[2rem] p-8 shadow-[0_4px_20px_rgb(0,0,0,0.02)] space-y-4 flex flex-col justify-between"
+                    >
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className={`text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full border ${
+                            idx === 0 ? 'bg-indigo-50 text-indigo-700 border-indigo-200' :
+                            idx === 1 ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                            idx === 2 ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                            'bg-rose-50 text-rose-700 border-rose-200'
+                          }`}>
+                            {fn.rank}
+                          </span>
+
+                          <div className="w-11 h-11 rounded-2xl bg-slate-900 text-white font-mono font-black text-lg flex items-center justify-center shadow-xs">
+                            {fn.function}
+                          </div>
                         </div>
-                        
-                        <p className="text-sm text-slate-600 leading-relaxed font-medium bg-slate-50/50 p-4 rounded-xl border border-slate-100/50">
-                          <strong>Why:</strong> {dim.why}
+
+                        <div>
+                          <h4 className="text-xl font-black text-slate-900">{fn.name}</h4>
+                          <span className="text-xs font-bold text-slate-400">Role: {fn.role}</span>
+                        </div>
+
+                        <p className="text-slate-600 text-sm leading-relaxed font-medium">
+                          {fn.desc}
                         </p>
+                      </div>
 
-                        <div className="grid grid-cols-2 gap-4 pt-1">
-                          <div>
-                            <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block mb-2">Advantages</span>
-                            <ul className="space-y-2">
-                              {(dim.pros || []).map((p, i) => (
-                                <li key={i} className="text-xs text-slate-600 font-medium leading-relaxed flex items-start gap-1.5">
-                                  <span className="text-emerald-500 font-bold">•</span>
-                                  <span>{p}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          <div>
-                            <span className="text-xs font-bold text-rose-500 uppercase tracking-wider block mb-2">Blind Spots</span>
-                            <ul className="space-y-2">
-                              {(dim.cons || []).map((c, i) => (
-                                <li key={i} className="text-xs text-slate-600 font-medium leading-relaxed flex items-start gap-1.5">
-                                  <span className="text-rose-400 font-bold">•</span>
-                                  <span>{c}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-400">
+                        <span>Hierarchy Position #{idx + 1}</span>
+                        <span>{idx === 0 ? '100% Dominant Flow' : idx === 1 ? '75% Auxiliary Support' : idx === 2 ? '50% Tertiary Balance' : 'Inferior Stress Trigger'}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Preference Deep Dive Grid */}
+              <div className="space-y-6">
+                <div className="space-y-1">
+                  <h3 className="text-2xl font-black text-slate-900">Understanding Your Trait Preferences</h3>
+                  <p className="text-slate-500 text-sm font-medium">Detailed advantages and blind spots for each of your 4 active preferences.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {activeDimensions.map((dim, idx) => (
+                    <div key={idx} className="bg-white border border-slate-200/80 rounded-[2rem] p-7 shadow-[0_4px_20px_rgb(0,0,0,0.02)] space-y-4">
+                      <div className="flex justify-between items-center pb-3 border-b border-slate-100">
+                        <h4 className="text-base font-black text-slate-900">{dim.activeTitle} ({dim.activeChar})</h4>
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">vs {dim.opposingTitle} ({dim.opposingChar})</span>
+                      </div>
+
+                      <p className="text-sm text-slate-600 font-medium leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <strong>Why:</strong> {dim.why}
+                      </p>
+
+                      <div className="grid grid-cols-2 gap-4 pt-1 text-xs">
+                        <div>
+                          <span className="font-black text-emerald-600 uppercase tracking-wider block mb-2">Advantages</span>
+                          <ul className="space-y-1.5 font-medium text-slate-700">
+                            {dim.pros.map((p, i) => (
+                              <li key={i} className="flex items-start gap-1.5">
+                                <span className="text-emerald-500 font-bold">•</span>
+                                <span>{p}</span>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
+
+                        <div>
+                          <span className="font-black text-rose-600 uppercase tracking-wider block mb-2">Blind Spots</span>
+                          <ul className="space-y-1.5 font-medium text-slate-700">
+                            {dim.cons.map((c, i) => (
+                              <li key={i} className="flex items-start gap-1.5">
+                                <span className="text-rose-400 font-bold">•</span>
+                                <span>{c}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Motion.div>
+          )}
+
+          {/* ========================================================= */}
+          {/* TAB 3: SUPERPOWERS & CAREERS */}
+          {/* ========================================================= */}
+          {activeTab === 'traits' && (
+            <Motion.div
+              key="traits-tab"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.25 }}
+              className="space-y-8"
+            >
+              {/* Strengths & Blind Spots */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
+                  <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                    <Target className="w-5 h-5 text-emerald-500" />
+                    <h3 className="text-xl font-black text-slate-900">Core Superpowers</h3>
+                  </div>
+                  <ul className="space-y-3">
+                    {typeInfo.strengths?.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-3 text-sm font-medium text-slate-700 leading-relaxed">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 mt-2" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
+                  <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                    <Zap className="w-5 h-5 text-amber-500" />
+                    <h3 className="text-xl font-black text-slate-900">Blind Spots & Challenges</h3>
+                  </div>
+                  <ul className="space-y-3">
+                    {typeInfo.weaknesses?.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-3 text-sm font-medium text-slate-700 leading-relaxed">
+                        <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0 mt-2" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Famous Figures */}
+              {famousFigures.length > 0 && (
+                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-6">
+                  <div className="space-y-1">
+                    <h3 className="text-2xl font-black text-slate-900">Famous {upperType} Figures</h3>
+                    <p className="text-slate-500 text-sm font-medium">Historical visionaries and creators who share your cognitive archetype.</p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {famousFigures.map((fig, idx) => (
+                      <div key={idx} className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 relative overflow-hidden">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h4 className="text-lg font-black text-slate-900">{fig.name}</h4>
+                            <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider">{fig.role}</span>
+                          </div>
+                          <Quote className="w-6 h-6 text-slate-300" />
+                        </div>
+                        <blockquote className="text-slate-600 text-sm italic font-medium leading-relaxed">
+                          "{fig.quote}"
+                        </blockquote>
                       </div>
                     ))}
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* ---------------------------------------------------- */}
-            {/* TAB 3: TRAITS, FAMOUS FIGURES & CAREERS */}
-            {/* ---------------------------------------------------- */}
-            {activeTab === 'traits' && (
-              <div className="space-y-12">
-                
-                {/* Strengths & Blind Spots */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 shadow-2xs rounded-[2.5rem] p-8">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className={`w-10 h-10 rounded-xl bg-${primaryColor}-50 flex items-center justify-center`}>
-                        <Target className={`w-5 h-5 text-${primaryColor}-500`} />
-                      </div>
-                      <h3 className="text-base font-bold text-slate-800 uppercase tracking-wider">Strengths</h3>
-                    </div>
-                    <ul className="space-y-4">
-                      {(typeInfo.strengths || []).map((item, i) => (
-                        <li key={i} className="flex gap-3 text-slate-600 font-medium text-sm leading-relaxed items-start">
-                          <div className={`w-1.5 h-1.5 rounded-full bg-${primaryColor}-400 mt-2 shrink-0`} />
-                          <span>{highlightSentence(item)}</span>
-                        </li>
-                      ))}
-                    </ul>
+              {/* Suitable Careers & Workplace */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
+                  <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                    <Briefcase className="w-5 h-5 text-indigo-500" />
+                    <h3 className="text-xl font-black text-slate-900">Ideal Career Horizons</h3>
                   </div>
-
-                  <div className="bg-white border border-slate-100 shadow-2xs rounded-[2.5rem] p-8">
-                    <div className="flex items-center gap-3 mb-6">
-                      <div className={`w-10 h-10 rounded-xl bg-${secondaryColor}-50 flex items-center justify-center`}>
-                        <Zap className={`w-5 h-5 text-${secondaryColor}-500`} />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {(typeInfo.careers || []).map((career, idx) => (
+                      <div key={idx} className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/60 font-bold text-xs text-slate-800 flex items-center justify-between">
+                        <span>{career}</span>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-indigo-500" />
                       </div>
-                      <h3 className="text-base font-bold text-slate-800 uppercase tracking-wider">Blind Spots</h3>
-                    </div>
-                    <ul className="space-y-4">
-                      {(typeInfo.weaknesses || []).map((item, i) => (
-                        <li key={i} className="flex gap-3 text-slate-600 font-medium text-sm leading-relaxed items-start">
-                          <div className={`w-1.5 h-1.5 rounded-full bg-${secondaryColor}-400 mt-2 shrink-0`} />
-                          <span>{highlightSentence(item)}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    ))}
                   </div>
                 </div>
 
-                {/* Famous Figures */}
-                {famousFigures.length > 0 && (
-                  <div className="space-y-6">
-                    <div className="space-y-2">
-                      <h3 className="text-3xl font-black text-slate-900 tracking-tight">Famous {upperType} Figures</h3>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {famousFigures.map((fig, idx) => (
-                        <div key={idx} className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)] space-y-4 relative overflow-hidden">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <h4 className="text-xl font-black text-slate-900">{fig.name}</h4>
-                              <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider">{fig.role}</span>
-                            </div>
-                            <Quote className="w-8 h-8 text-slate-200" />
-                          </div>
-
-                          <blockquote className="text-slate-600 text-sm md:text-base italic leading-relaxed bg-slate-50/70 p-4 rounded-2xl border border-slate-100">
-                            "{fig.quote}"
-                          </blockquote>
-                        </div>
-                      ))}
-                    </div>
+                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
+                  <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                    <Compass className="w-5 h-5 text-amber-500" />
+                    <h3 className="text-xl font-black text-slate-900">Workplace Behavior</h3>
                   </div>
-                )}
-
-                {/* Careers & Workplace Behavior */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 shadow-2xs rounded-[2.5rem] p-8 flex flex-col justify-between">
-                    <div className="flex items-center gap-3 mb-6">
-                      <Briefcase className="w-5 h-5 text-indigo-500" />
-                      <h4 className="text-xs font-bold tracking-wider text-slate-400 uppercase">Suitable Career Paths</h4>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {(typeInfo.careers || []).map((career, i) => (
-                        <div key={i} className="font-semibold bg-slate-50 text-slate-800 px-4 py-3.5 rounded-2xl border border-slate-100 text-xs flex items-center justify-between">
-                          <span>{career}</span>
-                          <div className={`w-1.5 h-1.5 rounded-full bg-${primaryColor}-400`} />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="bg-white border border-slate-100 shadow-2xs rounded-[2.5rem] p-8 flex flex-col justify-between">
-                    <div className="flex items-center gap-3 mb-6">
-                      <Compass className="w-5 h-5 text-amber-500" />
-                      <h4 className="text-xs font-bold tracking-wider text-slate-400 uppercase">Workplace Behavior</h4>
-                    </div>
-                    <p className="text-slate-600 font-medium leading-relaxed text-sm md:text-base">
-                      {typeInfo.workplace || "Thrives in settings with clear boundaries, logic-driven expectations, and plenty of autonomous focus."}
-                    </p>
-                  </div>
+                  <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
+                    {typeInfo.workplace}
+                  </p>
                 </div>
               </div>
-            )}
+            </Motion.div>
+          )}
 
-            {/* ---------------------------------------------------- */}
-            {/* TAB 4: COMPATIBILITY & STRESS DYNAMICS */}
-            {/* ---------------------------------------------------- */}
-            {activeTab === 'synergy' && (
-              <div className="space-y-12">
-                
-                {/* Flow State vs Acute Stress Response */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-2xs relative overflow-hidden">
-                    <div className="flex items-center gap-3 mb-4">
-                      <Sparkles className="w-5 h-5 text-emerald-500" />
-                      <span className="text-xs font-bold tracking-widest uppercase text-emerald-600">Peak Flow State</span>
-                    </div>
-                    <h4 className="text-xl font-black text-slate-900 mb-3">When You Are Thriving</h4>
-                    <p className="text-slate-600 text-sm md:text-base leading-relaxed font-medium">
-                      Operating at peak clarity, leveraging your dominant cognitive function effortlessly. You feel aligned, creative, and confident in execution.
-                    </p>
+          {/* ========================================================= */}
+          {/* TAB 4: COMPATIBILITY & STRESS DYNAMICS */}
+          {/* ========================================================= */}
+          {activeTab === 'synergy' && (
+            <Motion.div
+              key="synergy-tab"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.25 }}
+              className="space-y-8"
+            >
+              {/* Flow State vs Acute Stress Response */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-3">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Sparkles className="w-5 h-5 text-emerald-500" />
+                    <span className="text-xs font-black uppercase tracking-wider text-emerald-600">Peak Flow State</span>
                   </div>
-
-                  <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-2xs relative overflow-hidden">
-                    <div className="flex items-center gap-3 mb-4">
-                      <ShieldAlert className="w-5 h-5 text-rose-500" />
-                      <span className="text-xs font-bold tracking-widest uppercase text-rose-600">Under High Stress</span>
-                    </div>
-                    <h4 className="text-xl font-black text-slate-900 mb-3">Inferior Function Trigger</h4>
-                    <p className="text-slate-600 text-sm md:text-base leading-relaxed font-medium">
-                      {typeInfo.stressResponse || "Under extreme fatigue or prolonged conflict, your inferior function can take over, leading to uncharacteristic reactions or emotional burnout."}
-                    </p>
-                  </div>
+                  <h4 className="text-xl font-black text-slate-900">When You Are Thriving</h4>
+                  <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
+                    Operating at peak clarity, leveraging your dominant cognitive function effortlessly. You feel aligned, creative, and confident in execution.
+                  </p>
                 </div>
 
-                {/* Chemistry Grid: Detailed compatible & incompatible types */}
-                <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-10 shadow-2xs space-y-8">
-                  <div className="border-b border-slate-100 pb-4">
-                    <h3 className="text-2xl font-black text-slate-900">Relational Chemistry Matrix</h3>
-                    <p className="text-slate-500 text-sm mt-1">Detailed compatibility matrix split across Introvert and Extrovert groups.</p>
+                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-3">
+                  <div className="flex items-center gap-3 mb-2">
+                    <ShieldAlert className="w-5 h-5 text-rose-500" />
+                    <span className="text-xs font-black uppercase tracking-wider text-rose-600">Under Acute Stress</span>
                   </div>
+                  <h4 className="text-xl font-black text-slate-900">Inferior Function Trigger</h4>
+                  <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
+                    {typeInfo.stressResponse}
+                  </p>
+                </div>
+              </div>
+
+              {/* Chemistry Matrix */}
+              <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-8">
+                <div className="space-y-1">
+                  <h3 className="text-2xl font-black text-slate-900">Relational Chemistry Matrix</h3>
+                  <p className="text-slate-500 text-sm font-medium">Synergies across compatible and growth-challenge archetype pairings.</p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    
-                    {/* COMPATIBLE SECTION */}
-                    <div className="space-y-6">
-                      <div className="flex items-center gap-2 border-l-2 border-emerald-500 pl-2.5">
-                        <Heart className="w-4 h-4 text-emerald-500" />
-                        <span className="text-xs font-bold tracking-wider text-emerald-600 uppercase">Compatible With</span>
-                      </div>
-                      
-                      <div className="space-y-4">
-                        {/* Introvert Types */}
-                        <div>
-                          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2">Introvert Types</span>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {compatibleIntroverts.map((partner) => (
-                              <div key={partner} className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center gap-3 hover:border-slate-200 transition">
-                                <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 font-black text-xs flex items-center justify-center border border-white shadow-xs shrink-0">
-                                  {partner}
-                                </div>
-                                <div className="space-y-0.5">
-                                  <span className="text-xs font-bold text-slate-800 uppercase block">{partner}</span>
-                                  <p className="text-xs text-slate-500 leading-normal">{formatMarkdown(getSynergyExplanation(upperType, partner, true))}</p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Extrovert Types */}
-                        <div>
-                          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2">Extrovert Types</span>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {compatibleExtroverts.map((partner) => (
-                              <div key={partner} className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center gap-3 hover:border-slate-200 transition">
-                                <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 font-black text-xs flex items-center justify-center border border-white shadow-xs shrink-0">
-                                  {partner}
-                                </div>
-                                <div className="space-y-0.5">
-                                  <span className="text-xs font-bold text-slate-800 uppercase block">{partner}</span>
-                                  <p className="text-xs text-slate-500 leading-normal">{formatMarkdown(getSynergyExplanation(upperType, partner, true))}</p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                      </div>
+                  {/* Compatible Types */}
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 border-l-2 border-emerald-500 pl-3">
+                      <Heart className="w-4 h-4 text-emerald-500" />
+                      <span className="text-xs font-black tracking-wider text-emerald-600 uppercase">Natural Synergy Partners</span>
                     </div>
 
-                    {/* INCOMPATIBLE SECTION */}
-                    <div className="space-y-6">
-                      <div className="flex items-center gap-2 border-l-2 border-rose-500 pl-2.5">
-                        <Zap className="w-4 h-4 text-rose-500" />
-                        <span className="text-xs font-bold tracking-wider text-rose-600 uppercase">Incompatible With</span>
-                      </div>
-                      
-                      <div className="space-y-4">
-                        {/* Introvert Types */}
-                        <div>
-                          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2">Introvert Types</span>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {incompatibleIntroverts.map((partner) => (
-                              <div key={partner} className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center gap-3 hover:border-slate-200 transition">
-                                <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 font-black text-xs flex items-center justify-center border border-white shadow-xs shrink-0">
-                                  {partner}
-                                </div>
-                                <div className="space-y-0.5">
-                                  <span className="text-xs font-bold text-slate-800 uppercase block">{partner}</span>
-                                  <p className="text-xs text-slate-500 leading-normal">{formatMarkdown(getSynergyExplanation(upperType, partner, false))}</p>
-                                </div>
-                              </div>
-                            ))}
+                    <div className="space-y-3">
+                      {compatibleIntroverts.slice(0, 2).concat(compatibleExtroverts.slice(0, 2)).map((partner) => (
+                        <Link 
+                          key={partner} 
+                          to={`/wiki/mbti/${partner.toLowerCase()}`}
+                          className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 flex items-center justify-between hover:bg-emerald-50 hover:border-emerald-200 transition group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-white text-slate-900 font-mono font-black text-xs flex items-center justify-center border border-slate-200 shadow-2xs">
+                              {partner}
+                            </div>
+                            <div className="space-y-0.5">
+                              <span className="text-xs font-black text-slate-900 block group-hover:text-emerald-800">{partner} — {typeDescriptions[partner]?.title}</span>
+                              <p className="text-xs text-slate-500 font-medium">{getSynergyExplanation(upperType, partner, true)}</p>
+                            </div>
                           </div>
-                        </div>
+                          <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
 
-                        {/* Extrovert Types */}
-                        <div>
-                          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-2">Extrovert Types</span>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {incompatibleExtroverts.map((partner) => (
-                              <div key={partner} className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center gap-3 hover:border-slate-200 transition">
-                                <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-600 font-black text-xs flex items-center justify-center border border-white shadow-xs shrink-0">
-                                  {partner}
-                                </div>
-                                <div className="space-y-0.5">
-                                  <span className="text-xs font-bold text-slate-800 uppercase block">{partner}</span>
-                                  <p className="text-xs text-slate-500 leading-normal">{formatMarkdown(getSynergyExplanation(upperType, partner, false))}</p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                      </div>
+                  {/* Growth Challenge Types */}
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 border-l-2 border-amber-500 pl-3">
+                      <Zap className="w-4 h-4 text-amber-500" />
+                      <span className="text-xs font-black tracking-wider text-amber-600 uppercase">Growth Challenge Partners</span>
                     </div>
 
+                    <div className="space-y-3">
+                      {incompatibleIntroverts.slice(0, 2).concat(incompatibleExtroverts.slice(0, 2)).map((partner) => (
+                        <Link 
+                          key={partner} 
+                          to={`/wiki/mbti/${partner.toLowerCase()}`}
+                          className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 flex items-center justify-between hover:bg-amber-50 hover:border-amber-200 transition group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-white text-slate-900 font-mono font-black text-xs flex items-center justify-center border border-slate-200 shadow-2xs">
+                              {partner}
+                            </div>
+                            <div className="space-y-0.5">
+                              <span className="text-xs font-black text-slate-900 block group-hover:text-amber-800">{partner} — {typeDescriptions[partner]?.title}</span>
+                              <p className="text-xs text-slate-500 font-medium">{getSynergyExplanation(upperType, partner, false)}</p>
+                            </div>
+                          </div>
+                          <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600 group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
+                        </Link>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                {/* General Dynamics */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-2xs">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Romance Styles</h4>
-                    <p className="text-slate-600 text-sm leading-relaxed font-medium">{typeInfo.romantic || "Appreciates honest, authentic, and deep connections."}</p>
-                  </div>
-                  <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-2xs">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Social Circles</h4>
-                    <p className="text-slate-600 text-sm leading-relaxed font-medium">{typeInfo.friendships || "Prefers a few close, high-trust friendships over wide social circles."}</p>
-                  </div>
                 </div>
               </div>
-            )}
-          </Motion.div>
+            </Motion.div>
+          )}
+
         </AnimatePresence>
 
-      </div>
-    </div>
-  );
-}
-
-function ResultBar({ left, right, leftCode, rightCode, leftValue, rightValue, color }) {
-  const isLeftDominant = leftValue >= rightValue;
-
-  return (
-    <div className="space-y-3">
-      <div className="flex justify-between items-center text-xs md:text-sm font-bold">
-        <div className="flex items-center gap-2">
-          <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs text-white ${isLeftDominant ? color : 'bg-slate-300'}`}>
-            {leftCode}
-          </span>
-          <span className={isLeftDominant ? 'text-slate-900 font-extrabold' : 'text-slate-400'}>
-            {left}
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className={!isLeftDominant ? 'text-slate-900 font-extrabold' : 'text-slate-400'}>
-            {right}
-          </span>
-          <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs text-white ${!isLeftDominant ? color : 'bg-slate-300'}`}>
-            {rightCode}
-          </span>
-        </div>
-      </div>
-
-      <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden flex p-0.5 border border-slate-200/50">
-        <div 
-          className={`h-full rounded-full transition-all duration-700 ${isLeftDominant ? color : 'bg-transparent'}`}
-          style={{ width: `${leftValue}%` }}
-        />
-        <div 
-          className={`h-full rounded-full transition-all duration-700 ${!isLeftDominant ? color : 'bg-transparent'}`}
-          style={{ width: `${rightValue}%` }}
-        />
-      </div>
-      
-      <div className="flex justify-between items-center text-xs font-bold text-slate-400">
-        <span>{leftValue}%</span>
-        <span>{rightValue}%</span>
       </div>
     </div>
   );
