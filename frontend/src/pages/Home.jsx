@@ -7,7 +7,7 @@ import {
   Compass, Binary, Skull, Brain, Fingerprint, Eye, Battery, Shield, UserMinus, 
   Swords, HeartHandshake, Waves, Sprout, LayoutGrid, Ghost, Flame, Flag, Coffee, 
   Wand2, Navigation2, Mountain, Microscope, Activity, Gem, Puzzle, HeartCrack, 
-  Settings, Siren, Timer, Lock
+  Settings, Siren, Timer, Lock, Sparkles
 } from 'lucide-react';
 
 const categories = [
@@ -27,7 +27,7 @@ const tests = [
     category: 'cognition',
     title: '16 Archetypes',
     description: 'Cognitive functions and personality mapping based on Jungian psychology. A comprehensive deep-dive into your psyche.',
-    time: '12 min',
+    time: '4 min',
     active: true,
     color: 'from-indigo-500 to-purple-500',
     bgLight: 'bg-indigo-50',
@@ -141,6 +141,18 @@ const tests = [
     bgLight: 'bg-amber-50',
     borderLight: 'border-amber-100',
     icon: Pentagon
+  },
+  {
+    id: 'dere',
+    category: 'relational',
+    title: 'The -dere Spectrum',
+    description: 'Discover your affectionate persona. Are you a Tsundere, Kuudere, Yandere, Dandere, or Deredere?',
+    time: '8 min',
+    active: true,
+    color: 'from-rose-500 via-purple-500 to-indigo-600',
+    bgLight: 'bg-rose-50',
+    borderLight: 'border-rose-100',
+    icon: Sparkles
   },
   {
     id: 'conflict-styles',

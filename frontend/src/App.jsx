@@ -45,6 +45,9 @@ const DefenseResult = lazy(() => import('./pages/DefenseResult'));
 const ImposterTest = lazy(() => import('./pages/ImposterTest'));
 const ImposterResult = lazy(() => import('./pages/ImposterResult'));
 
+const DereTest = lazy(() => import('./pages/DereTest'));
+const DereResult = lazy(() => import('./pages/DereResult'));
+
 const IdentityDashboard = lazy(() => import('./pages/IdentityDashboard'));
 const Wiki = lazy(() => import('./pages/Wiki'));
 const MbtiWikiDetail = lazy(() => import('./pages/MbtiWikiDetail'));
@@ -117,6 +120,8 @@ export default function App() {
                 <Route path="/result/defense/:type" element={<DefenseResult />} />
                 <Route path="/test/imposter" element={<ImposterTest />} />
                 <Route path="/result/imposter/:type" element={<ImposterResult />} />
+                <Route path="/test/dere" element={<DereTest />} />
+                <Route path="/result/dere/:type" element={<DereResult />} />
                 <Route path="/dashboard" element={<LocalhostRoute><IdentityDashboard /></LocalhostRoute>} />
                 <Route path="/wiki" element={<Wiki />} />
                 <Route path="/wiki/mbti/:type" element={<MbtiWikiDetail />} />
