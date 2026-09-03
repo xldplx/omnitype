@@ -12,9 +12,9 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub Profile"
-            className="w-10 h-10 rounded-full bg-white/80 hover:bg-slate-900 border border-slate-200/80 hover:border-slate-900 flex items-center justify-center text-slate-700 hover:text-white shadow-2xs hover:shadow-md hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer group"
+            className="w-10 h-10 rounded-full bg-white/80 hover:bg-slate-900 border border-slate-200/80 hover:border-slate-900 flex items-center justify-center text-slate-700 hover:text-white shadow-2xs hover:shadow-md transition-colors duration-200 cursor-pointer"
           >
-            <Github className="w-5 h-5 transition-transform group-hover:scale-110" />
+            <Github className="w-5 h-5" />
           </a>
         </div>
 

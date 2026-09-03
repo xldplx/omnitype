@@ -26,13 +26,6 @@ function formatMarkdown(text) {
   });
 }
 
-const allTypesList = [
-  'INTJ', 'INTP', 'ENTJ', 'ENTP',
-  'INFJ', 'INFP', 'ENFJ', 'ENFP',
-  'ISTJ', 'ISFJ', 'ESTJ', 'ESFJ',
-  'ISTP', 'ISFP', 'ESTP', 'ESFP'
-];
-
 export default function MbtiWikiDetail() {
   const { type } = useParams();
   const navigate = useNavigate();
@@ -665,43 +658,6 @@ export default function MbtiWikiDetail() {
             )}
           </Motion.div>
         </AnimatePresence>
-
-        {/* Quick Type Switcher Carousel */}
-        <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.03)] rounded-[2.5rem] p-8 space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="text-xs font-black uppercase tracking-widest text-slate-400">Quick Navigation</span>
-              <h4 className="text-xl font-black text-slate-900">Explore All 16 Archetypes</h4>
-            </div>
-            <Link 
-              to="/wiki"
-              className="text-xs font-black uppercase tracking-widest text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
-            >
-              <span>Full Directory</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-4 sm:grid-cols-8 md:grid-cols-16 gap-2">
-            {allTypesList.map((code) => {
-              const isCurrent = code === uppercaseType;
-              const typeTemp = getTypeTemperament(code);
-              return (
-                <Link
-                  key={code}
-                  to={`/wiki/mbti/${code.toLowerCase()}`}
-                  className={`py-3 px-2 rounded-2xl text-center font-mono font-black text-xs transition-all ${
-                    isCurrent 
-                      ? 'bg-slate-900 text-white shadow-md scale-105 ring-2 ring-indigo-500' 
-                      : 'bg-slate-50 text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 border border-slate-200/60'
-                  }`}
-                >
-                  {code}
-                </Link>
-              );
-            })}
-          </div>
-        </div>
 
       </div>
     </div>

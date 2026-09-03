@@ -1,13 +1,13 @@
 import { useState, useRef, useMemo } from 'react';
 import { motion as Motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { 
   ArrowRight, ChevronLeft, ChevronRight, Hexagon, Circle, Triangle, Square, Diamond, Pentagon, Layers, 
   ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, 
   Compass, Binary, Skull, Brain, Fingerprint, Eye, Battery, Shield, UserMinus, 
   Swords, HeartHandshake, Waves, Sprout, LayoutGrid, Ghost, Flame, Flag, Coffee, 
   Wand2, Navigation2, Mountain, Microscope, Activity, Gem, Puzzle, HeartCrack, 
-  Settings, Siren, Timer, Lock, Sparkles, Search, X, CheckCircle2, RotateCcw
+  Settings, Siren, Timer, Lock, Sparkles, Search, X
 } from 'lucide-react';
 
 const categories = [
@@ -552,110 +552,10 @@ const tests = [
   }
 ];
 
-const TEST_TAGS = {
-  mbti: 'Jungian Typology',
-  'mindset-architecture': 'Mindset Theory',
-  'mental-models': 'Problem Solving',
-  enneagram: 'Ego Dynamics',
-  tritype: '3 Centers of Mind',
-  'instinctual-variants': 'Subtype Drives',
-  'core-needs': 'Core Motivation',
-  'core-values': 'Value Systems',
-  'love-languages': 'Affection Dynamics',
-  'attachment-styles': 'Attachment Theory',
-  dere: 'Relational Trope',
-  'conflict-styles': 'Conflict Strategy',
-  'apology-languages': 'Restorative Repair',
-  'social-battery': 'Social Endurance',
-  'red-green-flags': 'Interpersonal Hygiene',
-  'beige-flags': 'Quirk Spectrum',
-  'jungian-archetypes': 'Depth Psychology',
-  'aesthetic-core': 'Visual Identity',
-  'main-character': 'Narrative Role',
-  'color-psychology': 'Chromatic Profile',
-  'hexaco-model': 'Trait Psychology',
-  'locus-of-control': 'Agency & Attribution',
-  'grit-scale': 'Persistence Metric',
-  'cognitive-reflection': 'Analytical Thinking',
-  socionics: 'Information Metabolism',
-  'cognitive-loop': 'Function Jumper',
-  'attitudinal-psyche': 'Volition & Logic',
-  'objective-personality': '512 Subtypes',
-  alignment: 'Moral Dimensions',
-  resilience: 'Fortitude Index',
-  'dark-triad': 'Shadow Self',
-  defense: 'Psychoanalysis',
-  imposter: 'Self-Efficacy',
-  'shadow-archetype': 'Repressed Traits',
-  'primal-fears': 'Anxiety Reflexes',
-  adhd: 'Executive Function',
-  'autism-spectrum': 'Neuro-Signature',
-  'rsd-test': 'Rejection Sensitivity',
-  'executive-function': 'Cognitive Admin',
-  'cptsd-responses': 'Survival Reflexes',
-  'ocd-tendencies': 'Cognitive Loops',
-  hsp: 'Sensory Processing',
-  burnout: 'Nervous Fatigue',
-  'big-five': 'OCEAN Standard'
-};
-
-function getSavedResult(testId) {
-  if (typeof window === 'undefined') return null;
-  try {
-    const keyMap = {
-      mbti: 'omnitype_mbti',
-      enneagram: 'omnitype_enneagram',
-      'love-languages': 'omnitype_love_languages',
-      'attachment-styles': 'omnitype_attachment_styles',
-      'instinctual-variants': 'omnitype_instinctual_variants',
-      tritype: 'omnitype_tritype',
-      'color-psychology': 'omnitype_color_psychology',
-      'jungian-archetypes': 'omnitype_jungian_archetypes',
-      alignment: 'omnitype_alignment',
-      resilience: 'omnitype_resilience',
-      adhd: 'omnitype_adhd',
-      hsp: 'omnitype_hsp',
-      burnout: 'omnitype_burnout',
-      'dark-triad': 'omnitype_dark_triad',
-      defense: 'omnitype_defense',
-      imposter: 'omnitype_imposter',
-      dere: 'omnitype_dere',
-    };
-    const storageKey = keyMap[testId];
-    if (!storageKey) return null;
-    const raw = localStorage.getItem(storageKey);
-    if (!raw) return null;
-    
-    try {
-      const parsed = JSON.parse(raw);
-      if (typeof parsed === 'string') return { type: parsed };
-      if (parsed && typeof parsed === 'object') {
-        const typeVal = parsed.type || parsed.dominantType || parsed.primary || parsed.style || parsed.archetype;
-        return { type: typeVal || 'Completed' };
-      }
-    } catch {
-      return { type: raw };
-    }
-    return { type: raw };
-  } catch {
-    return null;
-  }
-}
-
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [savedResults] = useState(() => {
-    const map = {};
-    tests.forEach(t => {
-      if (t.active) {
-        const saved = getSavedResult(t.id);
-        if (saved) map[t.id] = saved;
-      }
-    });
-    return map;
-  });
   const navigate = useNavigate();
   const categoryScrollRef = useRef(null);
 
@@ -706,6 +606,21 @@ export default function Home() {
   return (
     <div className="w-full min-h-screen bg-transparent flex flex-col items-center pb-32 relative selection:bg-indigo-100">
       
+      {/* Full-Width Announcement Ribbon (Website Purple Theme) */}
+      <Link
+        to="/test/dere"
+        className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 sm:py-2.5 px-4 text-center block text-xs sm:text-sm font-medium tracking-wide transition-all duration-300 relative z-30 shadow-[0_4px_25px_rgba(147,51,234,0.25)] border-t border-purple-400/40 border-b border-purple-800/40 group cursor-pointer"
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-center flex-wrap gap-x-3 gap-y-1">
+          <span className="font-black uppercase tracking-widest text-[0.62rem] sm:text-[0.68rem] bg-white/20 text-white border border-white/30 px-2.5 py-0.5 rounded-full shadow-2xs backdrop-blur-xs">
+            New Assessment
+          </span>
+          <span className="text-purple-100 group-hover:text-white transition-colors">
+            The <span className="font-bold text-white underline decoration-white/60 underline-offset-4">-Dere Relational Trope Test</span> is now available. Discover your relational archetype.
+          </span>
+        </div>
+      </Link>
+
       {/* Full Height Hero Section */}
       <div className="w-full min-h-[100dvh] flex flex-col items-center justify-center relative z-10 px-6 pt-20 md:pt-28">
         <Motion.div 
@@ -910,34 +825,16 @@ export default function Home() {
                   <div className="w-16 h-1 bg-indigo-500/20 rounded-full mt-8" />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full">
                   {catTests.map((test) => (
                     <div key={test.id} className="w-full h-full">
                       {test.active ? (
-                        <div 
-                          onClick={() => {
-                            const saved = savedResults[test.id];
-                            if (saved?.type) {
-                              navigate(`/result/${test.id}/${encodeURIComponent(String(saved.type).toLowerCase())}`);
-                            } else {
-                              navigate(`/test/${test.id}`);
-                            }
-                          }}
-                          className="block h-full group cursor-pointer"
-                        >
-                          <TestCard 
-                            test={test} 
-                            savedResult={savedResults[test.id]} 
-                            onNavigate={navigate}
-                          />
-                        </div>
+                        <Link to={`/test/${test.id}`} className="block h-full group">
+                          <TestCard test={test} />
+                        </Link>
                       ) : (
                         <div className="h-full cursor-not-allowed">
-                          <TestCard 
-                            test={test} 
-                            savedResult={null}
-                            onNavigate={navigate}
-                          />
+                          <TestCard test={test} />
                         </div>
                       )}
                     </div>
@@ -952,10 +849,8 @@ export default function Home() {
   );
 }
 
-function TestCard({ test, savedResult, onNavigate }) {
+function TestCard({ test }) {
   const Icon = test.icon || Hexagon;
-  const tag = TEST_TAGS[test.id] || 'Psychological Framework';
-  const isCompleted = Boolean(savedResult);
   
   if (!test.active) {
     // Distinct Grayscale & Static Styling for In-Development Cards
@@ -969,19 +864,14 @@ function TestCard({ test, savedResult, onNavigate }) {
             <Icon className="w-6 h-6 md:w-7 md:h-7 text-slate-400" />
           </div>
           
-          <div className="flex flex-wrap items-center justify-end gap-1.5">
-            <span className="hidden sm:inline-flex items-center text-[0.65rem] md:text-[0.68rem] font-bold text-slate-400 bg-slate-200/60 px-2.5 py-1 rounded-full border border-slate-300/40 uppercase tracking-wider">
-              {tag}
-            </span>
-            <div className="flex items-center gap-1.5 text-slate-400 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-wider bg-slate-200/60 px-3 py-1 rounded-full border border-slate-300/40">
-              <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-              {test.time}
-            </div>
+          <div className="flex items-center gap-1.5 text-slate-400 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-wider bg-slate-200/60 px-3 py-1 rounded-full border border-slate-300/40">
+            <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+            {test.time}
           </div>
         </div>
 
         <div className="flex-1 relative z-10 flex flex-col justify-center">
-          <h3 className="text-2xl sm:text-3xl md:text-[2rem] font-extrabold text-slate-400 mb-2.5 tracking-tight leading-tight">
+          <h3 className="text-2xl sm:text-3xl md:text-[2rem] font-bold text-slate-400 mb-2.5 tracking-tight leading-tight">
             {test.title}
           </h3>
           <p className="text-slate-400 text-sm md:text-[0.98rem] font-medium leading-relaxed mb-6">
@@ -1003,7 +893,7 @@ function TestCard({ test, savedResult, onNavigate }) {
     );
   }
 
-  // Active Live Assessment Card with Enhanced Micro-interactions
+  // Active Live Assessment Card
   return (
     <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 md:p-9 flex flex-col h-full relative overflow-hidden transition-all duration-500 ease-out rounded-[2rem] md:rounded-3xl border border-white/90 group-hover:border-indigo-200/70 shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_45px_rgb(0,0,0,0.08)] hover:-translate-y-1.5">
       
@@ -1018,28 +908,15 @@ function TestCard({ test, savedResult, onNavigate }) {
       {/* Subtle Ambient Radial Glow */}
       <div className={`absolute -right-8 -bottom-8 w-48 h-48 md:w-60 md:h-60 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] ${test.color} opacity-[0.05] rounded-full pointer-events-none group-hover:opacity-[0.15] transition-all duration-500 ease-out z-0`} />
 
-      {/* Header: Icon Box + Metadata Badges */}
+      {/* Header: Icon Box + Time Badge */}
       <div className="flex justify-between items-start mb-6 md:mb-8 relative z-10 gap-3">
         <div className={`w-13 h-13 md:w-15 md:h-15 rounded-2xl flex items-center justify-center border ${test.borderLight} ${test.bgLight} shadow-2xs transition-transform duration-500 ease-out group-hover:scale-105 shrink-0`}>
           <Icon className="w-6 h-6 md:w-7 md:h-7 text-indigo-600" />
         </div>
         
-        <div className="flex flex-wrap items-center justify-end gap-1.5">
-          {isCompleted && (
-            <div className="flex items-center gap-1.5 text-[0.68rem] md:text-[0.72rem] font-extrabold text-emerald-700 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full shadow-2xs">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>{savedResult.type && savedResult.type !== 'Completed' ? savedResult.type : 'Completed'}</span>
-            </div>
-          )}
-
-          <span className="hidden sm:inline-flex items-center text-[0.65rem] md:text-[0.68rem] font-bold text-slate-500 bg-slate-100/70 px-2.5 py-1 rounded-full border border-slate-200/50 uppercase tracking-wider">
-            {tag}
-          </span>
-
-          <div className="flex items-center gap-1.5 text-slate-400 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-wider bg-white/70 backdrop-blur-md px-3 py-1 rounded-full border border-slate-100/80 shadow-2xs">
-            <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
-            {test.time}
-          </div>
+        <div className="flex items-center gap-1.5 text-slate-400 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-wider bg-white/70 backdrop-blur-md px-3 py-1 rounded-full border border-slate-100/80 shadow-2xs">
+          <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+          {test.time}
         </div>
       </div>
 
@@ -1053,42 +930,14 @@ function TestCard({ test, savedResult, onNavigate }) {
         </p>
       </div>
       
-      {/* Footer Actions: Dual action when completed, or standard link when new */}
-      {isCompleted ? (
-        <div className="flex items-center justify-between mt-auto pt-5 border-t border-slate-100/80 relative z-10">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onNavigate(`/test/${test.id}`);
-            }}
-            className="inline-flex items-center gap-1.5 text-[0.72rem] md:text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-slate-800 transition-colors py-1 cursor-pointer"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Retake</span>
-          </button>
-          
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onNavigate(`/result/${test.id}/${encodeURIComponent(String(savedResult.type || 'profile').toLowerCase())}`);
-            }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[0.72rem] md:text-xs font-extrabold uppercase tracking-wider transition-all duration-200 shadow-2xs hover:shadow-xs group/btn cursor-pointer"
-          >
-            <span>View Result</span>
-            <ArrowRight className="w-3.5 h-3.5 text-indigo-600 transition-transform group-hover/btn:translate-x-0.5" />
-          </button>
+      {/* Clean Single Action: Begin Assessment */}
+      <div className="flex items-center justify-between mt-auto pt-5 border-t border-slate-100/80 relative z-10">
+        <span className="text-[0.7rem] md:text-xs font-bold uppercase tracking-wider text-slate-400">Standardized Scale</span>
+        <div className="inline-flex items-center gap-2 text-[0.75rem] md:text-xs font-black uppercase tracking-wider text-indigo-600 group-hover:text-indigo-700 transition-colors">
+          <span>Begin Assessment</span>
+          <ArrowRight className="w-4 h-4 text-indigo-500 transition-transform duration-300 group-hover:translate-x-1" />
         </div>
-      ) : (
-        <div className="flex items-center justify-between mt-auto pt-5 border-t border-slate-100/80 relative z-10">
-          <span className="text-[0.7rem] md:text-xs font-bold uppercase tracking-wider text-slate-400">Standardized Scale</span>
-          <div className="inline-flex items-center gap-2 text-[0.75rem] md:text-xs font-black uppercase tracking-wider text-indigo-600 group-hover:text-indigo-700 transition-colors">
-            <span>Begin Assessment</span>
-            <ArrowRight className="w-4 h-4 text-indigo-500 transition-transform duration-300 group-hover:translate-x-1" />
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 }

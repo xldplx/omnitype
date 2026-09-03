@@ -55,8 +55,12 @@ export default function Navbar() {
     { label: "The Shadow Self", icon: Ghost, to: "/coming-soon" }
   ];
 
+  const isHome = location.pathname === '/';
+
   return (
-    <div className="fixed top-6 md:top-8 left-0 right-0 z-50 flex justify-center px-4 md:px-8 pointer-events-none">
+    <div className={`fixed left-0 right-0 z-50 flex justify-center px-4 md:px-8 pointer-events-none transition-all duration-300 ${
+      isHome && !scrolled ? 'top-14 md:top-16' : 'top-6 md:top-8'
+    }`}>
       <Motion.nav 
         variants={{
           visible: { y: 0, opacity: 1, scale: 1 },

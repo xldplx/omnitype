@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, Navigate, useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import {
@@ -13,13 +13,11 @@ import {
   Quote,
   Sparkles,
   ShieldAlert,
-  Download,
   RefreshCw,
   ArrowRight,
   BookOpen,
   CheckCircle2
 } from 'lucide-react';
-import { toPng } from 'html-to-image';
 import { typeDescriptions } from '../utils/mbtiResultLogic';
 import { 
   mbtiCognitiveStacks, 
@@ -273,8 +271,6 @@ export default function MbtiResult() {
   const location = useLocation();
   const upperType = type ? type.toUpperCase() : 'INTP';
   const [activeTab, setActiveTab] = useState('overview');
-  const [isExporting, setIsExporting] = useState(false);
-  const cardRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -308,22 +304,6 @@ export default function MbtiResult() {
       JP: upperType.includes('J') ? 68 : 32
     };
   }, [location.state, upperType]);
-
-  const handleDownloadCard = async () => {
-    if (!cardRef.current) return;
-    try {
-      setIsExporting(true);
-      const dataUrl = await toPng(cardRef.current, { quality: 0.95 });
-      const link = document.createElement('a');
-      link.download = `omnitype-mbti-${upperType.toLowerCase()}.png`;
-      link.href = dataUrl;
-      link.click();
-    } catch (err) {
-      console.error('Failed to export card image', err);
-    } finally {
-      setIsExporting(false);
-    }
-  };
 
   const tabs = [
     { id: 'overview', label: 'Overview & Habits', icon: Target },
@@ -388,16 +368,6 @@ export default function MbtiResult() {
               <span>Wiki Chapter</span>
             </Link>
 
-            <button
-              type="button"
-              onClick={handleDownloadCard}
-              disabled={isExporting}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200/80 hover:bg-slate-50 text-xs font-black uppercase tracking-wider text-slate-700 shadow-2xs transition cursor-pointer"
-            >
-              <Download className="w-3.5 h-3.5 text-indigo-500" />
-              <span>{isExporting ? 'Exporting...' : 'Export Card'}</span>
-            </button>
-
             <Link
               to="/test/mbti"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-xs font-black uppercase tracking-wider text-white shadow-xs transition"
@@ -408,11 +378,8 @@ export default function MbtiResult() {
           </div>
         </div>
 
-        {/* Hero Result Card (Captured for Export) */}
-        <div 
-          ref={cardRef}
-          className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.03)] rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden group space-y-8"
-        >
+        {/* Hero Result Card */}
+        <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.03)] rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden group space-y-8">
           {/* Left Gradient Strip */}
           <div className={`absolute top-0 left-0 w-3 h-full bg-linear-to-b ${temperament.color}`} />
 
