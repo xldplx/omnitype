@@ -1,13 +1,13 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import { motion as Motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, ChevronLeft, ChevronRight, Hexagon, Circle, Triangle, Square, Diamond, Pentagon, Layers, 
   ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, 
   Compass, Binary, Skull, Brain, Fingerprint, Eye, Battery, Shield, UserMinus, 
   Swords, HeartHandshake, Waves, Sprout, LayoutGrid, Ghost, Flame, Flag, Coffee, 
   Wand2, Navigation2, Mountain, Microscope, Activity, Gem, Puzzle, HeartCrack, 
-  Settings, Siren, Timer, Lock, Sparkles
+  Settings, Siren, Timer, Lock, Sparkles, Search, X, CheckCircle2, RotateCcw
 } from 'lucide-react';
 
 const categories = [
@@ -552,12 +552,149 @@ const tests = [
   }
 ];
 
+const TEST_TAGS = {
+  mbti: 'Jungian Typology',
+  'mindset-architecture': 'Mindset Theory',
+  'mental-models': 'Problem Solving',
+  enneagram: 'Ego Dynamics',
+  tritype: '3 Centers of Mind',
+  'instinctual-variants': 'Subtype Drives',
+  'core-needs': 'Core Motivation',
+  'core-values': 'Value Systems',
+  'love-languages': 'Affection Dynamics',
+  'attachment-styles': 'Attachment Theory',
+  dere: 'Relational Trope',
+  'conflict-styles': 'Conflict Strategy',
+  'apology-languages': 'Restorative Repair',
+  'social-battery': 'Social Endurance',
+  'red-green-flags': 'Interpersonal Hygiene',
+  'beige-flags': 'Quirk Spectrum',
+  'jungian-archetypes': 'Depth Psychology',
+  'aesthetic-core': 'Visual Identity',
+  'main-character': 'Narrative Role',
+  'color-psychology': 'Chromatic Profile',
+  'hexaco-model': 'Trait Psychology',
+  'locus-of-control': 'Agency & Attribution',
+  'grit-scale': 'Persistence Metric',
+  'cognitive-reflection': 'Analytical Thinking',
+  socionics: 'Information Metabolism',
+  'cognitive-loop': 'Function Jumper',
+  'attitudinal-psyche': 'Volition & Logic',
+  'objective-personality': '512 Subtypes',
+  alignment: 'Moral Dimensions',
+  resilience: 'Fortitude Index',
+  'dark-triad': 'Shadow Self',
+  defense: 'Psychoanalysis',
+  imposter: 'Self-Efficacy',
+  'shadow-archetype': 'Repressed Traits',
+  'primal-fears': 'Anxiety Reflexes',
+  adhd: 'Executive Function',
+  'autism-spectrum': 'Neuro-Signature',
+  'rsd-test': 'Rejection Sensitivity',
+  'executive-function': 'Cognitive Admin',
+  'cptsd-responses': 'Survival Reflexes',
+  'ocd-tendencies': 'Cognitive Loops',
+  hsp: 'Sensory Processing',
+  burnout: 'Nervous Fatigue',
+  'big-five': 'OCEAN Standard'
+};
+
+function getSavedResult(testId) {
+  if (typeof window === 'undefined') return null;
+  try {
+    const keyMap = {
+      mbti: 'omnitype_mbti',
+      enneagram: 'omnitype_enneagram',
+      'love-languages': 'omnitype_love_languages',
+      'attachment-styles': 'omnitype_attachment_styles',
+      'instinctual-variants': 'omnitype_instinctual_variants',
+      tritype: 'omnitype_tritype',
+      'color-psychology': 'omnitype_color_psychology',
+      'jungian-archetypes': 'omnitype_jungian_archetypes',
+      alignment: 'omnitype_alignment',
+      resilience: 'omnitype_resilience',
+      adhd: 'omnitype_adhd',
+      hsp: 'omnitype_hsp',
+      burnout: 'omnitype_burnout',
+      'dark-triad': 'omnitype_dark_triad',
+      defense: 'omnitype_defense',
+      imposter: 'omnitype_imposter',
+      dere: 'omnitype_dere',
+    };
+    const storageKey = keyMap[testId];
+    if (!storageKey) return null;
+    const raw = localStorage.getItem(storageKey);
+    if (!raw) return null;
+    
+    try {
+      const parsed = JSON.parse(raw);
+      if (typeof parsed === 'string') return { type: parsed };
+      if (parsed && typeof parsed === 'object') {
+        const typeVal = parsed.type || parsed.dominantType || parsed.primary || parsed.style || parsed.archetype;
+        return { type: typeVal || 'Completed' };
+      }
+    } catch {
+      return { type: raw };
+    }
+    return { type: raw };
+  } catch {
+    return null;
+  }
+}
+
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [savedResults] = useState(() => {
+    const map = {};
+    tests.forEach(t => {
+      if (t.active) {
+        const saved = getSavedResult(t.id);
+        if (saved) map[t.id] = saved;
+      }
+    });
+    return map;
+  });
+  const navigate = useNavigate();
   const categoryScrollRef = useRef(null);
 
-  const activeCount = tests.filter(t => t.active).length;
+  const activeCount = useMemo(() => tests.filter(t => t.active).length, []);
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+
+  const matchingTests = useMemo(() => {
+    return tests.filter(test => {
+      // 1. Status Filter
+      if (statusFilter === 'available' && !test.active) return false;
+      if (statusFilter === 'coming-soon' && test.active) return false;
+
+      // 2. Category Filter (if not 'all')
+      if (selectedCategory !== 'all' && test.category !== selectedCategory) return false;
+
+      // 3. Search Query Filter
+      if (!normalizedQuery) return true;
+
+      const tag = (TEST_TAGS[test.id] || '').toLowerCase();
+      const cat = categories.find(c => c.id === test.category);
+      const catTitle = cat ? cat.title.toLowerCase() : '';
+
+      return (
+        test.title.toLowerCase().includes(normalizedQuery) ||
+        test.description.toLowerCase().includes(normalizedQuery) ||
+        test.id.toLowerCase().includes(normalizedQuery) ||
+        tag.includes(normalizedQuery) ||
+        catTitle.includes(normalizedQuery)
+      );
+    });
+  }, [statusFilter, selectedCategory, normalizedQuery]);
+
+  const filteredCategories = useMemo(() => {
+    return categories.filter(cat => {
+      if (cat.id === 'all') return false;
+      if (selectedCategory !== 'all' && cat.id !== selectedCategory) return false;
+      return matchingTests.some(t => t.category === cat.id);
+    });
+  }, [selectedCategory, matchingTests]);
 
   const scrollCategories = (direction) => {
     if (categoryScrollRef.current) {
@@ -565,12 +702,6 @@ export default function Home() {
       categoryScrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
-
-  const filteredCategories = categories.filter(cat => {
-    if (cat.id === 'all') return false;
-    if (selectedCategory !== 'all' && cat.id !== selectedCategory) return false;
-    return true;
-  });
 
   return (
     <div className="w-full min-h-screen bg-transparent flex flex-col items-center pb-32 relative selection:bg-indigo-100">
@@ -611,6 +742,46 @@ export default function Home() {
       {/* Directory Section */}
       <div id="tests-directory" className="w-full max-w-5xl mx-auto px-4 md:px-8 pt-12 relative z-10">
         
+        {/* Sleek Live Search Bar */}
+        <div className="w-full max-w-2xl mx-auto mb-10">
+          <div className="relative flex items-center bg-white/80 backdrop-blur-xl border border-slate-200/80 rounded-full shadow-[0_4px_25px_rgb(0,0,0,0.03)] focus-within:shadow-[0_8px_30px_rgb(99,102,241,0.12)] focus-within:border-indigo-400/80 transition-all duration-300 px-5 py-3.5 group">
+            <Search className="w-5 h-5 text-slate-400 group-focus-within:text-indigo-600 transition-colors shrink-0 mr-3" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search 35+ psychological tests, traits, or models (e.g. MBTI, ADHD, Enneagram)..."
+              className="w-full bg-transparent text-slate-800 placeholder:text-slate-400 font-medium text-sm sm:text-base outline-none pr-8 selection:bg-indigo-100"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-4 p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                aria-label="Clear search"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Search Status Meta Line */}
+          {normalizedQuery && (
+            <div className="flex items-center justify-between text-xs text-slate-500 font-medium px-4 mt-2.5">
+              <span>
+                Found <strong className="text-slate-900 font-bold">{matchingTests.length}</strong> assessment{matchingTests.length === 1 ? '' : 's'} matching &ldquo;<span className="text-indigo-600 font-semibold">{searchQuery}</span>&rdquo;
+              </span>
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="text-indigo-600 hover:text-indigo-800 font-bold cursor-pointer transition-colors"
+              >
+                Clear Search
+              </button>
+            </div>
+          )}
+        </div>
+
         {/* Status & Category Filters */}
         <div className="flex flex-col gap-6 mb-16">
           
@@ -703,131 +874,221 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Categorized Test Sections */}
-        {filteredCategories.map((cat) => {
-          let catTests = tests.filter(t => t.category === cat.id);
-          
-          if (statusFilter === 'available') {
-            catTests = catTests.filter(t => t.active);
-          } else if (statusFilter === 'coming-soon') {
-            catTests = catTests.filter(t => !t.active);
-          }
-
-          if (catTests.length === 0) return null;
-
-          return (
-            <div key={cat.id} className="w-full mb-20 md:mb-28">
-              <div className="flex flex-col items-center text-center mb-10 md:mb-14">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight mb-4">{cat.title}</h2>
-                <p className="text-slate-500 font-medium text-lg md:text-xl max-w-2xl text-balance">{cat.desc}</p>
-                <div className="w-16 h-1 bg-indigo-500/20 rounded-full mt-8" />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full">
-                {catTests.map((test) => (
-                  <div key={test.id} className="w-full h-full">
-                    {test.active ? (
-                      <Link to={`/test/${test.id}`} className="block h-full group">
-                        <TestCard test={test} />
-                      </Link>
-                    ) : (
-                      <div className="h-full cursor-not-allowed">
-                        <TestCard test={test} />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+        {/* Empty State if No Assessments Match Search / Filters */}
+        {matchingTests.length === 0 ? (
+          <div className="w-full py-16 px-6 flex flex-col items-center justify-center text-center bg-white/60 backdrop-blur-md rounded-[2.5rem] border border-slate-200/70 shadow-xs mb-20">
+            <div className="w-16 h-16 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center mb-5 text-indigo-500">
+              <Search className="w-7 h-7" />
             </div>
-          );
-        })}
+            <h3 className="text-2xl font-black text-slate-800 mb-2">No assessments found</h3>
+            <p className="text-slate-500 text-sm sm:text-base max-w-md mb-6 leading-relaxed">
+              No psychological assessments matched {normalizedQuery ? `"${searchQuery}"` : 'your active filters'}. Try searching for &ldquo;MBTI&rdquo;, &ldquo;ADHD&rdquo;, &ldquo;Shadow&rdquo;, or resetting your filters.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setSearchQuery('');
+                setSelectedCategory('all');
+                setStatusFilter('all');
+              }}
+              className="px-6 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-widest transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md"
+            >
+              Reset Search & Filters
+            </button>
+          </div>
+        ) : (
+          /* Categorized Test Sections */
+          filteredCategories.map((cat) => {
+            const catTests = matchingTests.filter(t => t.category === cat.id);
+            if (catTests.length === 0) return null;
+
+            return (
+              <div key={cat.id} className="w-full mb-20 md:mb-28">
+                <div className="flex flex-col items-center text-center mb-10 md:mb-14">
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight mb-4">{cat.title}</h2>
+                  <p className="text-slate-500 font-medium text-lg md:text-xl max-w-2xl text-balance">{cat.desc}</p>
+                  <div className="w-16 h-1 bg-indigo-500/20 rounded-full mt-8" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full">
+                  {catTests.map((test) => (
+                    <div key={test.id} className="w-full h-full">
+                      {test.active ? (
+                        <div 
+                          onClick={() => {
+                            const saved = savedResults[test.id];
+                            if (saved?.type) {
+                              navigate(`/result/${test.id}/${encodeURIComponent(String(saved.type).toLowerCase())}`);
+                            } else {
+                              navigate(`/test/${test.id}`);
+                            }
+                          }}
+                          className="block h-full group cursor-pointer"
+                        >
+                          <TestCard 
+                            test={test} 
+                            savedResult={savedResults[test.id]} 
+                            onNavigate={navigate}
+                          />
+                        </div>
+                      ) : (
+                        <div className="h-full cursor-not-allowed">
+                          <TestCard 
+                            test={test} 
+                            savedResult={null}
+                            onNavigate={navigate}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );
 }
 
-function TestCard({ test }) {
+function TestCard({ test, savedResult, onNavigate }) {
   const Icon = test.icon || Hexagon;
+  const tag = TEST_TAGS[test.id] || 'Psychological Framework';
+  const isCompleted = Boolean(savedResult);
   
   if (!test.active) {
     // Distinct Grayscale & Static Styling for In-Development Cards
     return (
-      <div className="bg-slate-100/80 p-6 sm:p-8 md:p-10 flex flex-col h-full relative overflow-hidden rounded-[2rem] md:rounded-4xl border border-slate-200/80 grayscale opacity-60 pointer-events-none">
-        <div className="flex justify-between items-start mb-6 md:mb-10 relative z-10">
-          <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center border border-slate-200 bg-slate-200/60 text-slate-400">
+      <div className="bg-slate-100/70 backdrop-blur-md p-6 sm:p-8 md:p-9 flex flex-col h-full relative overflow-hidden rounded-[2rem] md:rounded-3xl border border-slate-200/80 grayscale opacity-65 pointer-events-none transition-all duration-300">
+        {/* Top Hairline Accent */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-slate-300" />
+
+        <div className="flex justify-between items-start mb-6 md:mb-8 relative z-10 gap-3">
+          <div className="w-13 h-13 md:w-15 md:h-15 rounded-2xl flex items-center justify-center border border-slate-200 bg-slate-200/60 text-slate-400 shrink-0">
             <Icon className="w-6 h-6 md:w-7 md:h-7 text-slate-400" />
           </div>
           
-          <div className="flex items-center gap-1.5 md:gap-2.5 text-slate-400 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-widest bg-slate-200/60 px-3.5 py-1.5 md:px-4 md:py-2 rounded-full border border-slate-300/40">
-            <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
-            {test.time}
+          <div className="flex flex-wrap items-center justify-end gap-1.5">
+            <span className="hidden sm:inline-flex items-center text-[0.65rem] md:text-[0.68rem] font-bold text-slate-400 bg-slate-200/60 px-2.5 py-1 rounded-full border border-slate-300/40 uppercase tracking-wider">
+              {tag}
+            </span>
+            <div className="flex items-center gap-1.5 text-slate-400 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-wider bg-slate-200/60 px-3 py-1 rounded-full border border-slate-300/40">
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+              {test.time}
+            </div>
           </div>
         </div>
 
         <div className="flex-1 relative z-10 flex flex-col justify-center">
-          <h3 className="text-2xl sm:text-3xl md:text-[2.2rem] font-extrabold text-slate-400 mb-3 md:mb-4 tracking-tight leading-none">
+          <h3 className="text-2xl sm:text-3xl md:text-[2rem] font-extrabold text-slate-400 mb-2.5 tracking-tight leading-tight">
             {test.title}
           </h3>
-          <p className="text-slate-400 text-sm sm:text-base md:text-[1.05rem] font-medium leading-relaxed mb-6 md:mb-8">
+          <p className="text-slate-400 text-sm md:text-[0.98rem] font-medium leading-relaxed mb-6">
             {test.description}
           </p>
         </div>
         
-        <div className="flex items-center justify-between mt-auto pt-6 md:pt-8 border-t border-slate-200/80 relative z-10 opacity-60">
-          <span className="text-[0.65rem] md:text-[0.8rem] font-bold tracking-widest uppercase text-slate-400 flex items-center gap-2">
+        <div className="flex items-center justify-between mt-auto pt-5 md:pt-6 border-t border-slate-200/80 relative z-10 opacity-70">
+          <span className="text-[0.68rem] md:text-[0.75rem] font-bold tracking-wider uppercase text-slate-400 flex items-center gap-2">
             <Lock className="w-3.5 h-3.5" />
             Under Construction
           </span>
           
-          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-400 border border-slate-300/50">
-            <Lock className="w-4 h-4 md:w-5 md:h-5" />
+          <div className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-slate-200 flex items-center justify-center text-slate-400 border border-slate-300/50">
+            <Lock className="w-3.5 h-3.5" />
           </div>
         </div>
       </div>
     );
   }
 
-  // Active Live Assessment Card with Interactive Floating Hover Shape Accent
+  // Active Live Assessment Card with Enhanced Micro-interactions
   return (
-    <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 md:p-10 flex flex-col h-full relative overflow-hidden transition-all duration-500 ease-out rounded-[2rem] md:rounded-4xl border border-white/90 group-hover:border-indigo-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1">
+    <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 md:p-9 flex flex-col h-full relative overflow-hidden transition-all duration-500 ease-out rounded-[2rem] md:rounded-3xl border border-white/90 group-hover:border-indigo-200/70 shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_45px_rgb(0,0,0,0.08)] hover:-translate-y-1.5">
       
+      {/* Top Hairline Gradient Accent on Hover */}
+      <div className={`absolute top-0 left-0 right-0 h-1 bg-linear-to-r ${test.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20`} />
+
       {/* Floating Animated Geometric Shape Accent on Hover */}
-      <div className={`absolute -right-6 -bottom-6 w-36 h-36 md:w-44 md:h-44 rounded-3xl md:rounded-4xl bg-linear-to-br ${test.color} opacity-0 group-hover:opacity-[0.14] scale-75 group-hover:scale-100 group-hover:rotate-12 transition-all duration-500 ease-out pointer-events-none flex items-center justify-center`}>
+      <div className={`absolute -right-6 -bottom-6 w-36 h-36 md:w-44 md:h-44 rounded-3xl md:rounded-4xl bg-linear-to-br ${test.color} opacity-0 group-hover:opacity-[0.14] scale-75 group-hover:scale-100 group-hover:rotate-12 transition-all duration-500 ease-out pointer-events-none flex items-center justify-center z-0`}>
         <Icon className="w-20 h-20 md:w-24 md:h-24 text-slate-900 opacity-30" />
       </div>
 
       {/* Subtle Ambient Radial Glow */}
-      <div className={`absolute -right-8 -bottom-8 w-48 h-48 md:w-60 md:h-60 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] ${test.color} opacity-[0.06] rounded-full pointer-events-none group-hover:opacity-[0.15] transition-all duration-500 ease-out`} />
+      <div className={`absolute -right-8 -bottom-8 w-48 h-48 md:w-60 md:h-60 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] ${test.color} opacity-[0.05] rounded-full pointer-events-none group-hover:opacity-[0.15] transition-all duration-500 ease-out z-0`} />
 
-      {/* Header: Icon Box + Time Badge */}
-      <div className="flex justify-between items-start mb-6 md:mb-10 relative z-10">
-        <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center border ${test.borderLight} ${test.bgLight} shadow-inner transition-transform duration-500 ease-out group-hover:scale-105`}>
+      {/* Header: Icon Box + Metadata Badges */}
+      <div className="flex justify-between items-start mb-6 md:mb-8 relative z-10 gap-3">
+        <div className={`w-13 h-13 md:w-15 md:h-15 rounded-2xl flex items-center justify-center border ${test.borderLight} ${test.bgLight} shadow-2xs transition-transform duration-500 ease-out group-hover:scale-105 shrink-0`}>
           <Icon className="w-6 h-6 md:w-7 md:h-7 text-indigo-600" />
         </div>
         
-        <div className="flex items-center gap-1.5 md:gap-2.5 text-slate-400 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-widest bg-white/60 backdrop-blur-md px-3.5 py-1.5 md:px-4 md:py-2 rounded-full border border-slate-100/80 shadow-xs">
-          <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
-          {test.time}
+        <div className="flex flex-wrap items-center justify-end gap-1.5">
+          {isCompleted && (
+            <div className="flex items-center gap-1.5 text-[0.68rem] md:text-[0.72rem] font-extrabold text-emerald-700 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full shadow-2xs">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+              <span>{savedResult.type && savedResult.type !== 'Completed' ? savedResult.type : 'Completed'}</span>
+            </div>
+          )}
+
+          <span className="hidden sm:inline-flex items-center text-[0.65rem] md:text-[0.68rem] font-bold text-slate-500 bg-slate-100/70 px-2.5 py-1 rounded-full border border-slate-200/50 uppercase tracking-wider">
+            {tag}
+          </span>
+
+          <div className="flex items-center gap-1.5 text-slate-400 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-wider bg-white/70 backdrop-blur-md px-3 py-1 rounded-full border border-slate-100/80 shadow-2xs">
+            <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+            {test.time}
+          </div>
         </div>
       </div>
 
       {/* Title & Description with Hover Colors */}
       <div className="flex-1 relative z-10 flex flex-col justify-center">
-        <h3 className={`text-2xl sm:text-3xl md:text-[2.2rem] font-extrabold text-slate-800 mb-3 md:mb-4 tracking-tight leading-none text-balance group-hover:text-transparent bg-clip-text bg-linear-to-r ${test.color} transition-colors duration-500`}>
+        <h3 className={`text-2xl sm:text-3xl md:text-[2rem] font-black text-slate-800 mb-2.5 tracking-tight leading-tight group-hover:text-transparent bg-clip-text bg-linear-to-r ${test.color} transition-all duration-500`}>
           {test.title}
         </h3>
-        <p className="text-slate-500 text-sm sm:text-base md:text-[1.05rem] font-medium leading-relaxed mb-6 md:mb-8 text-balance opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+        <p className="text-slate-500 text-sm md:text-[0.98rem] font-medium leading-relaxed mb-6 opacity-80 group-hover:opacity-100 transition-opacity duration-500">
           {test.description}
         </p>
       </div>
       
-      {/* Clean Static Text + Icon Link without background pill or hover translate animation */}
-      <div className="flex items-center justify-end mt-auto pt-6 md:pt-8 border-t border-slate-100/80 relative z-10">
-        <div className="inline-flex items-center gap-2 text-[0.75rem] md:text-xs font-extrabold uppercase tracking-widest text-indigo-600">
-          <span>Begin Assessment</span>
-          <ArrowRight className="w-4 h-4 text-indigo-500" />
+      {/* Footer Actions: Dual action when completed, or standard link when new */}
+      {isCompleted ? (
+        <div className="flex items-center justify-between mt-auto pt-5 border-t border-slate-100/80 relative z-10">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onNavigate(`/test/${test.id}`);
+            }}
+            className="inline-flex items-center gap-1.5 text-[0.72rem] md:text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-slate-800 transition-colors py-1 cursor-pointer"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Retake</span>
+          </button>
+          
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onNavigate(`/result/${test.id}/${encodeURIComponent(String(savedResult.type || 'profile').toLowerCase())}`);
+            }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-[0.72rem] md:text-xs font-extrabold uppercase tracking-wider transition-all duration-200 shadow-2xs hover:shadow-xs group/btn cursor-pointer"
+          >
+            <span>View Result</span>
+            <ArrowRight className="w-3.5 h-3.5 text-indigo-600 transition-transform group-hover/btn:translate-x-0.5" />
+          </button>
         </div>
-      </div>
+      ) : (
+        <div className="flex items-center justify-between mt-auto pt-5 border-t border-slate-100/80 relative z-10">
+          <span className="text-[0.7rem] md:text-xs font-bold uppercase tracking-wider text-slate-400">Standardized Scale</span>
+          <div className="inline-flex items-center gap-2 text-[0.75rem] md:text-xs font-black uppercase tracking-wider text-indigo-600 group-hover:text-indigo-700 transition-colors">
+            <span>Begin Assessment</span>
+            <ArrowRight className="w-4 h-4 text-indigo-500 transition-transform duration-300 group-hover:translate-x-1" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
