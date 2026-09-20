@@ -1,43 +1,123 @@
 export const mbtiQuestions = [
-  // Page 1 (6 Questions)
-  { id: 1, text: "You feel mentally drained after spending hours in crowded social events and need solitude to recharge.", axis: "E-I", positive: "I" },
-  { id: 2, text: "You are frequently drawn to abstract theories, philosophical concepts, and big-picture ideas.", axis: "S-N", positive: "N" },
-  { id: 3, text: "When making decisions, you prioritize objective logic, rational analysis, and consistency over personal feelings.", axis: "T-F", positive: "T" },
-  { id: 4, text: "You prefer having a structured daily plan and feel uncomfortable when things are left unsettled.", axis: "J-P", positive: "J" },
-  { id: 5, text: "You feel energized and enthusiastic when interacting with a wide circle of friends and meeting new people.", axis: "E-I", positive: "E" },
-  { id: 6, text: "You focus heavily on concrete facts, practical details, and present realities rather than speculative ideas.", axis: "S-N", positive: "S" },
+  // Phase 1 (Questions 1 - 10)
+  { id: 1, text: "You feel mentally drained after spending hours in crowded social events and need quiet solitude to recharge.", axis: "E-I", positive: "I" },
+  { id: 2, text: "You are frequently drawn to abstract theories, philosophical concepts, and big-picture ideas rather than plain facts.", axis: "S-N", positive: "N" },
+  { id: 3, text: "When evaluating options, you prioritize objective logic, rational critique, and consistency over personal sentiments.", axis: "T-F", positive: "T" },
+  { id: 4, text: "You prefer having a structured daily itinerary and feel unsettled when key tasks are left open-ended.", axis: "J-P", positive: "J" },
+  { id: 5, text: "You feel energized and enthusiastic when interacting with a wide circle of people and meeting newcomers.", axis: "E-I", positive: "E" },
+  { id: 6, text: "You focus heavily on concrete facts, verified details, and present realities rather than speculative possibilities.", axis: "S-N", positive: "S" },
+  { id: 7, text: "You are deeply attuned to how your words and choices affect other people's emotional well-being.", axis: "T-F", positive: "F" },
+  { id: 8, text: "You thrive on spontaneous plans and prefer keeping your schedule fluid so you can adapt in real time.", axis: "J-P", positive: "P" },
+  { id: 9, text: "You prefer working through complex problems in solitary reflection rather than in group brainstorming meetings.", axis: "E-I", positive: "I" },
+  { id: 10, text: "You love connecting seemingly unrelated concepts to discover underlying patterns behind everyday events.", axis: "S-N", positive: "N" },
 
-  // Page 2 (6 Questions)
-  { id: 7, text: "You are deeply attuned to how your decisions affect other people's emotions and value interpersonal harmony.", axis: "T-F", positive: "F" },
-  { id: 8, text: "You thrive on spontaneity and prefer keeping your schedule open and adaptable to last-minute changes.", axis: "J-P", positive: "P" },
-  { id: 9, text: "You prefer working through complex problems in solitary contemplation rather than in group brainstorming sessions.", axis: "E-I", positive: "I" },
-  { id: 10, text: "You love connecting seemingly unrelated concepts and discovering hidden patterns behind everyday events.", axis: "S-N", positive: "N" },
-  { id: 11, text: "In an argument or debate, reaching the absolute factual truth matters more to you than protecting someone's feelings.", axis: "T-F", positive: "T" },
-  { id: 12, text: "You make to-do lists and feel a strong sense of satisfaction when checking off completed milestones.", axis: "J-P", positive: "J" },
+  // Phase 2 (Questions 11 - 20)
+  { id: 11, text: "In a debate or discussion, establishing the unvarnished factual truth matters more to you than soothing hurt feelings.", axis: "T-F", positive: "T" },
+  { id: 12, text: "You routinely build checklists or to-do lists and gain clear satisfaction from checking off completed milestones.", axis: "J-P", positive: "J" },
+  { id: 13, text: "You feel completely comfortable speaking up in large gatherings and naturally take the initiative in social situations.", axis: "E-I", positive: "E" },
+  { id: 14, text: "You trust proven procedures, hands-on experience, and practical guidelines far more than untested theories.", axis: "S-N", positive: "S" },
+  { id: 15, text: "You instinctively place yourself in others' shoes and find it easy to empathize with their personal vulnerabilities.", axis: "T-F", positive: "F" },
+  { id: 16, text: "You often delay making irreversible commitments until the last practical moment to keep all options open.", axis: "J-P", positive: "P" },
+  { id: 17, text: "You find prolonged small talk exhausting and crave substantive, intellectually stimulating one-on-one dialogues.", axis: "E-I", positive: "I" },
+  { id: 18, text: "You spend significant mental energy imagining future trajectories, scenarios, and what could be.", axis: "S-N", positive: "N" },
+  { id: 19, text: "You spot logical flaws, structural inconsistencies, and flawed reasoning almost instantaneously.", axis: "T-F", positive: "T" },
+  { id: 20, text: "You feel a distinct mental tension when your living or work environment is disordered or chaotic.", axis: "J-P", positive: "J" },
 
-  // Page 3 (6 Questions)
-  { id: 13, text: "You feel comfortable speaking up in large group discussions and often take the lead in social settings.", axis: "E-I", positive: "E" },
-  { id: 14, text: "You trust proven methods, hands-on experience, and practical guidelines over untested experimental theories.", axis: "S-N", positive: "S" },
-  { id: 15, text: "You instinctively put yourself in other people's shoes and find it easy to empathize with their emotional struggles.", axis: "T-F", positive: "F" },
-  { id: 16, text: "You tend to delay making final decisions until the last possible moment so you can gather more information.", axis: "J-P", positive: "P" },
-  { id: 17, text: "You find small talk exhausting and prefer diving straight into deep, intellectually stimulating conversations.", axis: "E-I", positive: "I" },
-  { id: 18, text: "You are more fascinated by future possibilities and hypothetical scenarios than by what is currently happening.", axis: "S-N", positive: "N" },
+  // Phase 3 (Questions 21 - 30)
+  { id: 21, text: "You process complex thoughts more effectively by talking them through aloud with peers than keeping them purely internal.", axis: "E-I", positive: "E" },
+  { id: 22, text: "You see yourself as a grounded pragmatist who values immediate tangible results over elaborate thought experiments.", axis: "S-N", positive: "S" },
+  { id: 23, text: "You actively seek to preserve group harmony and will compromise on minor points to prevent interpersonal strife.", axis: "T-F", positive: "F" },
+  { id: 24, text: "Your most productive work happens in intense bursts of inspiration rather than through strict daily time-blocks.", axis: "J-P", positive: "P" },
+  { id: 25, text: "After an eventful week, you look forward to an uninterrupted weekend alone or with a single close companion.", axis: "E-I", positive: "I" },
+  { id: 26, text: "You frequently think in analogies, metaphors, and conceptual models when interpreting information.", axis: "S-N", positive: "N" },
+  { id: 27, text: "Under emotional pressure or interpersonal drama, you instinctively maintain a detached, clinical objectivity.", axis: "T-F", positive: "T" },
+  { id: 28, text: "You feel relieved and centered once a definitive decision has been locked in and finalized.", axis: "J-P", positive: "J" },
+  { id: 29, text: "You enjoy introducing people to one another and circulating through diverse social groups at events.", axis: "E-I", positive: "E" },
+  { id: 30, text: "When a colleague shares personal distress, your immediate instinct is to offer empathetic validation before practical fixes.", axis: "T-F", positive: "F" },
 
-  // Page 4 (6 Questions)
-  { id: 19, text: "You naturally analyze systems, point out logical fallacies, and spot inconsistencies in reasoning.", axis: "T-F", positive: "T" },
-  { id: 20, text: "You feel unsettled when your living or working environment is cluttered or disarranged.", axis: "J-P", positive: "J" },
-  { id: 21, text: "You tend to process thoughts out loud by talking them through with others rather than keeping them internal.", axis: "E-I", positive: "E" },
-  { id: 22, text: "You describe yourself as a grounded realist who values tangible, step-by-step results over abstract visions.", axis: "S-N", positive: "S" },
-  { id: 23, text: "You strive to maintain emotional peace and will often compromise to avoid interpersonal conflict.", axis: "T-F", positive: "F" },
-  { id: 24, text: "Your productivity comes in spontaneous bursts of inspiration rather than steady, methodical routines.", axis: "J-P", positive: "P" },
+  // Phase 4 (Questions 31 - 40)
+  { id: 31, text: "You are comfortable pivoting your entire weekend schedule at a moment's notice when an exciting opportunity appears.", axis: "J-P", positive: "P" },
+  { id: 32, text: "You prefer instruction manuals or recipes that give exact measurements and unambiguous step-by-step guidance.", axis: "S-N", positive: "S" },
+  { id: 33, text: "You protect your private thoughts carefully and only share your inner world with a select few trusted confidants.", axis: "E-I", positive: "I" },
+  { id: 34, text: "You evaluate organizational policies based strictly on operational efficiency and verifiable performance metrics.", axis: "T-F", positive: "T" },
+  { id: 35, text: "You establish clear deadlines for yourself well ahead of official due dates to avoid last-minute rush.", axis: "J-P", positive: "J" },
+  { id: 36, text: "You find yourself questioning established traditions and wondering why systems cannot be reimagined from scratch.", axis: "S-N", positive: "N" },
+  { id: 37, text: "Being isolated from people for multiple consecutive days makes you feel restless, lethargic, or understimulated.", axis: "E-I", positive: "E" },
+  { id: 38, text: "You prefer descriptions that ground things in tangible sensory details (what was seen, heard, and measured).", axis: "S-N", positive: "S" },
+  { id: 39, text: "You place high value on tact, warmth, and making people feel heard, even when their logic is slightly imperfect.", axis: "T-F", positive: "F" },
+  { id: 40, text: "You dislike rigid recurring agendas and prefer working in environments where tasks can unfold dynamically.", axis: "J-P", positive: "P" },
 
-  // Page 5 (6 Questions)
-  { id: 25, text: "You prefer spending a quiet evening with a book, hobby, or one close confidant over attending a loud party.", axis: "E-I", positive: "I" },
-  { id: 26, text: "You often think about complex conceptual models, symbolic meanings, and overarching systems.", axis: "S-N", positive: "N" },
-  { id: 27, text: "You remain calm, level-headed, and emotionally detached when analyzing stressful situations.", axis: "T-F", positive: "T" },
-  { id: 28, text: "You prefer having your travel itineraries, deadlines, and social calendar finalized well in advance.", axis: "J-P", positive: "J" },
-  { id: 29, text: "You readily start conversations with strangers and find it easy to break the ice in unfamiliar environments.", axis: "E-I", positive: "E" },
-  { id: 30, text: "You prefer concrete, direct answers over open-ended philosophical speculations.", axis: "S-N", positive: "S" }
+  // Phase 5 (Questions 41 - 50)
+  { id: 41, text: "In collaborative projects, you prefer independent modules where you can dive deep without continuous check-ins.", axis: "E-I", positive: "I" },
+  { id: 42, text: "You naturally anticipate second- and third-order consequences that others often overlook.", axis: "S-N", positive: "N" },
+  { id: 43, text: "You believe constructive criticism should be delivered directly and unvarnished, without excessive softening.", axis: "T-F", positive: "T" },
+  { id: 44, text: "You like having a predictable weekly rhythm where obligations, meals, and appointments are predetermined.", axis: "J-P", positive: "J" },
+  { id: 45, text: "You find it easy to strike up a natural conversation with a stranger while waiting in a line or at an airport.", axis: "E-I", positive: "E" },
+  { id: 46, text: "You pay meticulous attention to immediate facts and notice subtle physical changes in your surroundings.", axis: "S-N", positive: "S" },
+  { id: 47, text: "When resolving a dispute, you consider each individual's unique emotional circumstances rather than applying a rigid rule.", axis: "T-F", positive: "F" },
+  { id: 48, text: "You find strict rules and micromanaged schedules stifling, preferring broad guardrails with room to improvise.", axis: "J-P", positive: "P" },
+  { id: 49, text: "You rehearse or mentally edit your thoughts thoroughly before voicing them in important discussions.", axis: "E-I", positive: "I" },
+  { id: 50, text: "You are energized by philosophical debates about the future of technology, humanity, or consciousness.", axis: "S-N", positive: "N" },
+
+  // Phase 6 (Questions 51 - 60)
+  { id: 51, text: "When giving advice, you focus primarily on diagnosing the root structural cause rather than emotional comfort.", axis: "T-F", positive: "T" },
+  { id: 52, text: "You feel uncomfortable leaving important decisions hanging in limbo overnight.", axis: "J-P", positive: "J" },
+  { id: 53, text: "You feel most alive and inspired when you are actively collaborating in a lively, fast-paced team setting.", axis: "E-I", positive: "E" },
+  { id: 54, text: "You place greater trust in empirical track records and historical precedent than in speculative forecasts.", axis: "S-N", positive: "S" },
+  { id: 55, text: "You take personal pride in being a compassionate listener whom friends seek out when they need heartfelt support.", axis: "T-F", positive: "F" },
+  { id: 56, text: "You find that rigid itineraries during travel ruin the organic thrill of stumbling upon unexpected discoveries.", axis: "J-P", positive: "P" },
+  { id: 57, text: "Even in environments you enjoy, your internal energy battery has a finite timer that necessitates solitary retreat.", axis: "E-I", positive: "I" },
+  { id: 58, text: "You often find literal interpretations of stories or art uninteresting compared to their symbolic subtexts.", axis: "S-N", positive: "N" },
+  { id: 59, text: "You hold decisions to strict standards of justice and fairness, even when the outcome is emotionally uncomfortable.", axis: "T-F", positive: "T" },
+  { id: 60, text: "You prefer systematically wrapping up one major milestone before opening the door to the next endeavor.", axis: "J-P", positive: "J" },
+
+  // Phase 7 (Questions 61 - 70)
+  { id: 61, text: "You tend to express your excitement outwardly and use expressive body language when communicating.", axis: "E-I", positive: "E" },
+  { id: 62, text: "You excel at realistic logistical execution, budgeting, and ensuring all practical prerequisites are met.", axis: "S-N", positive: "S" },
+  { id: 63, text: "You find it painful to witness social exclusion and actively work to ensure everyone feels welcomed.", axis: "T-F", positive: "F" },
+  { id: 64, text: "You prefer experimenting with various approaches as you go along rather than formulating an ironclad blueprint upfront.", axis: "J-P", positive: "P" },
+  { id: 65, text: "You maintain a compact, highly curated circle of friendships that you have nurtured deeply over years.", axis: "E-I", positive: "I" },
+  { id: 66, text: "You frequently experience flashes of intuition or sudden insights whose intermediate steps you cannot easily retrace.", axis: "S-N", positive: "N" },
+  { id: 67, text: "When evaluating someone's argument, you dissect whether their premises are sound regardless of their passion.", axis: "T-F", positive: "T" },
+  { id: 68, text: "You feel genuine satisfaction when checking off the final item on your daily schedule and packing up your desk.", axis: "J-P", positive: "J" },
+  { id: 69, text: "You readily share your daily experiences, humorous anecdotes, and immediate reactions with those around you.", axis: "E-I", positive: "E" },
+  { id: 70, text: "You often keep multiple creative projects open at once, shifting between them as inspiration strikes.", axis: "J-P", positive: "P" },
+
+  // Phase 8 (Questions 71 - 80)
+  { id: 71, text: "You prefer tackling immediate, tangible issues with clear physical parameters over abstract thought exercises.", axis: "S-N", positive: "S" },
+  { id: 72, text: "You believe that preserving morale and mutual respect is just as essential to a project's success as raw output.", axis: "T-F", positive: "F" },
+  { id: 73, text: "You prefer written communication (like messaging or email) over spontaneous voice calls or video meetings.", axis: "E-I", positive: "I" },
+  { id: 74, text: "You are fascinated by visionary manifestos, future architectures, and paradigm shifts in science or philosophy.", axis: "S-N", positive: "N" },
+  { id: 75, text: "You have no trouble playing devil's advocate to stress-test ideas, even if it creates mild intellectual friction.", axis: "T-F", positive: "T" },
+  { id: 76, text: "You prepare contingency plans well in advance because unexpected surprises cause you unnecessary friction.", axis: "J-P", positive: "J" },
+  { id: 77, text: "You find active, bustling workspaces with ongoing dialogue more stimulating than silent solitary offices.", axis: "E-I", positive: "E" },
+  { id: 78, text: "You notice immediate discrepancies in numbers, measurements, or physical items that others brush past.", axis: "S-N", positive: "S" },
+  { id: 79, text: "You are sensitive to emotional shifts in a room and can instinctively sense when interpersonal tension is brewing.", axis: "T-F", positive: "F" },
+  { id: 80, text: "You find tight, inflexible schedules mentally suffocating and prefer defining your own pacing as you go.", axis: "J-P", positive: "P" },
+
+  // Phase 9 (Questions 81 - 90)
+  { id: 81, text: "You are usually the one to initiate social outings, coordinate gatherings, and invite friends to join.", axis: "E-I", positive: "E" },
+  { id: 82, text: "You are drawn to speculative discussions about what life, culture, or technology could look like 50 years from now.", axis: "S-N", positive: "N" },
+  { id: 83, text: "You judge personal performance and work deliverables against rigorous, impartial benchmark standards.", axis: "T-F", positive: "T" },
+  { id: 84, text: "You prefer having clear milestones, defined phases, and an explicit roadmap before embarking on a new project.", axis: "J-P", positive: "J" },
+  { id: 85, text: "After intense public engagement, you crave several hours of absolute silence to regain your equilibrium.", axis: "E-I", positive: "I" },
+  { id: 86, text: "You focus on the realistic constraints of the present rather than spending hours daydreaming about idealistic visions.", axis: "S-N", positive: "S" },
+  { id: 87, text: "You prioritize empathy, relational kindness, and emotional warmth over purely mechanical efficiency.", axis: "T-F", positive: "F" },
+  { id: 88, text: "You often find that your best ideas emerge under the adrenaline pressure of an imminent deadline.", axis: "J-P", positive: "P" },
+  { id: 89, text: "You easily form quick rapport with diverse acquaintances across varied walks of life.", axis: "E-I", positive: "E" },
+  { id: 90, text: "You prefer analyzing issues through cold logic and causal diagrams rather than through narrative sentiment.", axis: "T-F", positive: "T" },
+
+  // Phase 10 (Questions 91 - 100)
+  { id: 91, text: "You find it reassuring to have your commitments, flight times, and hotel reservations locked in weeks ahead.", axis: "J-P", positive: "J" },
+  { id: 92, text: "You value hands-on craftsmanship, empirical evidence, and realistic execution over speculative hypotheses.", axis: "S-N", positive: "S" },
+  { id: 93, text: "You rarely feel lonely when left alone for extended periods; your rich inner mental life keeps you thoroughly engaged.", axis: "E-I", positive: "I" },
+  { id: 94, text: "You are deeply touched by sincere expressions of personal appreciation and value deep emotional authenticity.", axis: "T-F", positive: "F" },
+  { id: 95, text: "You prefer keeping your weekend unstructured so you can pursue whatever captures your curiosity that morning.", axis: "J-P", positive: "P" },
+  { id: 96, text: "You are captivated by the big picture and overarching themes rather than individual granular components.", axis: "S-N", positive: "N" },
+  { id: 97, text: "You find being at the energetic center of group activities exciting and naturally gravitate toward active participation.", axis: "E-I", positive: "E" },
+  { id: 98, text: "You prefer literal, practical advice that addresses your immediate realistic situation step by step.", axis: "S-N", positive: "S" },
+  { id: 99, text: "In high-stakes decisions, you remain emotionally unswayed and base your verdict on rigorous objective analysis.", axis: "T-F", positive: "T" },
+  { id: 100, text: "You feel structured satisfaction when tasks are completed cleanly and items are returned to their designated places.", axis: "J-P", positive: "J" }
 ];
 
 export function calculateMBTI(answers, questions) {
@@ -71,11 +151,18 @@ export function calculateMBTI(answers, questions) {
     scores.J >= scores.P ? 'J' : 'P'
   ].join('');
 
+  const calcPct = (pole1Score, pole2Score) => {
+    const total = pole1Score + pole2Score;
+    if (total === 0) return 50;
+    const rawPct = Math.round((pole1Score / total) * 100);
+    return Math.max(5, Math.min(95, isNaN(rawPct) ? 50 : rawPct));
+  };
+
   const percentages = {
-    EI: Math.round((scores.E / (scores.E + scores.I || 1)) * 100) || 50,
-    SN: Math.round((scores.S / (scores.S + scores.N || 1)) * 100) || 50,
-    TF: Math.round((scores.T / (scores.T + scores.F || 1)) * 100) || 50,
-    JP: Math.round((scores.J / (scores.J + scores.P || 1)) * 100) || 50,
+    EI: calcPct(scores.E, scores.I),
+    SN: calcPct(scores.S, scores.N),
+    TF: calcPct(scores.T, scores.F),
+    JP: calcPct(scores.J, scores.P),
   };
 
   return { type, scores, percentages };
