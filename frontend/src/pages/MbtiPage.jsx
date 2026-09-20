@@ -5,7 +5,7 @@ export default function MbtiPage() {
   return (
     <QuestionnaireRunner
       questions={mbtiQuestions}
-      questionsPerPage={6}
+      questionsPerPage={10}
       loadingTitle="Calculating Cognitive Profile"
       loadingSubtitle="Mapping your 4 Jungian dichotomies and cognitive architecture..."
       calculateResult={(_, simpleAnswersMap, questions) => calculateMBTI(simpleAnswersMap, questions)}

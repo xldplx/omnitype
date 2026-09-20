@@ -27,7 +27,7 @@ const tests = [
     category: 'cognition',
     title: '16 Archetypes',
     description: 'Cognitive functions and personality mapping based on Jungian psychology. A comprehensive deep-dive into your psyche.',
-    time: '4 min',
+    time: '12 min',
     active: true,
     color: 'from-indigo-500 to-purple-500',
     bgLight: 'bg-indigo-50',
