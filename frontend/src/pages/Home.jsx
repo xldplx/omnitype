@@ -552,12 +552,24 @@ const tests = [
   }
 ];
 
+const POPULAR_TEST_IDS = new Set([
+  'mbti',
+  'enneagram',
+  'tritype',
+  'attachment-styles',
+  'love-languages',
+  'dark-triad',
+  'adhd',
+  'burnout'
+]);
+
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const categoryScrollRef = useRef(null);
 
   const activeCount = tests.filter(t => t.active).length;
+  const popularCount = tests.filter(t => POPULAR_TEST_IDS.has(t.id)).length;
 
   const scrollCategories = (direction) => {
     if (categoryScrollRef.current) {
@@ -627,6 +639,17 @@ export default function Home() {
                 }`}
               >
                 All Assessments ({tests.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setStatusFilter('popular')}
+                className={`px-4 sm:px-5 py-2 rounded-full text-[0.7rem] sm:text-xs font-bold uppercase tracking-widest transition-all duration-300 cursor-pointer whitespace-nowrap shrink-0 ${
+                  statusFilter === 'popular' 
+                    ? 'bg-amber-500 text-white shadow-md' 
+                    : 'bg-white/80 text-slate-500 hover:bg-white hover:text-slate-800 border border-slate-200/60'
+                }`}
+              >
+                Most Popular ({popularCount})
               </button>
               <button
                 type="button"
@@ -704,43 +727,89 @@ export default function Home() {
         </div>
 
         {/* Categorized Test Sections */}
-        {filteredCategories.map((cat) => {
-          let catTests = tests.filter(t => t.category === cat.id);
-          
-          if (statusFilter === 'available') {
-            catTests = catTests.filter(t => t.active);
-          } else if (statusFilter === 'coming-soon') {
-            catTests = catTests.filter(t => !t.active);
-          }
-
-          if (catTests.length === 0) return null;
-
-          return (
-            <div key={cat.id} className="w-full mb-20 md:mb-28">
-              <div className="flex flex-col items-center text-center mb-10 md:mb-14">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight mb-4">{cat.title}</h2>
-                <p className="text-slate-500 font-medium text-lg md:text-xl max-w-2xl text-balance">{cat.desc}</p>
-                <div className="w-16 h-1 bg-indigo-500/20 rounded-full mt-8" />
+        {statusFilter === 'popular' ? (
+          <div className="w-full mb-20 md:mb-28">
+            <div className="flex flex-col items-center text-center mb-10 md:mb-14">
+              <div className="inline-flex items-center px-3 py-1 rounded-full bg-amber-50 border border-amber-200/60 text-amber-700 text-xs font-bold uppercase tracking-wider mb-3">
+                Community Favorites
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full">
-                {catTests.map((test) => (
-                  <div key={test.id} className="w-full h-full">
-                    {test.active ? (
-                      <Link to={`/test/${test.id}`} className="block h-full group">
-                        <TestCard test={test} />
-                      </Link>
-                    ) : (
-                      <div className="h-full cursor-not-allowed">
-                        <TestCard test={test} />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight mb-4">Most Popular Assessments</h2>
+              <p className="text-slate-500 font-medium text-lg md:text-xl max-w-2xl text-balance">
+                The most frequently taken psychological profiles, relationship tests, and cognitive frameworks on OmniType.
+              </p>
+              <div className="w-16 h-1 bg-amber-500/20 rounded-full mt-8" />
             </div>
-          );
-        })}
+
+            {tests.filter(t => POPULAR_TEST_IDS.has(t.id) && (selectedCategory === 'all' || t.category === selectedCategory)).length === 0 ? (
+              <div className="text-center py-16 px-4">
+                <p className="text-slate-400 font-medium">No popular assessments found in this category.</p>
+                <button
+                  type="button"
+                  onClick={() => setSelectedCategory('all')}
+                  className="mt-4 text-xs font-bold uppercase tracking-wider text-indigo-600 hover:text-indigo-800 cursor-pointer"
+                >
+                  Show all popular assessments
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full">
+                {tests
+                  .filter(t => POPULAR_TEST_IDS.has(t.id) && (selectedCategory === 'all' || t.category === selectedCategory))
+                  .map((test) => (
+                    <div key={test.id} className="w-full h-full">
+                      {test.active ? (
+                        <Link to={`/test/${test.id}`} className="block h-full group">
+                          <TestCard test={test} />
+                        </Link>
+                      ) : (
+                        <div className="h-full cursor-not-allowed">
+                          <TestCard test={test} />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          filteredCategories.map((cat) => {
+            let catTests = tests.filter(t => t.category === cat.id);
+            
+            if (statusFilter === 'available') {
+              catTests = catTests.filter(t => t.active);
+            } else if (statusFilter === 'coming-soon') {
+              catTests = catTests.filter(t => !t.active);
+            }
+
+            if (catTests.length === 0) return null;
+
+            return (
+              <div key={cat.id} className="w-full mb-20 md:mb-28">
+                <div className="flex flex-col items-center text-center mb-10 md:mb-14">
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-tight mb-4">{cat.title}</h2>
+                  <p className="text-slate-500 font-medium text-lg md:text-xl max-w-2xl text-balance">{cat.desc}</p>
+                  <div className="w-16 h-1 bg-indigo-500/20 rounded-full mt-8" />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 w-full">
+                  {catTests.map((test) => (
+                    <div key={test.id} className="w-full h-full">
+                      {test.active ? (
+                        <Link to={`/test/${test.id}`} className="block h-full group">
+                          <TestCard test={test} />
+                        </Link>
+                      ) : (
+                        <div className="h-full cursor-not-allowed">
+                          <TestCard test={test} />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );
@@ -805,9 +874,17 @@ function TestCard({ test }) {
           <Icon className="w-6 h-6 md:w-7 md:h-7 text-indigo-600" />
         </div>
         
-        <div className="flex items-center gap-1.5 md:gap-2.5 text-slate-400 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-widest bg-white/60 backdrop-blur-md px-3.5 py-1.5 md:px-4 md:py-2 rounded-full border border-slate-100/80 shadow-xs">
-          <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
-          {test.time}
+        <div className="flex items-center gap-2">
+          {POPULAR_TEST_IDS.has(test.id) && (
+            <div className="flex items-center gap-1 text-amber-700 font-bold text-[0.65rem] md:text-[0.68rem] uppercase tracking-widest bg-amber-50/90 backdrop-blur-md px-2.5 py-1 md:px-3 md:py-1.5 rounded-full border border-amber-200/60 shadow-2xs">
+              <Sparkles className="w-3 h-3 text-amber-500" />
+              Popular
+            </div>
+          )}
+          <div className="flex items-center gap-1.5 md:gap-2.5 text-slate-400 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-widest bg-white/60 backdrop-blur-md px-3.5 py-1.5 md:px-4 md:py-2 rounded-full border border-slate-100/80 shadow-xs">
+            <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+            {test.time}
+          </div>
         </div>
       </div>
 
