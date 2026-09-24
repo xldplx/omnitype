@@ -5,6 +5,7 @@ export default function MbtiPage() {
   return (
     <QuestionnaireRunner
       questions={mbtiQuestions}
+      shuffleQuestions={true}
       questionsPerPage={10}
       loadingTitle="Calculating Cognitive Profile"
       loadingSubtitle="Mapping your 4 Jungian dichotomies and cognitive architecture..."
