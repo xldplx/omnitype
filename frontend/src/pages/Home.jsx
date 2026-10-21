@@ -2,12 +2,12 @@ import { useState, useRef } from 'react';
 import { motion as Motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
-  ArrowRight, ChevronLeft, ChevronRight, Hexagon, Circle, Triangle, Square, Diamond, Pentagon, Layers, 
+  ArrowRight, ChevronLeft, ChevronRight, Layers, 
   ShieldAlert, Palette, Star, Zap, ClipboardCheck, Workflow, RefreshCw, 
   Compass, Binary, Skull, Brain, Fingerprint, Eye, Battery, Shield, UserMinus, 
   Swords, HeartHandshake, Waves, Sprout, LayoutGrid, Ghost, Flame, Flag, Coffee, 
   Wand2, Navigation2, Mountain, Microscope, Activity, Gem, Puzzle, HeartCrack, 
-  Settings, Siren, Timer, Lock, Sparkles
+  Settings, Siren, Timer, Lock, Sparkles, Heart, Scale, Crown, Target, Sliders
 } from 'lucide-react';
 
 const categories = [
@@ -32,7 +32,7 @@ const tests = [
     color: 'from-indigo-500 to-purple-500',
     bgLight: 'bg-indigo-50',
     borderLight: 'border-indigo-100',
-    icon: Hexagon
+    icon: Brain
   },
   {
     id: 'mindset-architecture',
@@ -68,7 +68,7 @@ const tests = [
     color: 'from-orange-400 to-rose-500',
     bgLight: 'bg-rose-50',
     borderLight: 'border-rose-100',
-    icon: Circle
+    icon: Compass
   },
   {
     id: 'tritype',
@@ -92,7 +92,7 @@ const tests = [
     color: 'from-emerald-500 to-teal-600',
     bgLight: 'bg-emerald-50',
     borderLight: 'border-emerald-100',
-    icon: Zap
+    icon: Flame
   },
   {
     id: 'core-needs',
@@ -104,7 +104,7 @@ const tests = [
     color: 'from-orange-500 to-amber-600',
     bgLight: 'bg-orange-50',
     borderLight: 'border-orange-100',
-    icon: Activity
+    icon: Target
   },
   {
     id: 'core-values',
@@ -128,7 +128,7 @@ const tests = [
     color: 'from-rose-400 to-pink-500',
     bgLight: 'bg-pink-50',
     borderLight: 'border-pink-100',
-    icon: Triangle
+    icon: Heart
   },
   {
     id: 'attachment-styles',
@@ -140,7 +140,7 @@ const tests = [
     color: 'from-amber-400 to-orange-500',
     bgLight: 'bg-amber-50',
     borderLight: 'border-amber-100',
-    icon: Pentagon
+    icon: HeartHandshake
   },
   {
     id: 'dere',
@@ -224,7 +224,7 @@ const tests = [
     color: 'from-sky-400 to-blue-600',
     bgLight: 'bg-sky-50',
     borderLight: 'border-sky-100',
-    icon: Diamond
+    icon: Crown
   },
   {
     id: 'aesthetic-core',
@@ -344,7 +344,7 @@ const tests = [
     color: 'from-cyan-500 to-blue-600',
     bgLight: 'bg-cyan-50',
     borderLight: 'border-cyan-100',
-    icon: Compass
+    icon: Sliders
   },
   {
     id: 'objective-personality',
@@ -368,7 +368,7 @@ const tests = [
     color: 'from-teal-400 to-emerald-500',
     bgLight: 'bg-emerald-50',
     borderLight: 'border-emerald-100',
-    icon: Square
+    icon: Scale
   },
   {
     id: 'resilience',
@@ -816,17 +816,17 @@ export default function Home() {
 }
 
 function TestCard({ test }) {
-  const Icon = test.icon || Hexagon;
-  
+  const Icon = test.icon || Brain;
+
   if (!test.active) {
     // Distinct Grayscale & Static Styling for In-Development Cards
     return (
-      <div className="bg-slate-100/80 p-6 sm:p-8 md:p-10 flex flex-col h-full relative overflow-hidden rounded-[2rem] md:rounded-4xl border border-slate-200/80 grayscale opacity-60 pointer-events-none">
+      <div className="bg-slate-100/70 p-6 sm:p-8 md:p-10 flex flex-col h-full relative overflow-hidden rounded-[2rem] md:rounded-4xl border border-dashed border-slate-200/80 grayscale opacity-60 pointer-events-none select-none">
         <div className="flex justify-between items-start mb-6 md:mb-10 relative z-10">
           <div className="w-14 h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center border border-slate-200 bg-slate-200/60 text-slate-400">
             <Icon className="w-6 h-6 md:w-7 md:h-7 text-slate-400" />
           </div>
-          
+
           <div className="flex items-center gap-1.5 md:gap-2.5 text-slate-400 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-widest bg-slate-200/60 px-3.5 py-1.5 md:px-4 md:py-2 rounded-full border border-slate-300/40">
             <div className="w-1.5 h-1.5 rounded-full bg-slate-300" />
             {test.time}
@@ -841,13 +841,13 @@ function TestCard({ test }) {
             {test.description}
           </p>
         </div>
-        
+
         <div className="flex items-center justify-between mt-auto pt-6 md:pt-8 border-t border-slate-200/80 relative z-10 opacity-60">
           <span className="text-[0.65rem] md:text-[0.8rem] font-bold tracking-widest uppercase text-slate-400 flex items-center gap-2">
             <Lock className="w-3.5 h-3.5" />
             Under Construction
           </span>
-          
+
           <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-400 border border-slate-300/50">
             <Lock className="w-4 h-4 md:w-5 md:h-5" />
           </div>
@@ -856,24 +856,16 @@ function TestCard({ test }) {
     );
   }
 
-  // Active Live Assessment Card with Interactive Floating Hover Shape Accent
+  // Active Live Assessment Card: Crisp glassmorphism with calm, non-gimmicky hover interaction
   return (
-    <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 md:p-10 flex flex-col h-full relative overflow-hidden transition-all duration-500 ease-out rounded-[2rem] md:rounded-4xl border border-white/90 group-hover:border-indigo-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1">
-      
-      {/* Floating Animated Geometric Shape Accent on Hover */}
-      <div className={`absolute -right-6 -bottom-6 w-36 h-36 md:w-44 md:h-44 rounded-3xl md:rounded-4xl bg-linear-to-br ${test.color} opacity-0 group-hover:opacity-[0.14] scale-75 group-hover:scale-100 group-hover:rotate-12 transition-all duration-500 ease-out pointer-events-none flex items-center justify-center`}>
-        <Icon className="w-20 h-20 md:w-24 md:h-24 text-slate-900 opacity-30" />
-      </div>
+    <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 md:p-10 flex flex-col h-full relative overflow-hidden transition-all duration-300 ease-out rounded-[2rem] md:rounded-4xl border border-white/90 group-hover:border-indigo-200 shadow-[0_4px_24px_rgba(15,23,42,0.03)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.07)] hover:-translate-y-1">
 
-      {/* Subtle Ambient Radial Glow */}
-      <div className={`absolute -right-8 -bottom-8 w-48 h-48 md:w-60 md:h-60 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] ${test.color} opacity-[0.06] rounded-full pointer-events-none group-hover:opacity-[0.15] transition-all duration-500 ease-out`} />
-
-      {/* Header: Icon Box + Time Badge */}
+      {/* Header: Icon Box + Badges */}
       <div className="flex justify-between items-start mb-6 md:mb-10 relative z-10">
-        <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center border ${test.borderLight} ${test.bgLight} shadow-inner transition-transform duration-500 ease-out group-hover:scale-105`}>
+        <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center border ${test.borderLight} ${test.bgLight} transition-all duration-300 group-hover:shadow-sm group-hover:scale-105`}>
           <Icon className="w-6 h-6 md:w-7 md:h-7 text-indigo-600" />
         </div>
-        
+
         <div className="flex items-center gap-2">
           {POPULAR_TEST_IDS.has(test.id) && (
             <div className="flex items-center gap-1 text-amber-700 font-bold text-[0.65rem] md:text-[0.68rem] uppercase tracking-widest bg-amber-50/90 backdrop-blur-md px-2.5 py-1 md:px-3 md:py-1.5 rounded-full border border-amber-200/60 shadow-2xs">
@@ -881,28 +873,34 @@ function TestCard({ test }) {
               Popular
             </div>
           )}
-          <div className="flex items-center gap-1.5 md:gap-2.5 text-slate-400 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-widest bg-white/60 backdrop-blur-md px-3.5 py-1.5 md:px-4 md:py-2 rounded-full border border-slate-100/80 shadow-xs">
-            <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+          <div className="flex items-center gap-1.5 md:gap-2.5 text-slate-500 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-widest bg-white/70 backdrop-blur-md px-3.5 py-1.5 md:px-4 md:py-2 rounded-full border border-slate-200/60 shadow-2xs">
+            <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
             {test.time}
           </div>
         </div>
       </div>
 
-      {/* Title & Description with Hover Colors */}
+      {/* Title & Description */}
       <div className="flex-1 relative z-10 flex flex-col justify-center">
-        <h3 className={`text-2xl sm:text-3xl md:text-[2.2rem] font-extrabold text-slate-800 mb-3 md:mb-4 tracking-tight leading-none text-balance group-hover:text-transparent bg-clip-text bg-linear-to-r ${test.color} transition-colors duration-500`}>
+        <h3 className="text-2xl sm:text-3xl md:text-[2.2rem] font-extrabold text-slate-900 group-hover:text-indigo-600 mb-3 md:mb-4 tracking-tight leading-none text-balance transition-colors duration-300">
           {test.title}
         </h3>
-        <p className="text-slate-500 text-sm sm:text-base md:text-[1.05rem] font-medium leading-relaxed mb-6 md:mb-8 text-balance opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+        <p className="text-slate-500 text-sm sm:text-base md:text-[1.05rem] font-medium leading-relaxed mb-6 md:mb-8 text-balance group-hover:text-slate-700 transition-colors duration-300">
           {test.description}
         </p>
       </div>
-      
-      {/* Clean Static Text + Icon Link without background pill or hover translate animation */}
-      <div className="flex items-center justify-end mt-auto pt-6 md:pt-8 border-t border-slate-100/80 relative z-10">
-        <div className="inline-flex items-center gap-2 text-[0.75rem] md:text-xs font-extrabold uppercase tracking-widest text-indigo-600">
+
+      {/* Clean Bottom Action Bar */}
+      <div className="flex items-center justify-between mt-auto pt-6 md:pt-8 border-t border-slate-100/90 relative z-10">
+        <span className="text-[0.68rem] md:text-xs text-slate-400 font-semibold tracking-wide">
+          Scored in browser
+        </span>
+
+        <div className="inline-flex items-center gap-2.5 text-[0.75rem] md:text-xs font-extrabold uppercase tracking-widest text-slate-800 group-hover:text-indigo-600 transition-colors duration-200">
           <span>Begin Assessment</span>
-          <ArrowRight className="w-4 h-4 text-indigo-500" />
+          <div className="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-indigo-50 border border-slate-200/60 group-hover:border-indigo-100 flex items-center justify-center transition-colors">
+            <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-transform duration-200" />
+          </div>
         </div>
       </div>
     </div>
