@@ -65,15 +65,15 @@ export default function Navbar() {
         initial="visible"
         animate={hidden ? "hidden" : "visible"}
         transition={{ type: "spring", stiffness: 260, damping: 25, mass: 0.5 }}
-        className={`pointer-events-auto flex items-center justify-center transition-all duration-500 rounded-full px-6 py-2.5 border ${
+        className={`pointer-events-auto flex items-center justify-center transition-all duration-500 rounded-full px-4 py-2.5 sm:px-5 sm:py-3 border ${
           scrolled 
-            ? 'bg-white/45 backdrop-blur-2xl border-white/70 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_10px_35px_rgba(0,0,0,0.07)]' 
-            : 'bg-white/35 backdrop-blur-xl border-white/60 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_25px_rgba(0,0,0,0.05)]'
+            ? 'bg-white/60 backdrop-blur-2xl border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_10px_35px_rgba(0,0,0,0.07)]' 
+            : 'bg-white/45 backdrop-blur-xl border-white/70 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_25px_rgba(0,0,0,0.05)]'
         }`}
         style={{ WebkitBackdropFilter: 'blur(20px) saturate(180%)', backdropFilter: 'blur(20px) saturate(180%)' }}
       >
         {/* Navigation Links */}
-        <div className="flex gap-2 sm:gap-6 items-center">
+        <div className="flex gap-1.5 sm:gap-2 items-center">
           <NavLink to="/" current={location.pathname === "/"}>Home</NavLink>
           
           {/* Wiki Multi-Level Nested Dropdown Menu */}
@@ -88,7 +88,7 @@ export default function Navbar() {
             <NavLink to="/wiki" current={location.pathname.startsWith("/wiki")}>
               <span className="flex items-center gap-1.5 font-semibold">
                 Wiki
-                <ChevronDown className={`w-3.5 h-3.5 opacity-60 transition-transform duration-300 ${isWikiOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${location.pathname.startsWith("/wiki") ? 'text-white/80' : 'opacity-60'} ${isWikiOpen ? 'rotate-180' : ''}`} />
               </span>
             </NavLink>
 
@@ -170,6 +170,8 @@ export default function Navbar() {
               )}
             </AnimatePresence>
           </div>
+
+          <NavLink to="/about" current={location.pathname === "/about"}>About</NavLink>
         </div>
       </Motion.nav>
     </div>
@@ -180,10 +182,10 @@ function NavLink({ to, children, current }) {
   return (
     <Link 
       to={to} 
-      className={`relative inline-flex items-center px-4 py-2 text-[0.95rem] tracking-wide transition-colors duration-300 font-medium ${
+      className={`relative inline-flex items-center px-4.5 sm:px-5.5 py-2.5 text-[0.95rem] tracking-wide transition-colors duration-200 font-medium ${
         current 
-          ? 'text-indigo-600 font-bold' 
-          : 'text-slate-500 hover:text-slate-900'
+          ? 'text-white font-semibold' 
+          : 'text-slate-600 hover:text-slate-900'
       }`}
     >
       <span className="relative z-10">{children}</span>
@@ -191,11 +193,11 @@ function NavLink({ to, children, current }) {
         {current && (
           <Motion.div
             layoutId="nav-pill"
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
-            className="absolute inset-0 bg-indigo-50/70 backdrop-blur-md rounded-full z-0 border border-indigo-100/50"
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
+            className="absolute inset-0 bg-slate-900 rounded-full z-0 shadow-sm border border-slate-800"
           />
         )}
       </AnimatePresence>

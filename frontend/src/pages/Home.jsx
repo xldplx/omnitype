@@ -603,6 +603,7 @@ export default function Home() {
           </p>
           
           <button 
+            type="button"
             onClick={() => {
               const el = document.getElementById('tests-directory');
               if (el) {
@@ -610,12 +611,9 @@ export default function Home() {
                 window.scrollTo({ top: y, behavior: 'smooth' });
               }
             }}
-            className="group inline-flex items-center gap-4 px-6 py-3 bg-white text-slate-800 rounded-full font-bold text-base md:text-lg transition-all duration-300 border border-slate-200/80 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 cursor-pointer"
+            className="inline-flex items-center justify-center px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base md:text-lg tracking-wide text-slate-800 bg-white border border-slate-200/90 shadow-[0_4px_24px_rgba(0,0,0,0.04)] hover:bg-slate-900 hover:text-white hover:border-slate-900 hover:shadow-[0_12px_36px_rgba(15,23,42,0.14)] hover:-translate-y-0.5 active:scale-95 transition-all duration-300 cursor-pointer"
           >
-            <span className="pl-2 group-hover:text-indigo-600 transition-colors">Begin the Assessment</span>
-            <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:bg-indigo-50 group-hover:border-indigo-100 transition-colors">
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-transform group-hover:translate-x-0.5" />
-            </div>
+            Begin Test
           </button>
         </Motion.div>
       </div>
@@ -815,8 +813,145 @@ export default function Home() {
   );
 }
 
+const TEST_THEMES = {
+  indigo: {
+    icon: 'text-indigo-600',
+    dot: 'bg-indigo-500',
+    hoverBorder: 'group-hover:border-indigo-300',
+    hoverText: 'group-hover:text-indigo-600',
+    hoverBg: 'group-hover:bg-indigo-50',
+    hoverIconBorder: 'group-hover:border-indigo-200'
+  },
+  emerald: {
+    icon: 'text-emerald-600',
+    dot: 'bg-emerald-500',
+    hoverBorder: 'group-hover:border-emerald-300',
+    hoverText: 'group-hover:text-emerald-600',
+    hoverBg: 'group-hover:bg-emerald-50',
+    hoverIconBorder: 'group-hover:border-emerald-200'
+  },
+  blue: {
+    icon: 'text-blue-600',
+    dot: 'bg-blue-500',
+    hoverBorder: 'group-hover:border-blue-300',
+    hoverText: 'group-hover:text-blue-600',
+    hoverBg: 'group-hover:bg-blue-50',
+    hoverIconBorder: 'group-hover:border-blue-200'
+  },
+  rose: {
+    icon: 'text-rose-600',
+    dot: 'bg-rose-500',
+    hoverBorder: 'group-hover:border-rose-300',
+    hoverText: 'group-hover:text-rose-600',
+    hoverBg: 'group-hover:bg-rose-50',
+    hoverIconBorder: 'group-hover:border-rose-200'
+  },
+  violet: {
+    icon: 'text-violet-600',
+    dot: 'bg-violet-500',
+    hoverBorder: 'group-hover:border-violet-300',
+    hoverText: 'group-hover:text-violet-600',
+    hoverBg: 'group-hover:bg-violet-50',
+    hoverIconBorder: 'group-hover:border-violet-200'
+  },
+  orange: {
+    icon: 'text-orange-600',
+    dot: 'bg-orange-500',
+    hoverBorder: 'group-hover:border-orange-300',
+    hoverText: 'group-hover:text-orange-600',
+    hoverBg: 'group-hover:bg-orange-50',
+    hoverIconBorder: 'group-hover:border-orange-200'
+  },
+  amber: {
+    icon: 'text-amber-600',
+    dot: 'bg-amber-500',
+    hoverBorder: 'group-hover:border-amber-300',
+    hoverText: 'group-hover:text-amber-600',
+    hoverBg: 'group-hover:bg-amber-50',
+    hoverIconBorder: 'group-hover:border-amber-200'
+  },
+  pink: {
+    icon: 'text-pink-600',
+    dot: 'bg-pink-500',
+    hoverBorder: 'group-hover:border-pink-300',
+    hoverText: 'group-hover:text-pink-600',
+    hoverBg: 'group-hover:bg-pink-50',
+    hoverIconBorder: 'group-hover:border-pink-200'
+  },
+  cyan: {
+    icon: 'text-cyan-600',
+    dot: 'bg-cyan-500',
+    hoverBorder: 'group-hover:border-cyan-300',
+    hoverText: 'group-hover:text-cyan-600',
+    hoverBg: 'group-hover:bg-cyan-50',
+    hoverIconBorder: 'group-hover:border-cyan-200'
+  },
+  sky: {
+    icon: 'text-sky-600',
+    dot: 'bg-sky-500',
+    hoverBorder: 'group-hover:border-sky-300',
+    hoverText: 'group-hover:text-sky-600',
+    hoverBg: 'group-hover:bg-sky-50',
+    hoverIconBorder: 'group-hover:border-sky-200'
+  },
+  fuchsia: {
+    icon: 'text-fuchsia-600',
+    dot: 'bg-fuchsia-500',
+    hoverBorder: 'group-hover:border-fuchsia-300',
+    hoverText: 'group-hover:text-fuchsia-600',
+    hoverBg: 'group-hover:bg-fuchsia-50',
+    hoverIconBorder: 'group-hover:border-fuchsia-200'
+  },
+  purple: {
+    icon: 'text-purple-600',
+    dot: 'bg-purple-500',
+    hoverBorder: 'group-hover:border-purple-300',
+    hoverText: 'group-hover:text-purple-600',
+    hoverBg: 'group-hover:bg-purple-50',
+    hoverIconBorder: 'group-hover:border-purple-200'
+  },
+  zinc: {
+    icon: 'text-zinc-700',
+    dot: 'bg-zinc-600',
+    hoverBorder: 'group-hover:border-zinc-300',
+    hoverText: 'group-hover:text-zinc-800',
+    hoverBg: 'group-hover:bg-zinc-100',
+    hoverIconBorder: 'group-hover:border-zinc-200'
+  },
+  slate: {
+    icon: 'text-slate-600',
+    dot: 'bg-slate-500',
+    hoverBorder: 'group-hover:border-slate-300',
+    hoverText: 'group-hover:text-slate-800',
+    hoverBg: 'group-hover:bg-slate-100',
+    hoverIconBorder: 'group-hover:border-slate-200'
+  },
+  red: {
+    icon: 'text-red-600',
+    dot: 'bg-red-500',
+    hoverBorder: 'group-hover:border-red-300',
+    hoverText: 'group-hover:text-red-600',
+    hoverBg: 'group-hover:bg-red-50',
+    hoverIconBorder: 'group-hover:border-red-200'
+  },
+  teal: {
+    icon: 'text-teal-600',
+    dot: 'bg-teal-500',
+    hoverBorder: 'group-hover:border-teal-300',
+    hoverText: 'group-hover:text-teal-600',
+    hoverBg: 'group-hover:bg-teal-50',
+    hoverIconBorder: 'group-hover:border-teal-200'
+  }
+};
+
+function getTestTheme(test) {
+  const colorKey = test.bgLight?.split('-')?.[1] || 'indigo';
+  return TEST_THEMES[colorKey] || TEST_THEMES.indigo;
+}
+
 function TestCard({ test }) {
   const Icon = test.icon || Brain;
+  const theme = getTestTheme(test);
 
   if (!test.active) {
     // Distinct Grayscale & Static Styling for In-Development Cards
@@ -856,14 +991,17 @@ function TestCard({ test }) {
     );
   }
 
-  // Active Live Assessment Card: Crisp glassmorphism with calm, non-gimmicky hover interaction
+  // Active Live Assessment Card: Crisp glassmorphism with individual colors on hover
   return (
-    <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 md:p-10 flex flex-col h-full relative overflow-hidden transition-all duration-300 ease-out rounded-[2rem] md:rounded-4xl border border-white/90 group-hover:border-indigo-200 shadow-[0_4px_24px_rgba(15,23,42,0.03)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.07)] hover:-translate-y-1">
+    <div className={`bg-white/80 backdrop-blur-xl p-6 sm:p-8 md:p-10 flex flex-col h-full relative overflow-hidden transition-all duration-300 ease-out rounded-[2rem] md:rounded-4xl border border-white/90 ${theme.hoverBorder} shadow-[0_4px_24px_rgba(15,23,42,0.03)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.07)] hover:-translate-y-1`}>
 
-      {/* Header: Icon Box + Badges */}
+      {/* Subtle Individual Ambient Radial Glow on Hover */}
+      <div className={`absolute -right-8 -bottom-8 w-48 h-48 rounded-full bg-gradient-to-br ${test.color} opacity-0 group-hover:opacity-[0.10] blur-2xl transition-opacity duration-300 pointer-events-none`} />
+
+      {/* Header: Static Icon Box + Badges */}
       <div className="flex justify-between items-start mb-6 md:mb-10 relative z-10">
-        <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center border ${test.borderLight} ${test.bgLight} transition-all duration-300 group-hover:shadow-sm group-hover:scale-105`}>
-          <Icon className="w-6 h-6 md:w-7 md:h-7 text-indigo-600" />
+        <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center border ${test.borderLight} ${test.bgLight}`}>
+          <Icon className={`w-6 h-6 md:w-7 md:h-7 ${theme.icon}`} />
         </div>
 
         <div className="flex items-center gap-2">
@@ -874,7 +1012,7 @@ function TestCard({ test }) {
             </div>
           )}
           <div className="flex items-center gap-1.5 md:gap-2.5 text-slate-500 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-widest bg-white/70 backdrop-blur-md px-3.5 py-1.5 md:px-4 md:py-2 rounded-full border border-slate-200/60 shadow-2xs">
-            <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+            <div className={`w-1.5 h-1.5 rounded-full ${theme.dot}`} />
             {test.time}
           </div>
         </div>
@@ -882,7 +1020,7 @@ function TestCard({ test }) {
 
       {/* Title & Description */}
       <div className="flex-1 relative z-10 flex flex-col justify-center">
-        <h3 className="text-2xl sm:text-3xl md:text-[2.2rem] font-extrabold text-slate-900 group-hover:text-indigo-600 mb-3 md:mb-4 tracking-tight leading-none text-balance transition-colors duration-300">
+        <h3 className={`text-2xl sm:text-3xl md:text-[2.2rem] font-extrabold text-slate-900 group-hover:text-transparent bg-clip-text bg-gradient-to-r ${test.color} mb-3 md:mb-4 tracking-tight leading-none text-balance transition-all duration-300`}>
           {test.title}
         </h3>
         <p className="text-slate-500 text-sm sm:text-base md:text-[1.05rem] font-medium leading-relaxed mb-6 md:mb-8 text-balance group-hover:text-slate-700 transition-colors duration-300">
@@ -891,15 +1029,11 @@ function TestCard({ test }) {
       </div>
 
       {/* Clean Bottom Action Bar */}
-      <div className="flex items-center justify-between mt-auto pt-6 md:pt-8 border-t border-slate-100/90 relative z-10">
-        <span className="text-[0.68rem] md:text-xs text-slate-400 font-semibold tracking-wide">
-          Scored in browser
-        </span>
-
-        <div className="inline-flex items-center gap-2.5 text-[0.75rem] md:text-xs font-extrabold uppercase tracking-widest text-slate-800 group-hover:text-indigo-600 transition-colors duration-200">
+      <div className="flex items-center justify-end mt-auto pt-6 md:pt-8 border-t border-slate-100/90 relative z-10">
+        <div className={`inline-flex items-center gap-2.5 text-[0.75rem] md:text-xs font-extrabold uppercase tracking-widest text-slate-800 ${theme.hoverText} transition-colors duration-200`}>
           <span>Begin Assessment</span>
-          <div className="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-indigo-50 border border-slate-200/60 group-hover:border-indigo-100 flex items-center justify-center transition-colors">
-            <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-transform duration-200" />
+          <div className={`w-8 h-8 rounded-full bg-slate-100 ${theme.hoverBg} border border-slate-200/60 ${theme.hoverIconBorder} flex items-center justify-center transition-colors`}>
+            <ArrowRight className={`w-3.5 h-3.5 text-slate-500 ${theme.hoverText} group-hover:translate-x-0.5 transition-transform duration-200`} />
           </div>
         </div>
       </div>
