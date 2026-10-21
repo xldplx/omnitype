@@ -10,6 +10,33 @@ import {
   Settings, Siren, Timer, Lock, Sparkles, Heart, Scale, Crown, Target, Sliders
 } from 'lucide-react';
 
+// Per-color-family accents so every card's inner elements follow the test's own color
+const TEST_ACCENTS = {
+  indigo:  { hoverBorder: 'rgba(165, 180, 252, 0.75)', text: 'text-indigo-600',  hoverText: 'group-hover:text-indigo-700',  border: 'border-indigo-200',  bg: 'bg-indigo-50' },
+  emerald: { hoverBorder: 'rgba(110, 231, 183, 0.75)', text: 'text-emerald-600', hoverText: 'group-hover:text-emerald-700', border: 'border-emerald-200', bg: 'bg-emerald-50' },
+  rose:    { hoverBorder: 'rgba(253, 164, 175, 0.75)', text: 'text-rose-600',    hoverText: 'group-hover:text-rose-700',    border: 'border-rose-200',    bg: 'bg-rose-50' },
+  pink:    { hoverBorder: 'rgba(249, 168, 212, 0.75)', text: 'text-pink-600',    hoverText: 'group-hover:text-pink-700',    border: 'border-pink-200',    bg: 'bg-pink-50' },
+  violet:  { hoverBorder: 'rgba(196, 181, 253, 0.75)', text: 'text-violet-600',  hoverText: 'group-hover:text-violet-700',  border: 'border-violet-200',  bg: 'bg-violet-50' },
+  purple:  { hoverBorder: 'rgba(216, 180, 254, 0.75)', text: 'text-purple-600',  hoverText: 'group-hover:text-purple-700',  border: 'border-purple-200',  bg: 'bg-purple-50' },
+  amber:   { hoverBorder: 'rgba(252, 211, 77, 0.75)',  text: 'text-amber-600',   hoverText: 'group-hover:text-amber-700',   border: 'border-amber-200',   bg: 'bg-amber-50' },
+  orange:  { hoverBorder: 'rgba(253, 186, 116, 0.75)', text: 'text-orange-600',  hoverText: 'group-hover:text-orange-700',  border: 'border-orange-200',  bg: 'bg-orange-50' },
+  cyan:    { hoverBorder: 'rgba(103, 232, 249, 0.75)', text: 'text-cyan-600',    hoverText: 'group-hover:text-cyan-700',    border: 'border-cyan-200',    bg: 'bg-cyan-50' },
+  sky:     { hoverBorder: 'rgba(125, 211, 252, 0.75)', text: 'text-sky-600',     hoverText: 'group-hover:text-sky-700',     border: 'border-sky-200',     bg: 'bg-sky-50' },
+  blue:    { hoverBorder: 'rgba(147, 197, 253, 0.75)', text: 'text-blue-600',    hoverText: 'group-hover:text-blue-700',    border: 'border-blue-200',    bg: 'bg-blue-50' },
+  fuchsia: { hoverBorder: 'rgba(240, 171, 252, 0.75)', text: 'text-fuchsia-600', hoverText: 'group-hover:text-fuchsia-700', border: 'border-fuchsia-200', bg: 'bg-fuchsia-50' },
+  teal:    { hoverBorder: 'rgba(94, 234, 212, 0.75)',  text: 'text-teal-600',    hoverText: 'group-hover:text-teal-700',    border: 'border-teal-200',    bg: 'bg-teal-50' },
+  yellow:  { hoverBorder: 'rgba(250, 204, 21, 0.75)',  text: 'text-yellow-600',  hoverText: 'group-hover:text-yellow-700',  border: 'border-yellow-200',  bg: 'bg-yellow-50' },
+  red:     { hoverBorder: 'rgba(252, 165, 165, 0.75)', text: 'text-red-600',     hoverText: 'group-hover:text-red-700',     border: 'border-red-200',     bg: 'bg-red-50' },
+  zinc:    { hoverBorder: 'rgba(161, 161, 170, 0.65)', text: 'text-zinc-600',    hoverText: 'group-hover:text-zinc-700',    border: 'border-zinc-200',    bg: 'bg-zinc-50' },
+  slate:   { hoverBorder: 'rgba(203, 213, 225, 0.8)',  text: 'text-slate-600',   hoverText: 'group-hover:text-slate-800',   border: 'border-slate-200',   bg: 'bg-slate-50' },
+};
+
+const getTestAccent = (test) => {
+  const match = test.borderLight?.match(/border-([a-z]+)-/);
+  const family = match ? match[1] : 'slate';
+  return TEST_ACCENTS[family] || TEST_ACCENTS.slate;
+};
+
 const categories = [
   { id: 'all', title: 'All Categories' },
   { id: 'cognition', title: "Personality & Thinking", desc: "Understand who you are and how your mind works." },
@@ -603,6 +630,7 @@ export default function Home() {
           </p>
           
           <button 
+            type="button"
             onClick={() => {
               const el = document.getElementById('tests-directory');
               if (el) {
@@ -610,12 +638,12 @@ export default function Home() {
                 window.scrollTo({ top: y, behavior: 'smooth' });
               }
             }}
-            className="group inline-flex items-center gap-4 px-6 py-3 bg-white text-slate-800 rounded-full font-bold text-base md:text-lg transition-all duration-300 border border-slate-200/80 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 cursor-pointer"
+            className="btn-glass text-xs sm:text-sm py-2.5 sm:py-3 pl-6 sm:pl-7 pr-3 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(15,23,42,0.12)] active:scale-95 group"
           >
-            <span className="pl-2 group-hover:text-indigo-600 transition-colors">Begin the Assessment</span>
-            <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 group-hover:bg-indigo-50 group-hover:border-indigo-100 transition-colors">
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-transform group-hover:translate-x-0.5" />
-            </div>
+            <span className="font-bold tracking-[0.16em] group-hover:text-indigo-600 transition-colors">Begin the Assessment</span>
+            <span className="btn-chip group-hover:bg-indigo-600 transition-colors">
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+            </span>
           </button>
         </Motion.div>
       </div>
@@ -856,14 +884,26 @@ function TestCard({ test }) {
     );
   }
 
-  // Active Live Assessment Card: Crisp glassmorphism with calm, non-gimmicky hover interaction
+  // Active Live Assessment Card: Outline and accents dynamically follow the individual test's color
+  const accent = getTestAccent(test);
   return (
-    <div className="bg-white/80 backdrop-blur-xl p-6 sm:p-8 md:p-10 flex flex-col h-full relative overflow-hidden transition-all duration-300 ease-out rounded-[2rem] md:rounded-4xl border border-white/90 group-hover:border-indigo-200 shadow-[0_4px_24px_rgba(15,23,42,0.03)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.07)] hover:-translate-y-1">
+    <div
+      className={`test-card-${test.id} bg-white/80 backdrop-blur-xl p-6 sm:p-8 md:p-10 flex flex-col h-full relative overflow-hidden transition-all duration-300 ease-out rounded-[2rem] md:rounded-4xl border-2 border-transparent shadow-[0_4px_24px_rgba(15,23,42,0.03)] hover:shadow-[0_20px_45px_rgba(15,23,42,0.12)] hover:-translate-y-1.5`}
+      style={{ '--test-hover-border': accent.hoverBorder }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = 'var(--test-hover-border, #6366f1)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = 'transparent';
+      }}
+    >
+      {/* Subtle ambient glow themed to the test's color */}
+      <div className={`absolute -right-12 -bottom-12 w-48 h-48 md:w-56 md:h-56 bg-linear-to-br ${test.color} opacity-[0.05] group-hover:opacity-[0.14] rounded-full blur-2xl transition-opacity duration-300 pointer-events-none`} />
 
       {/* Header: Icon Box + Badges */}
       <div className="flex justify-between items-start mb-6 md:mb-10 relative z-10">
-        <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center border ${test.borderLight} ${test.bgLight} transition-all duration-300 group-hover:shadow-sm group-hover:scale-105`}>
-          <Icon className="w-6 h-6 md:w-7 md:h-7 text-indigo-600" />
+        <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl md:rounded-3xl flex items-center justify-center border ${accent.border} ${accent.bg} transition-all duration-300 group-hover:shadow-sm`}>
+          <Icon className={`w-6 h-6 md:w-7 md:h-7 ${accent.text}`} />
         </div>
 
         <div className="flex items-center gap-2">
@@ -873,33 +913,29 @@ function TestCard({ test }) {
               Popular
             </div>
           )}
-          <div className="flex items-center gap-1.5 md:gap-2.5 text-slate-500 font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-widest bg-white/70 backdrop-blur-md px-3.5 py-1.5 md:px-4 md:py-2 rounded-full border border-slate-200/60 shadow-2xs">
-            <div className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+          <div className={`flex items-center gap-1.5 md:gap-2.5 ${accent.text} font-bold text-[0.68rem] md:text-[0.72rem] uppercase tracking-widest bg-white/70 backdrop-blur-md px-3.5 py-1.5 md:px-4 md:py-2 rounded-full border ${accent.border} shadow-2xs`}>
+            <div className={`w-1.5 h-1.5 rounded-full bg-linear-to-r ${test.color}`} />
             {test.time}
           </div>
         </div>
       </div>
 
-      {/* Title & Description */}
+      {/* Title & Description without white flash */}
       <div className="flex-1 relative z-10 flex flex-col justify-center">
-        <h3 className="text-2xl sm:text-3xl md:text-[2.2rem] font-extrabold text-slate-900 group-hover:text-indigo-600 mb-3 md:mb-4 tracking-tight leading-none text-balance transition-colors duration-300">
+        <h3 className={`text-2xl sm:text-3xl md:text-[2.2rem] font-extrabold text-slate-900 ${accent.hoverText} mb-3 md:mb-4 tracking-tight leading-none text-balance transition-colors duration-200`}>
           {test.title}
         </h3>
-        <p className="text-slate-500 text-sm sm:text-base md:text-[1.05rem] font-medium leading-relaxed mb-6 md:mb-8 text-balance group-hover:text-slate-700 transition-colors duration-300">
+        <p className="text-slate-500 text-sm sm:text-base md:text-[1.05rem] font-medium leading-relaxed mb-6 md:mb-8 text-balance group-hover:text-slate-700 transition-colors duration-200">
           {test.description}
         </p>
       </div>
 
       {/* Clean Bottom Action Bar */}
-      <div className="flex items-center justify-between mt-auto pt-6 md:pt-8 border-t border-slate-100/90 relative z-10">
-        <span className="text-[0.68rem] md:text-xs text-slate-400 font-semibold tracking-wide">
-          Scored in browser
-        </span>
-
-        <div className="inline-flex items-center gap-2.5 text-[0.75rem] md:text-xs font-extrabold uppercase tracking-widest text-slate-800 group-hover:text-indigo-600 transition-colors duration-200">
+      <div className={`flex items-center justify-end mt-auto pt-6 md:pt-8 border-t ${accent.border} relative z-10`}>
+        <div className={`inline-flex items-center gap-2.5 text-[0.75rem] md:text-xs font-extrabold uppercase tracking-widest text-slate-800 ${accent.hoverText} transition-colors duration-200`}>
           <span>Begin Assessment</span>
-          <div className="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-indigo-50 border border-slate-200/60 group-hover:border-indigo-100 flex items-center justify-center transition-colors">
-            <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-transform duration-200" />
+          <div className={`w-8 h-8 rounded-full ${accent.bg} border ${accent.border} flex items-center justify-center transition-colors duration-200`}>
+            <ArrowRight className={`w-3.5 h-3.5 ${accent.text}`} />
           </div>
         </div>
       </div>

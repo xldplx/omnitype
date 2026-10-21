@@ -26,7 +26,7 @@ function ResultBar({ label, value, color, isPrimary }) {
         <span className="flex items-center gap-2">
           <span className={`w-2.5 h-2.5 rounded-full ${isPrimary ? 'bg-fuchsia-500 ring-4 ring-fuchsia-100' : 'bg-slate-300'}`} />
           <span className={isPrimary ? 'text-slate-900 font-black' : 'text-slate-700'}>{label}</span>
-          {isPrimary && <span className="text-[0.65rem] uppercase tracking-wider px-2 py-0.5 rounded-full bg-fuchsia-50 text-fuchsia-600 font-extrabold border border-fuchsia-100">Dominant</span>}
+          {isPrimary && <span className="chip-accent bg-fuchsia-50 text-fuchsia-600! border border-fuchsia-100">Dominant</span>}
         </span>
         <span className="font-mono text-slate-900 font-bold bg-slate-100 px-2.5 py-0.5 rounded-md text-xs">{displayVal}%</span>
       </div>
@@ -63,7 +63,9 @@ export default function ImposterResult() {
           if (parsed && (parsed.info || parsed.statusKey)) {
             stateData = parsed;
           }
-        } catch (e) {}
+        } catch {
+          // Ignore malformed cached data and fall back to URL reconstruction.
+        }
       }
     }
 
@@ -133,9 +135,9 @@ export default function ImposterResult() {
           <button 
             type="button"
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-slate-900 transition-colors group cursor-pointer"
+            className="label-micro hover:text-slate-900 transition-colors group cursor-pointer"
           >
-            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
+            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center transition-colors">
               <ChevronLeft className="w-4 h-4 text-slate-700" />
             </div>
             <span>Home</span>
@@ -151,10 +153,10 @@ export default function ImposterResult() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-5 py-3 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                className={`pill ${
                   isActive 
-                    ? 'bg-slate-900 text-white shadow-md' 
-                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50'
+                    ? 'pill-active' 
+                    : 'pill-muted'
                 }`}
               >
                 <span>{tab.label}</span>
@@ -182,11 +184,11 @@ export default function ImposterResult() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                   
                   {/* Primary Archetype (Dominant 8 Cols) */}
-                  <div className="lg:col-span-8 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+                  <div className="surface-card lg:col-span-8 p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
                     <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${primaryColor} opacity-90`} />
                     
                     <div>
-                      <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 text-slate-900 tracking-tight leading-none">
+                      <h1 className="heading-display text-4xl sm:text-6xl md:text-7xl mb-4 text-slate-900! leading-none">
                         {info.name}
                       </h1>
                       
@@ -195,10 +197,10 @@ export default function ImposterResult() {
                       </p>
 
                       <div className="flex flex-wrap gap-2">
-                        <span className="px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-700 font-extrabold text-xs uppercase tracking-wider border border-slate-200/60">
+                        <span className="chip-accent bg-slate-100 text-slate-700! border border-slate-200/60">
                           {info.subName}
                         </span>
-                        <span className="px-3.5 py-1.5 rounded-full bg-fuchsia-50 text-fuchsia-700 font-extrabold text-xs uppercase tracking-wider border border-fuchsia-100">
+                        <span className="chip-accent bg-fuchsia-50 text-fuchsia-700! border border-fuchsia-100">
                           Competence Archetype
                         </span>
                       </div>
@@ -206,38 +208,38 @@ export default function ImposterResult() {
                   </div>
 
                   {/* Standardized 2nd Box (4 Cols - Prominent & Centered - Icon-Free) */}
-                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
-                     <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 z-10 drop-shadow-sm pb-1 leading-tight">
+                  <div className="surface-card lg:col-span-4 p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                     <h2 className="heading-display text-3xl sm:text-4xl text-slate-900! z-10 drop-shadow-sm pb-1 leading-tight">
                        {info.subName}
                      </h2>
-                     <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-slate-400 mt-3 z-10 whitespace-nowrap">Primary Imposter Archetype</span>
+                     <span className="label-micro-muted mt-3 z-10 whitespace-nowrap">Primary Imposter Archetype</span>
                   </div>
 
                 </div>
 
                 {/* 2. Dedicated Core Motivations Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-2 text-emerald-600">
                       <Shield className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">What Drives You (Underlying Desire)</span>
+                      <span className="label-micro text-emerald-600!">What Drives You (Underlying Desire)</span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreDesire}</p>
                   </div>
 
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-2 text-rose-500">
                       <Heart className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">What You Avoid (Underlying Fear)</span>
+                      <span className="label-micro text-rose-500!">What You Avoid (Underlying Fear)</span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreFear}</p>
                   </div>
                 </div>
 
                 {/* 3. Self-Doubt Vectors Summary (Standardized Progress Bars) */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                <div className="surface-card p-8 md:p-12 space-y-8">
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-slate-900">Self-Doubt Vectors</h3>
+                    <h3 className="heading-display text-2xl text-slate-900!">Self-Doubt Vectors</h3>
                     <p className="text-slate-500 text-sm font-medium">
                       Relative distribution across key imposter triggers and competence standards.
                     </p>
@@ -269,12 +271,12 @@ export default function ImposterResult() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   
                   {/* Functional Strengths */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center">
                         <CheckCircle2 className="w-5 h-5 text-indigo-600" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Functional Strengths (Pros)</h3>
+                      <h3 className="heading-display text-xl text-slate-900!">Functional Strengths (Pros)</h3>
                     </div>
                     <ul className="space-y-4">
                       {info.pros?.map((item, idx) => (
@@ -287,12 +289,12 @@ export default function ImposterResult() {
                   </div>
 
                   {/* Friction Points */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center">
                         <AlertTriangle className="w-5 h-5 text-rose-500" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">The Friction Points (Cons)</h3>
+                      <h3 className="heading-display text-xl text-slate-900!">The Friction Points (Cons)</h3>
                     </div>
                     <ul className="space-y-4">
                       {info.cons?.map((item, idx) => (
@@ -315,7 +317,7 @@ export default function ImposterResult() {
             {activeTab === 'archetypes' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Competence Archetypes Spectrum</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Competence Archetypes Spectrum</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Detailed comparison across all 4 imposter competence styles and inner standards of success.
                   </p>
@@ -328,18 +330,18 @@ export default function ImposterResult() {
                     return (
                       <div 
                         key={key}
-                        className={`bg-white border shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-4 relative overflow-hidden transition-all ${
-                          isPrimary ? 'border-fuchsia-300 ring-2 ring-fuchsia-100' : 'border-slate-100'
+                        className={`surface-card p-8 space-y-4 relative overflow-hidden transition-all ${
+                          isPrimary ? 'border-fuchsia-300 ring-2 ring-fuchsia-100' : ''
                         }`}
                       >
                         <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${status.color}`} />
                         <div className="flex justify-between items-center pb-2 border-b border-slate-100">
                           <div>
-                            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{status.subName}</span>
-                            <h4 className="text-2xl font-black text-slate-900">{status.name}</h4>
+                            <span className="label-micro-muted">{status.subName}</span>
+                            <h4 className="heading-display text-2xl text-slate-900!">{status.name}</h4>
                           </div>
                           {isPrimary && (
-                            <span className="text-[0.65rem] font-black uppercase tracking-wider px-3 py-1 bg-fuchsia-50 text-fuchsia-700 rounded-full border border-fuchsia-200">
+                            <span className="chip-accent bg-fuchsia-50 text-fuchsia-700! border border-fuchsia-200">
                               Your Primary
                             </span>
                           )}
@@ -363,7 +365,7 @@ export default function ImposterResult() {
             {activeTab === 'critic' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Deconstructing The Internal Critic</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Deconstructing The Internal Critic</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Subconscious scripts, specific cognitive lies, activation triggers, and cognitive overhead.
                   </p>
@@ -371,37 +373,37 @@ export default function ImposterResult() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* The Specific Lie */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                       <Speech className="w-5 h-5 text-fuchsia-600" />
-                      <h4 className="text-xl font-black text-slate-900">The Subconscious Script</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">The Subconscious Script</h4>
                     </div>
                     <p className="text-fuchsia-900 text-lg font-bold italic leading-relaxed">{info.specificLie}</p>
                   </div>
 
                   {/* Trigger Condition */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                       <Zap className="w-5 h-5 text-amber-500" />
-                      <h4 className="text-xl font-black text-slate-900">Activation Trigger</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Activation Trigger</h4>
                     </div>
                     <p className="text-slate-700 text-base font-medium leading-relaxed">{info.triggerCondition}</p>
                   </div>
 
                   {/* Cognitive Overhead */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                       <Activity className="w-5 h-5 text-indigo-600" />
-                      <h4 className="text-xl font-black text-slate-900">Systemic Cognitive Overhead</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Systemic Cognitive Overhead</h4>
                     </div>
                     <p className="text-slate-700 text-base font-medium leading-relaxed">{info.cognitiveOverhead}</p>
                   </div>
 
                   {/* Reframing Mantra */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                       <RefreshCw className="w-5 h-5 text-emerald-600" />
-                      <h4 className="text-xl font-black text-slate-900">Cognitive Re-framing Mantra</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Cognitive Re-framing Mantra</h4>
                     </div>
                     <p className="text-emerald-900 text-base font-bold leading-relaxed">{info.reframingMantra}</p>
                   </div>
@@ -415,17 +417,17 @@ export default function ImposterResult() {
             {activeTab === 'reality' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Objective Reality Check & Somatic Protocol</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Objective Reality Check & Somatic Protocol</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Grounding your self-worth in objective reality, evidence logging, and somatic safety practices.
                   </p>
                 </div>
 
                 {/* Objective Evidence Card */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                <div className="surface-card p-8 md:p-10 space-y-4">
                   <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                     <Scale className="w-5 h-5 text-emerald-600" />
-                    <h4 className="text-xl font-black text-slate-900">The Objective Reality Check</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">The Objective Reality Check</h4>
                   </div>
                   <p className="text-slate-700 font-medium text-base leading-relaxed">
                     {info.objectiveEvidence}
@@ -433,10 +435,10 @@ export default function ImposterResult() {
                 </div>
 
                 {/* Somatic Protocol Card */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                <div className="surface-card p-8 md:p-10 space-y-4">
                   <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                     <Sparkles className="w-5 h-5 text-fuchsia-500" />
-                    <h4 className="text-xl font-black text-slate-900">Somatic Action Protocol</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">Somatic Action Protocol</h4>
                   </div>
                   <p className="text-slate-700 font-medium text-base leading-relaxed italic">
                     {info.somaticProtocol}
@@ -447,7 +449,7 @@ export default function ImposterResult() {
                 <div className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.2)] rounded-[2.5rem] p-10 md:p-14 text-white space-y-4">
                   <div className="flex items-center gap-3">
                     <Shield className="w-6 h-6 text-fuchsia-400" />
-                    <h4 className="text-2xl font-black">Competence Integration Protocol</h4>
+                    <h4 className="heading-display text-2xl text-white!">Competence Integration Protocol</h4>
                   </div>
                   <p className="text-slate-300 text-base md:text-lg leading-relaxed font-medium max-w-4xl italic">
                     Imposter phenomenon thrives in the dark spaces of unexamined standards. Real competence is not the absence of doubt, but the courage to take action despite it. You do not need to prove your worth to earn your place in the room—you already belong here.

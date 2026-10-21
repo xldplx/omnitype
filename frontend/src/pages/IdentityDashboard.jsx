@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { toPng } from 'html-to-image';
 import {
@@ -267,7 +267,7 @@ export default function IdentityDashboard() {
     const loadLocal = (key, setter) => {
       const val = localStorage.getItem(key);
       if (val) {
-        try { setter(JSON.parse(val)); } catch (e) { setter({ type: val }); }
+        try { setter(JSON.parse(val)); } catch { setter({ type: val }); }
       }
     };
 
@@ -553,7 +553,7 @@ export default function IdentityDashboard() {
 
       {/* Header and greeting */}
       <div className="pt-32 pb-8 px-6 max-w-7xl mx-auto relative z-10">
-        <h1 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 mb-2">My Profile</h1>
+        <h1 className="heading-display text-4xl md:text-5xl text-slate-900! mb-2">My Profile</h1>
         <p className="text-slate-500 font-medium text-sm md:text-base">Review your custom psychometric profile and export your Shareable Identity Card.</p>
       </div>
 
@@ -563,9 +563,9 @@ export default function IdentityDashboard() {
         <div className="lg:col-span-8 space-y-8">
           
           {/* Welcome & Circle Progress Chart */}
-          <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col sm:flex-row justify-between items-center gap-6">
+          <div className="surface-card p-8 flex flex-col sm:flex-row justify-between items-center gap-6">
             <div className="space-y-3 text-center sm:text-left">
-              <h2 className="text-3xl font-black text-slate-900 leading-tight">
+              <h2 className="heading-display text-3xl text-slate-900! leading-tight">
                 Hello, <span className="text-indigo-600">{profile.name.split(' ')[0]}</span>
               </h2>
               <p className="text-slate-500 text-sm max-w-md leading-relaxed">
@@ -585,7 +585,7 @@ export default function IdentityDashboard() {
                   stroke="currentColor"
                   fill="transparent"
                 />
-                <motion.circle
+                <Motion.circle
                   cx="56"
                   cy="56"
                   r={radialChart.radius}
@@ -602,32 +602,32 @@ export default function IdentityDashboard() {
               </svg>
               <div className="absolute flex flex-col items-center justify-center">
                 <span className="text-xl font-black text-slate-900 leading-none">{Math.round((completedCount / 16) * 100)}%</span>
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">{completedCount}/16</span>
+                <span className="label-micro-muted mt-0.5">{completedCount}/16</span>
               </div>
             </div>
           </div>
 
           {/* Identity Details Editor (Visually Appealing & Premium Card Layout) */}
-          <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)] relative">
+          <div className="surface-card p-8 relative">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Identity Details</h3>
+              <h3 className="heading-display text-sm text-slate-400! uppercase tracking-widest">Identity Details</h3>
               {isEditing ? (
                 <div className="flex gap-2">
-                  <button onClick={handleSaveProfile} className="px-4 py-1.5 bg-indigo-650 hover:bg-indigo-700 text-white rounded-full font-bold text-xs flex items-center gap-1 transition shadow-sm cursor-pointer border border-indigo-600">
+                  <button onClick={handleSaveProfile} className="btn-dark px-4 py-2.5">
                     <Check className="w-3.5 h-3.5" />
                     Save Changes
                   </button>
-                  <button onClick={() => setIsEditing(false)} className="px-4 py-1.5 bg-slate-100 text-slate-500 rounded-full font-bold text-xs flex items-center gap-1 hover:bg-slate-200 transition cursor-pointer border border-slate-200">
+                  <button onClick={() => setIsEditing(false)} className="pill pill-muted">
                     Cancel
                   </button>
                 </div>
               ) : (
                 <div className="flex gap-2">
-                  <button onClick={handleEditClick} className="px-4 py-1.5 bg-slate-50 hover:bg-indigo-50 border border-slate-200/50 hover:border-indigo-100 text-slate-400 hover:text-indigo-600 rounded-full font-bold text-xs flex items-center gap-1.5 transition shadow-sm cursor-pointer">
+                  <button onClick={handleEditClick} className="pill pill-muted">
                     <Edit2 className="w-3.5 h-3.5" />
                     Edit Profile
                   </button>
-                  <button onClick={handleLogout} className="px-4 py-1.5 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 rounded-full font-bold text-xs flex items-center gap-1.5 transition shadow-sm cursor-pointer">
+                  <button onClick={handleLogout} className="pill bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100">
                     Logout
                   </button>
                 </div>
@@ -648,7 +648,7 @@ export default function IdentityDashboard() {
                     )}
                   </div>
                   <div className="space-y-2 text-center sm:text-left w-full sm:w-auto">
-                    <h4 className="text-xs font-bold text-slate-800">Profile Photo</h4>
+                    <h4 className="heading-display text-xs text-slate-800!">Profile Photo</h4>
                     <p className="text-[10px] text-slate-400">Upload a custom image to display on your dashboard and shareable identity card.</p>
                     <input
                       type="file"
@@ -660,7 +660,7 @@ export default function IdentityDashboard() {
                     <button
                       type="button"
                       onClick={triggerFileInput}
-                      className="px-3.5 py-1.5 bg-white border border-slate-200 hover:border-indigo-200 text-slate-600 hover:text-indigo-600 text-[10px] font-bold uppercase tracking-wider rounded-xl transition inline-flex items-center gap-1.5 shadow-2xs cursor-pointer"
+                      className="pill pill-muted inline-flex items-center gap-1.5 cursor-pointer"
                     >
                       <Upload className="w-3 h-3" />
                       Upload Image
@@ -670,7 +670,7 @@ export default function IdentityDashboard() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Preferred Name</label>
+                    <label className="label-micro-muted">Preferred Name</label>
                     <input
                       type="text"
                       value={editName}
@@ -679,7 +679,7 @@ export default function IdentityDashboard() {
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Age</label>
+                    <label className="label-micro-muted">Age</label>
                     <input
                       type="number"
                       value={editAge}
@@ -688,7 +688,7 @@ export default function IdentityDashboard() {
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Gender Identity</label>
+                    <label className="label-micro-muted">Gender Identity</label>
                     <select
                       value={editGender}
                       onChange={(e) => setEditGender(e.target.value)}
@@ -741,13 +741,13 @@ export default function IdentityDashboard() {
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 w-full text-center sm:text-left">
                   <div className="space-y-1">
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center sm:justify-start gap-1">
+                    <span className="label-micro-muted flex items-center justify-center gap-1">
                       <User className="w-3 h-3 text-indigo-500" /> Name
                     </span>
                     <span className="text-base font-bold text-slate-900 block">{profile.name}</span>
                   </div>
                   <div className="space-y-1">
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center sm:justify-start gap-1">
+                    <span className="label-micro-muted flex items-center justify-center gap-1">
                       <Smile className="w-3 h-3 text-indigo-500" /> Age
                     </span>
                     <span className="text-base font-bold text-slate-900 block">
@@ -755,7 +755,7 @@ export default function IdentityDashboard() {
                     </span>
                   </div>
                   <div className="space-y-1">
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center sm:justify-start gap-1">
+                    <span className="label-micro-muted flex items-center justify-center gap-1">
                       <Users className="w-3 h-3 text-indigo-500" /> Gender
                     </span>
                     <span className="text-base font-bold text-slate-900 block">
@@ -763,7 +763,7 @@ export default function IdentityDashboard() {
                     </span>
                   </div>
                   <div className="space-y-1">
-                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center sm:justify-start gap-1">
+                    <span className="label-micro-muted flex items-center justify-center gap-1">
                       <Calendar className="w-3 h-3 text-indigo-500" /> Enrolled
                     </span>
                     <span className="text-base font-bold text-slate-900 block">{profile.memberSince}</span>
@@ -775,13 +775,13 @@ export default function IdentityDashboard() {
 
           {/* Soul Fusion Synergy Combination */}
           {soulFusion && (
-            <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)] relative overflow-hidden group">
+            <div className="surface-card p-8 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-purple-500/5 to-transparent rounded-full blur-[60px]" />
               <div className="relative z-10 space-y-4">
-                <span className="text-[9px] font-bold text-purple-600 uppercase tracking-widest bg-purple-50 px-2.5 py-1 rounded-full inline-block">
+                <span className="chip-accent bg-purple-50 text-purple-600! inline-block">
                   Soul Fusion Synergy
                 </span>
-                <h3 className="text-xl font-black text-slate-900 tracking-tight leading-tight">{soulFusion.title}</h3>
+                <h3 className="heading-display text-xl text-slate-900! leading-tight">{soulFusion.title}</h3>
                 <p className="text-slate-505 text-xs leading-relaxed font-medium max-w-2xl">{soulFusion.desc}</p>
               </div>
             </div>
@@ -791,9 +791,9 @@ export default function IdentityDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             
             {/* Cognitive Fingerprint Polygon Map */}
-            <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between items-center text-center">
+            <div className="surface-card p-8 flex flex-col justify-between items-center text-center">
               <div className="w-full text-left mb-4">
-                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Cognitive Fingerprint</h3>
+                <h3 className="heading-display text-sm text-slate-400! uppercase tracking-widest">Cognitive Fingerprint</h3>
                 <p className="text-[10px] text-slate-400 mt-1">Interactive mapping based on categories completed.</p>
               </div>
 
@@ -854,7 +854,7 @@ export default function IdentityDashboard() {
               <div className="w-full grid grid-cols-3 gap-1 mt-4">
                 {radarPoints.map((p, i) => (
                   <div key={i} className="flex flex-col items-center">
-                    <span className="text-[7.5px] font-black text-slate-400 uppercase tracking-tight block truncate w-full">{p.label}</span>
+                    <span className="label-micro-muted block truncate w-full">{p.label}</span>
                     <span className="text-[10px] font-black text-slate-800">{Math.round(p.score * 100)}%</span>
                   </div>
                 ))}
@@ -862,9 +862,9 @@ export default function IdentityDashboard() {
             </div>
 
             {/* Cognitive Architecture Sliders */}
-            <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between">
+            <div className="surface-card p-8 flex flex-col justify-between">
               <div className="w-full text-left mb-4">
-                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">Cognitive Architecture</h3>
+                <h3 className="heading-display text-sm text-slate-400! uppercase tracking-widest">Cognitive Architecture</h3>
               </div>
               
               {mbtiData ? (
@@ -873,11 +873,11 @@ export default function IdentityDashboard() {
                     <div key={i} className="space-y-1.5">
                       <div className="flex justify-between items-center text-[10px] font-bold text-slate-400">
                         <span className={scale.value <= 50 ? "text-slate-800" : ""}>{scale.left}</span>
-                        <span className="text-[8px] uppercase text-slate-300 tracking-wider font-semibold">{scale.label}</span>
+                        <span className="label-micro text-slate-300!">{scale.label}</span>
                         <span className={scale.value > 50 ? "text-slate-800" : ""}>{scale.right}</span>
                       </div>
                       <div className="h-2 w-full bg-slate-100 rounded-full relative overflow-hidden">
-                        <motion.div
+                        <Motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${scale.value}%` }}
                           transition={{ duration: 0.8, ease: "easeOut" }}
@@ -902,13 +902,13 @@ export default function IdentityDashboard() {
           {/* Assessment Ecosystem */}
           <div className="space-y-8">
             <div className="border-t border-slate-200/60 pt-6">
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight">Assessment Ecosystem</h3>
+              <h3 className="heading-display text-2xl text-slate-900!">Assessment Ecosystem</h3>
               <p className="text-slate-500 text-sm">Complete core psychological paradigms to map your personality stack.</p>
             </div>
 
             {categories.map((category) => (
               <div key={category.id} className="space-y-4">
-                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-l-2 border-indigo-500 pl-2">{category.title}</h4>
+                <h4 className="label-micro-muted border-l-2 border-indigo-500 pl-2">{category.title}</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {category.tests.map((t) => (
                     <div
@@ -921,7 +921,7 @@ export default function IdentityDashboard() {
                     >
                       <div>
                         <div className="flex justify-between items-start gap-1">
-                          <span className="text-[8px] font-bold text-slate-400 uppercase tracking-wider block truncate">{category.title}</span>
+                          <span className="label-micro-muted block truncate">{category.title}</span>
                           {!t.loaded && <Lock className="w-3.5 h-3.5 text-slate-300 shrink-0" />}
                         </div>
                         <span className="text-base font-bold text-slate-850 block mt-1 leading-tight">{t.title}</span>
@@ -934,12 +934,12 @@ export default function IdentityDashboard() {
                       
                       <div className="mt-4 pt-3 border-t border-slate-100 flex items-center">
                         {t.loaded ? (
-                          <Link to={t.path} className="text-[9px] font-bold text-slate-400 hover:text-indigo-600 uppercase tracking-widest inline-flex items-center gap-1 transition">
+                          <Link to={t.path} className="label-micro-muted hover:text-indigo-600 inline-flex items-center gap-1 transition">
                             <span>Retake</span>
                             <ArrowRight className="w-2.5 h-2.5" />
                           </Link>
                         ) : (
-                          <Link to={t.path} className="text-[9px] font-bold text-indigo-650 hover:text-indigo-850 uppercase tracking-widest inline-flex items-center gap-1 transition">
+                          <Link to={t.path} className="label-micro text-indigo-650! hover:text-indigo-850 inline-flex items-center gap-1 transition">
                             <span>Start Assessment</span>
                             <PlusCircle className="w-3 h-3" />
                           </Link>
@@ -956,8 +956,8 @@ export default function IdentityDashboard() {
 
         {/* RIGHT COLUMN: Shareable Card */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="bg-white border border-slate-100 rounded-[2.5rem] p-6 shadow-[0_8px_30px_rgb(0,0,0,0.02)] sticky top-24">
-            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Shareable Identity Card</h3>
+          <div className="surface-card p-6 sticky top-24">
+            <h3 className="heading-display text-sm text-slate-400! uppercase tracking-widest mb-4">Shareable Identity Card</h3>
             
             {/* The Card Preview (Tight, aspect-[4/5] shape with zero empty space) */}
             <div className="w-full flex justify-center py-2 overflow-hidden rounded-[2rem] bg-slate-50 border border-slate-100">
@@ -966,16 +966,16 @@ export default function IdentityDashboard() {
 
             {/* Interactive Theme Selector */}
             <div className="mt-5 space-y-2">
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block">Select Card Style</span>
+              <span className="label-micro-muted block">Select Card Style</span>
               <div className="grid grid-cols-2 gap-2">
                 {Object.entries(CARD_THEMES).map(([key, config]) => (
                   <button
                     key={key}
                     onClick={() => setCardTheme(key)}
-                    className={`px-3 py-2 rounded-xl text-[10px] font-bold border transition truncate ${
+                    className={`pill truncate ${
                       cardTheme === key
-                        ? 'border-indigo-600 bg-indigo-50/40 text-indigo-700 font-extrabold'
-                        : 'border-slate-200 bg-white text-slate-650 hover:bg-slate-50'
+                        ? 'pill-active'
+                        : 'pill-muted'
                     }`}
                   >
                     {config.name}
@@ -993,19 +993,21 @@ export default function IdentityDashboard() {
                 <button
                   onClick={downloadCard}
                   disabled={isDownloading}
-                  className="flex-1 py-3.5 bg-indigo-600 hover:bg-indigo-750 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  className="btn-glass flex-1 justify-between disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isDownloading ? (
-                    <div className="w-3.5 h-3.5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <Download className="w-3.5 h-3.5" />
-                  )}
                   <span>{isDownloading ? 'Downloading...' : 'Download Card'}</span>
+                  <span className="btn-chip w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center">
+                    {isDownloading ? (
+                      <div className="w-3.5 h-3.5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <Download className="w-3.5 h-3.5" />
+                    )}
+                  </span>
                 </button>
-                
+
                 <button
                   onClick={() => setShowShareModal(true)}
-                  className="p-3.5 border border-slate-200 hover:bg-slate-50 rounded-xl text-slate-500 transition cursor-pointer"
+                  className="surface-glass p-3 rounded-full text-slate-500 transition cursor-pointer"
                   title="Share profile link"
                 >
                   <Share2 className="w-4 h-4" />
@@ -1020,17 +1022,17 @@ export default function IdentityDashboard() {
       {/* Share Modal */}
       <AnimatePresence>
         {showShareModal && (
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs z-50 flex items-center justify-center px-4"
           >
-            <motion.div
+            <Motion.div
               initial={{ scale: 0.95, y: 15 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 15 }}
-              className="bg-white rounded-3xl p-7 max-w-md w-full border border-slate-100 shadow-xl relative"
+              className="surface-card p-7 max-w-md w-full relative"
             >
               <button
                 onClick={() => setShowShareModal(false)}
@@ -1039,7 +1041,7 @@ export default function IdentityDashboard() {
                 <X className="w-4 h-4" />
               </button>
 
-              <h3 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+              <h3 className="heading-display text-lg text-slate-900! mb-3 flex items-center gap-2">
                 <Share2 className="w-4.5 h-4.5 text-indigo-500" />
                 Share Your Stack
               </h3>
@@ -1054,25 +1056,25 @@ export default function IdentityDashboard() {
               <div className="flex gap-3">
                 <button
                   onClick={handleCopyLink}
-                  className="flex-1 py-3 border border-slate-200 bg-white hover:bg-slate-50 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition text-slate-700"
+                  className="pill pill-muted flex-1 justify-center"
                 >
-                  <Copy className="w-3.5 h-3.5 text-slate-400" />
+                  <Copy className="w-3.5 h-3.5" />
                   <span>{copiedLink ? 'Copied Link!' : 'Copy Profile Link'}</span>
                 </button>
-                
+
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(getBioText());
                     setShowShareModal(false);
                   }}
-                  className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-750 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition shadow"
+                  className="btn-dark flex-1 justify-center py-3"
                 >
                   <Check className="w-3.5 h-3.5" />
                   <span>Copy Bio Text</span>
                 </button>
               </div>
-            </motion.div>
-          </motion.div>
+            </Motion.div>
+          </Motion.div>
         )}
       </AnimatePresence>
     </div>
@@ -1106,7 +1108,7 @@ const ShareableIDCard = React.forwardRef(({ user, theme }, ref) => {
         <div className="flex justify-between items-center relative z-10 w-full">
           <div className={`flex items-center gap-1.5 ${tConfig.headerText}`}>
             <Fingerprint className="w-4.5 h-4.5 opacity-80" />
-            <span className="text-[10px] font-black tracking-widest uppercase">OMNITYPE</span>
+            <span className="label-micro text-inherit!">OMNITYPE</span>
           </div>
         </div>
       </div>
@@ -1129,8 +1131,8 @@ const ShareableIDCard = React.forwardRef(({ user, theme }, ref) => {
         
         {/* Profile Identity */}
         <div className="text-center">
-          <h2 className="text-[13px] font-black tracking-tight leading-none truncate">{user.name}</h2>
-          <p className="text-[7px] font-extrabold opacity-60 uppercase tracking-wider mt-1.5">
+          <h2 className="heading-display text-[13px] leading-none truncate text-inherit!">{user.name}</h2>
+          <p className="label-micro text-inherit! opacity-60 mt-1.5">
             {metadataText}
           </p>
         </div>

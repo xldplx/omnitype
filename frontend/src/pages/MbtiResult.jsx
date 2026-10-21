@@ -220,21 +220,21 @@ function ResultBar({ left, right, leftCode, rightCode, leftValue, rightValue, co
       {/* Top Labels with Circular Letter Badges */}
       <div className="flex justify-between items-center text-xs sm:text-sm font-bold">
         <div className="flex items-center gap-2">
-          <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-mono font-black transition-all ${
+          <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-mono font-bold transition-all ${
             isLeftDominant ? `${color} text-white shadow-xs` : 'bg-slate-200 text-slate-500'
           }`}>
             {leftCode}
           </span>
-          <span className={`transition-colors ${isLeftDominant ? 'text-slate-900 font-extrabold' : 'text-slate-400 font-medium'}`}>
+          <span className={`transition-colors ${isLeftDominant ? 'text-slate-900 font-bold' : 'text-slate-400 font-medium'}`}>
             {left}
           </span>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className={`transition-colors ${!isLeftDominant ? 'text-slate-900 font-extrabold' : 'text-slate-400 font-medium'}`}>
+          <span className={`transition-colors ${!isLeftDominant ? 'text-slate-900 font-bold' : 'text-slate-400 font-medium'}`}>
             {right}
           </span>
-          <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-mono font-black transition-all ${
+          <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-mono font-bold transition-all ${
             !isLeftDominant ? `${color} text-white shadow-xs` : 'bg-slate-200 text-slate-500'
           }`}>
             {rightCode}
@@ -260,8 +260,8 @@ function ResultBar({ left, right, leftCode, rightCode, leftValue, rightValue, co
 
       {/* Bottom Percentages */}
       <div className="flex justify-between items-center text-xs font-bold px-1">
-        <span className={isLeftDominant ? 'text-slate-900 font-extrabold' : 'text-slate-400'}>{leftValue}%</span>
-        <span className={!isLeftDominant ? 'text-slate-900 font-extrabold' : 'text-slate-400'}>{rightValue}%</span>
+        <span className={isLeftDominant ? 'text-slate-900 font-bold' : 'text-slate-400'}>{leftValue}%</span>
+        <span className={!isLeftDominant ? 'text-slate-900 font-bold' : 'text-slate-400'}>{rightValue}%</span>
       </div>
     </div>
   );
@@ -292,10 +292,6 @@ export default function MbtiResult() {
     }
   }, [upperType]);
 
-  if (!typeInfo) {
-    return <Navigate to="/test/mbti" replace />;
-  }
-
   // Calculate real percentages from location state or simulated fallback
   const percentages = useMemo(() => {
     if (location.state?.percentages) {
@@ -308,6 +304,10 @@ export default function MbtiResult() {
       JP: upperType.includes('J') ? 68 : 32
     };
   }, [location.state, upperType]);
+
+  if (!typeInfo) {
+    return <Navigate to="/test/mbti" replace />;
+  }
 
   const handleDownloadCard = async () => {
     if (!cardRef.current) return;
@@ -360,7 +360,7 @@ export default function MbtiResult() {
   } = getCompatibilityLists(upperType);
 
   return (
-    <div className="w-full min-h-screen bg-[#fafafa] pb-32 pt-28 md:pt-36 px-4 sm:px-8 md:px-12 relative text-slate-800 font-sans selection:bg-indigo-100">
+    <div className="w-full min-h-screen bg-slate-50 pb-32 pt-28 md:pt-36 px-4 sm:px-8 md:px-12 relative text-slate-800 font-sans selection:bg-indigo-100">
       
       {/* Background ambient lighting */}
       <div className="fixed top-[-15vh] left-[-10vw] w-[60vw] h-[60vw] bg-indigo-500/5 rounded-full blur-[140px] pointer-events-none z-0" />
@@ -373,26 +373,26 @@ export default function MbtiResult() {
           <button 
             type="button"
             onClick={() => navigate('/')}
-            className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-slate-400 hover:text-slate-900 transition cursor-pointer"
+            className="inline-flex items-center gap-2 label-micro transition cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span>Test Directory</span>
+            <span className="hover:text-slate-900">Test Directory</span>
           </button>
 
           <div className="flex items-center gap-2.5">
             <Link
               to={`/wiki/mbti/${upperType.toLowerCase()}`}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200/80 hover:bg-slate-50 text-xs font-black uppercase tracking-wider text-indigo-600 shadow-2xs transition"
+              className="pill pill-muted cursor-pointer"
             >
               <BookOpen className="w-3.5 h-3.5" />
-              <span>Wiki Chapter</span>
+              <span className="text-indigo-600">Wiki Chapter</span>
             </Link>
 
             <button
               type="button"
               onClick={handleDownloadCard}
               disabled={isExporting}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200/80 hover:bg-slate-50 text-xs font-black uppercase tracking-wider text-slate-700 shadow-2xs transition cursor-pointer"
+              className="pill pill-muted cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-indigo-500" />
               <span>{isExporting ? 'Exporting...' : 'Export Card'}</span>
@@ -400,7 +400,7 @@ export default function MbtiResult() {
 
             <Link
               to="/test/mbti"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-xs font-black uppercase tracking-wider text-white shadow-xs transition"
+              className="btn-dark px-4 py-2"
             >
               <RefreshCw className="w-3.5 h-3.5 text-slate-300" />
               <span>Retake Test</span>
@@ -411,7 +411,7 @@ export default function MbtiResult() {
         {/* Hero Result Card (Captured for Export) */}
         <div 
           ref={cardRef}
-          className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.03)] rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden group space-y-8"
+          className="surface-card p-8 md:p-12 relative overflow-hidden group space-y-8"
         >
           {/* Left Gradient Strip */}
           <div className={`absolute top-0 left-0 w-3 h-full bg-linear-to-b ${temperament.color}`} />
@@ -419,22 +419,22 @@ export default function MbtiResult() {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
             <div className="space-y-4 max-w-3xl">
               <div className="flex flex-wrap items-center gap-3">
-                <span className={`text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border ${temperament.themeBg} ${temperament.themeBorder} ${temperament.themeText}`}>
-                  {temperament.badge}
+                <span className={`label-micro px-3.5 py-1 rounded-full border ${temperament.themeBg} ${temperament.themeBorder}`}>
+                  <span className={temperament.themeText}>{temperament.badge}</span>
                 </span>
-                <span className="text-xs font-bold text-slate-400">
+                <span className="label-micro-muted">
                   {typeInfo.mythologicalArchetype || "The Master Archetype"}
                 </span>
               </div>
 
               <div className="space-y-2">
-                <h1 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight font-mono">
+                <h1 className="heading-display text-4xl sm:text-6xl">
                   {upperType}
                   <span className="text-indigo-600 font-sans italic text-3xl sm:text-4xl ml-3 font-normal">
                     — {typeInfo.title}
                   </span>
                 </h1>
-                <p className="text-sm sm:text-base font-bold text-indigo-600 uppercase tracking-wide">
+                <p className="font-display text-sm sm:text-base font-bold text-indigo-600 uppercase tracking-wide">
                   {temperament.tagline}
                 </p>
               </div>
@@ -445,13 +445,13 @@ export default function MbtiResult() {
             </div>
 
             {/* Quick Stats Pill Matrix */}
-            <div className="w-full lg:w-96 p-6 rounded-3xl bg-slate-50/90 border border-slate-200/80 space-y-3 shrink-0">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
+            <div className="w-full lg:w-96 surface-glass rounded-3xl p-6 space-y-3 shrink-0">
+              <span className="label-micro-muted block">
                 Cognitive Function Architecture
               </span>
               <div className="flex items-center gap-1.5 flex-wrap">
                 {cogStack.map((s, idx) => (
-                  <span key={idx} className="font-mono text-xs font-black px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-800 shadow-2xs">
+                  <span key={idx} className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-800 shadow-2xs">
                     {s.function}
                   </span>
                 ))}
@@ -473,10 +473,10 @@ export default function MbtiResult() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center justify-center gap-2 py-3 px-3 sm:px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 cursor-pointer ${
-                  isActive 
-                    ? 'bg-slate-900 text-white shadow-md scale-[1.01]' 
-                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50 shadow-2xs'
+                className={`pill transition-all duration-200 cursor-pointer ${
+                  isActive
+                    ? 'pill-active'
+                    : 'pill-muted'
                 }`}
               >
                 <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-indigo-400' : 'text-slate-400'}`} />
@@ -502,9 +502,9 @@ export default function MbtiResult() {
               className="space-y-8"
             >
               {/* Cognitive Balance Spectrum Sliders */}
-              <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-12 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-8">
+              <div className="surface-card p-8 md:p-12 space-y-8">
                 <div className="space-y-1">
-                  <h3 className="text-2xl font-black text-slate-900">Your Cognitive Polarity Spectrum</h3>
+                  <h3 className="heading-display text-2xl">Your Cognitive Polarity Spectrum</h3>
                   <p className="text-slate-500 text-sm font-medium">Visual balance across the four Jungian psychological polarities.</p>
                 </div>
 
@@ -518,9 +518,9 @@ export default function MbtiResult() {
 
               {/* Core Motives & Daily Habits */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
-                  <span className="text-xs font-black uppercase tracking-wider text-indigo-600 block">Core Motive & Driving Force</span>
-                  <h4 className="text-2xl font-black text-slate-900">What Drives Your Mind</h4>
+                <div className="surface-card p-8 md:p-10 space-y-4">
+                  <span className="label-micro block"><span className="text-indigo-600">Core Motive & Driving Force</span></span>
+                  <h4 className="heading-display text-2xl">What Drives Your Mind</h4>
                   <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
                     You are naturally driven to make sense of the world, analyze underlying systems, and build frameworks that work. You value competency, intellectual autonomy, and integrity in execution.
                   </p>
@@ -533,9 +533,9 @@ export default function MbtiResult() {
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
-                  <span className="text-xs font-black uppercase tracking-wider text-amber-600 block">Daily Interactions & Rhythms</span>
-                  <h4 className="text-2xl font-black text-slate-900">How You Interact Daily</h4>
+                <div className="surface-card p-8 md:p-10 space-y-4">
+                  <span className="label-micro block"><span className="text-amber-600">Daily Interactions & Rhythms</span></span>
+                  <h4 className="heading-display text-2xl">How You Interact Daily</h4>
                   <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
                     {typeInfo.habits || "You navigate daily life by processing information internally, solving complex problems, and optimizing workflows for maximum personal efficiency."}
                   </p>
@@ -546,15 +546,15 @@ export default function MbtiResult() {
               </div>
 
               {/* Letter Explanations */}
-              <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-6">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-400 block">Dichotomy Letters Breakdown</span>
+              <div className="surface-card p-8 md:p-10 space-y-6">
+                <span className="label-micro-muted block">Dichotomy Letters Breakdown</span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                   {letterExplainer.map((item, idx) => (
                     <div key={idx} className="p-5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
                       <div className="flex justify-between items-center">
-                        <span className="text-3xl font-black text-slate-900 font-mono">{item.letter}</span>
-                        <span className="text-[11px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-md bg-white text-indigo-600 border border-slate-200">
-                          {item.title}
+                        <span className="heading-display text-3xl">{item.letter}</span>
+                        <span className="label-micro px-2.5 py-0.5 rounded-md bg-white border border-slate-200">
+                          <span className="text-indigo-600">{item.title}</span>
                         </span>
                       </div>
                       <p className="text-xs text-slate-600 font-medium leading-relaxed">{item.why}</p>
@@ -565,17 +565,17 @@ export default function MbtiResult() {
 
               {/* Secret Dreams & Hidden Fears */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-3">
-                  <span className="text-xs font-black uppercase tracking-wider text-purple-600 block">Core Aspirations</span>
-                  <h4 className="text-xl font-black text-slate-900">Secret Dreams</h4>
+                <div className="surface-card p-8 md:p-10 space-y-3">
+                  <span className="label-micro block"><span className="text-purple-600">Core Aspirations</span></span>
+                  <h4 className="heading-display text-xl">Secret Dreams</h4>
                   <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
                     {typeInfo.secretDreams}
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-3">
-                  <span className="text-xs font-black uppercase tracking-wider text-rose-600 block">Vulnerabilities</span>
-                  <h4 className="text-xl font-black text-slate-900">Hidden Fears</h4>
+                <div className="surface-card p-8 md:p-10 space-y-3">
+                  <span className="label-micro block"><span className="text-rose-600">Vulnerabilities</span></span>
+                  <h4 className="heading-display text-xl">Hidden Fears</h4>
                   <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
                     {typeInfo.hiddenFears}
                   </p>
@@ -599,7 +599,7 @@ export default function MbtiResult() {
               {/* 4 Cognitive Functions */}
               <div className="space-y-6">
                 <div className="space-y-1">
-                  <h3 className="text-2xl font-black text-slate-900">4-Tier Cognitive Function Stack</h3>
+                  <h3 className="heading-display text-2xl">4-Tier Cognitive Function Stack</h3>
                   <p className="text-slate-500 text-sm font-medium">Carl Jung's cognitive hierarchy explaining how your brain prioritizes perception and judgment.</p>
                 </div>
 
@@ -607,27 +607,34 @@ export default function MbtiResult() {
                   {cogStack.map((fn, idx) => (
                     <div 
                       key={idx}
-                      className="bg-white border border-slate-200/80 rounded-[2rem] p-8 shadow-[0_4px_20px_rgb(0,0,0,0.02)] space-y-4 flex flex-col justify-between"
+                      className="surface-card p-8 space-y-4 flex flex-col justify-between"
                     >
                       <div className="space-y-3">
                         <div className="flex justify-between items-center">
-                          <span className={`text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full border ${
-                            idx === 0 ? 'bg-indigo-50 text-indigo-700 border-indigo-200' :
-                            idx === 1 ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                            idx === 2 ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                            'bg-rose-50 text-rose-700 border-rose-200'
+                          <span className={`label-micro px-3 py-1 rounded-full border ${
+                            idx === 0 ? 'bg-indigo-50 border-indigo-200' :
+                            idx === 1 ? 'bg-emerald-50 border-emerald-200' :
+                            idx === 2 ? 'bg-amber-50 border-amber-200' :
+                            'bg-rose-50 border-rose-200'
                           }`}>
-                            {fn.rank}
+                            <span className={
+                              idx === 0 ? 'text-indigo-700' :
+                              idx === 1 ? 'text-emerald-700' :
+                              idx === 2 ? 'text-amber-700' :
+                              'text-rose-700'
+                            }>
+                              {fn.rank}
+                            </span>
                           </span>
 
-                          <div className="w-11 h-11 rounded-2xl bg-slate-900 text-white font-mono font-black text-lg flex items-center justify-center shadow-xs">
+                          <div className="w-11 h-11 rounded-2xl bg-slate-900 text-white font-mono font-bold text-lg flex items-center justify-center shadow-xs">
                             {fn.function}
                           </div>
                         </div>
 
                         <div>
-                          <h4 className="text-xl font-black text-slate-900">{fn.name}</h4>
-                          <span className="text-xs font-bold text-slate-400">Role: {fn.role}</span>
+                          <h4 className="heading-display text-xl">{fn.name}</h4>
+                          <span className="label-micro-muted">Role: {fn.role}</span>
                         </div>
 
                         <p className="text-slate-600 text-sm leading-relaxed font-medium">
@@ -647,16 +654,16 @@ export default function MbtiResult() {
               {/* Preference Deep Dive Grid */}
               <div className="space-y-6">
                 <div className="space-y-1">
-                  <h3 className="text-2xl font-black text-slate-900">Understanding Your Trait Preferences</h3>
+                  <h3 className="heading-display text-2xl">Understanding Your Trait Preferences</h3>
                   <p className="text-slate-500 text-sm font-medium">Detailed advantages and blind spots for each of your 4 active preferences.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {activeDimensions.map((dim, idx) => (
-                    <div key={idx} className="bg-white border border-slate-200/80 rounded-[2rem] p-7 shadow-[0_4px_20px_rgb(0,0,0,0.02)] space-y-4">
+                    <div key={idx} className="surface-card p-7 space-y-4">
                       <div className="flex justify-between items-center pb-3 border-b border-slate-100">
-                        <h4 className="text-base font-black text-slate-900">{dim.activeTitle} ({dim.activeChar})</h4>
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">vs {dim.opposingTitle} ({dim.opposingChar})</span>
+                        <h4 className="heading-display text-base">{dim.activeTitle} ({dim.activeChar})</h4>
+                        <span className="label-micro-muted">vs {dim.opposingTitle} ({dim.opposingChar})</span>
                       </div>
 
                       <p className="text-sm text-slate-600 font-medium leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-100">
@@ -665,7 +672,7 @@ export default function MbtiResult() {
 
                       <div className="grid grid-cols-2 gap-4 pt-1 text-xs">
                         <div>
-                          <span className="font-black text-emerald-600 uppercase tracking-wider block mb-2">Advantages</span>
+                          <span className="label-micro block mb-2"><span className="text-emerald-600">Advantages</span></span>
                           <ul className="space-y-1.5 font-medium text-slate-700">
                             {dim.pros.map((p, i) => (
                               <li key={i} className="flex items-start gap-1.5">
@@ -677,7 +684,7 @@ export default function MbtiResult() {
                         </div>
 
                         <div>
-                          <span className="font-black text-rose-600 uppercase tracking-wider block mb-2">Blind Spots</span>
+                          <span className="label-micro block mb-2"><span className="text-rose-600">Blind Spots</span></span>
                           <ul className="space-y-1.5 font-medium text-slate-700">
                             {dim.cons.map((c, i) => (
                               <li key={i} className="flex items-start gap-1.5">
@@ -709,10 +716,10 @@ export default function MbtiResult() {
             >
               {/* Strengths & Blind Spots */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
+                <div className="surface-card p-8 md:p-10 space-y-4">
                   <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                     <Target className="w-5 h-5 text-emerald-500" />
-                    <h3 className="text-xl font-black text-slate-900">Core Superpowers</h3>
+                    <h3 className="heading-display text-xl">Core Superpowers</h3>
                   </div>
                   <ul className="space-y-3">
                     {typeInfo.strengths?.map((item, idx) => (
@@ -724,10 +731,10 @@ export default function MbtiResult() {
                   </ul>
                 </div>
 
-                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
+                <div className="surface-card p-8 md:p-10 space-y-4">
                   <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                     <Zap className="w-5 h-5 text-amber-500" />
-                    <h3 className="text-xl font-black text-slate-900">Blind Spots & Challenges</h3>
+                    <h3 className="heading-display text-xl">Blind Spots & Challenges</h3>
                   </div>
                   <ul className="space-y-3">
                     {typeInfo.weaknesses?.map((item, idx) => (
@@ -742,9 +749,9 @@ export default function MbtiResult() {
 
               {/* Famous Figures */}
               {famousFigures.length > 0 && (
-                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-6">
+                <div className="surface-card p-8 md:p-10 space-y-6">
                   <div className="space-y-1">
-                    <h3 className="text-2xl font-black text-slate-900">Famous {upperType} Figures</h3>
+                    <h3 className="heading-display text-2xl">Famous {upperType} Figures</h3>
                     <p className="text-slate-500 text-sm font-medium">Historical visionaries and creators who share your cognitive archetype.</p>
                   </div>
 
@@ -753,8 +760,8 @@ export default function MbtiResult() {
                       <div key={idx} className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 relative overflow-hidden">
                         <div className="flex justify-between items-start">
                           <div>
-                            <h4 className="text-lg font-black text-slate-900">{fig.name}</h4>
-                            <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider">{fig.role}</span>
+                            <h4 className="heading-display text-lg">{fig.name}</h4>
+                            <span className="label-micro"><span className="text-indigo-600">{fig.role}</span></span>
                           </div>
                           <Quote className="w-6 h-6 text-slate-300" />
                         </div>
@@ -769,10 +776,10 @@ export default function MbtiResult() {
 
               {/* Suitable Careers & Workplace */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
+                <div className="surface-card p-8 md:p-10 space-y-4">
                   <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                     <Briefcase className="w-5 h-5 text-indigo-500" />
-                    <h3 className="text-xl font-black text-slate-900">Ideal Career Horizons</h3>
+                    <h3 className="heading-display text-xl">Ideal Career Horizons</h3>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {(typeInfo.careers || []).map((career, idx) => (
@@ -784,10 +791,10 @@ export default function MbtiResult() {
                   </div>
                 </div>
 
-                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
+                <div className="surface-card p-8 md:p-10 space-y-4">
                   <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                     <Compass className="w-5 h-5 text-amber-500" />
-                    <h3 className="text-xl font-black text-slate-900">Workplace Behavior</h3>
+                    <h3 className="heading-display text-xl">Workplace Behavior</h3>
                   </div>
                   <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
                     {typeInfo.workplace}
@@ -811,23 +818,23 @@ export default function MbtiResult() {
             >
               {/* Flow State vs Acute Stress Response */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-3">
+                <div className="surface-card p-8 md:p-10 space-y-3">
                   <div className="flex items-center gap-3 mb-2">
                     <Sparkles className="w-5 h-5 text-emerald-500" />
-                    <span className="text-xs font-black uppercase tracking-wider text-emerald-600">Peak Flow State</span>
+                    <span className="label-micro"><span className="text-emerald-600">Peak Flow State</span></span>
                   </div>
-                  <h4 className="text-xl font-black text-slate-900">When You Are Thriving</h4>
+                  <h4 className="heading-display text-xl">When You Are Thriving</h4>
                   <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
                     Operating at peak clarity, leveraging your dominant cognitive function effortlessly. You feel aligned, creative, and confident in execution.
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-3">
+                <div className="surface-card p-8 md:p-10 space-y-3">
                   <div className="flex items-center gap-3 mb-2">
                     <ShieldAlert className="w-5 h-5 text-rose-500" />
-                    <span className="text-xs font-black uppercase tracking-wider text-rose-600">Under Acute Stress</span>
+                    <span className="label-micro"><span className="text-rose-600">Under Acute Stress</span></span>
                   </div>
-                  <h4 className="text-xl font-black text-slate-900">Inferior Function Trigger</h4>
+                  <h4 className="heading-display text-xl">Inferior Function Trigger</h4>
                   <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
                     {typeInfo.stressResponse}
                   </p>
@@ -835,9 +842,9 @@ export default function MbtiResult() {
               </div>
 
               {/* Chemistry Matrix */}
-              <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-8">
+              <div className="surface-card p-8 md:p-10 space-y-8">
                 <div className="space-y-1">
-                  <h3 className="text-2xl font-black text-slate-900">Relational Chemistry Matrix</h3>
+                  <h3 className="heading-display text-2xl">Relational Chemistry Matrix</h3>
                   <p className="text-slate-500 text-sm font-medium">Synergies across compatible and growth-challenge archetype pairings.</p>
                 </div>
 
@@ -847,7 +854,7 @@ export default function MbtiResult() {
                   <div className="space-y-4">
                     <div className="flex items-center gap-2 border-l-2 border-emerald-500 pl-3">
                       <Heart className="w-4 h-4 text-emerald-500" />
-                      <span className="text-xs font-black tracking-wider text-emerald-600 uppercase">Natural Synergy Partners</span>
+                      <span className="label-micro"><span className="text-emerald-600">Natural Synergy Partners</span></span>
                     </div>
 
                     <div className="space-y-3">
@@ -858,11 +865,11 @@ export default function MbtiResult() {
                           className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 flex items-center justify-between hover:bg-emerald-50 hover:border-emerald-200 transition group"
                         >
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-white text-slate-900 font-mono font-black text-xs flex items-center justify-center border border-slate-200 shadow-2xs">
+                            <div className="w-10 h-10 rounded-xl bg-white text-slate-900 font-mono font-bold text-xs flex items-center justify-center border border-slate-200 shadow-2xs">
                               {partner}
                             </div>
                             <div className="space-y-0.5">
-                              <span className="text-xs font-black text-slate-900 block group-hover:text-emerald-800">{partner} — {typeDescriptions[partner]?.title}</span>
+                              <span className="text-xs font-bold text-slate-900 block group-hover:text-emerald-800">{partner} — {typeDescriptions[partner]?.title}</span>
                               <p className="text-xs text-slate-500 font-medium">{getSynergyExplanation(upperType, partner, true)}</p>
                             </div>
                           </div>
@@ -876,7 +883,7 @@ export default function MbtiResult() {
                   <div className="space-y-4">
                     <div className="flex items-center gap-2 border-l-2 border-amber-500 pl-3">
                       <Zap className="w-4 h-4 text-amber-500" />
-                      <span className="text-xs font-black tracking-wider text-amber-600 uppercase">Growth Challenge Partners</span>
+                      <span className="label-micro"><span className="text-amber-600">Growth Challenge Partners</span></span>
                     </div>
 
                     <div className="space-y-3">
@@ -887,11 +894,11 @@ export default function MbtiResult() {
                           className="bg-slate-50 p-4 rounded-2xl border border-slate-200/70 flex items-center justify-between hover:bg-amber-50 hover:border-amber-200 transition group"
                         >
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-white text-slate-900 font-mono font-black text-xs flex items-center justify-center border border-slate-200 shadow-2xs">
+                            <div className="w-10 h-10 rounded-xl bg-white text-slate-900 font-mono font-bold text-xs flex items-center justify-center border border-slate-200 shadow-2xs">
                               {partner}
                             </div>
                             <div className="space-y-0.5">
-                              <span className="text-xs font-black text-slate-900 block group-hover:text-amber-800">{partner} — {typeDescriptions[partner]?.title}</span>
+                              <span className="text-xs font-bold text-slate-900 block group-hover:text-amber-800">{partner} — {typeDescriptions[partner]?.title}</span>
                               <p className="text-xs text-slate-500 font-medium">{getSynergyExplanation(upperType, partner, false)}</p>
                             </div>
                           </div>

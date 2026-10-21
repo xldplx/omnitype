@@ -12,7 +12,7 @@ function formatMarkdown(text) {
   const parts = text.split(/\*\*([^*]+)\*\*/g);
   return parts.map((part, idx) => {
     if (idx % 2 === 1) {
-      return <strong key={idx} className="text-slate-900 font-extrabold">{part}</strong>;
+      return <strong key={idx} className="text-slate-900 font-bold">{part}</strong>;
     }
     return part;
   });
@@ -24,9 +24,9 @@ function ResultBar({ label, value, color, isPrimary, isSecondary }) {
       <div className="flex justify-between items-center text-sm font-bold text-slate-700">
         <span className="flex items-center gap-2">
           <span className={`w-2.5 h-2.5 rounded-full ${isPrimary ? 'bg-indigo-600 ring-4 ring-indigo-100' : isSecondary ? 'bg-sky-500' : 'bg-slate-300'}`} />
-          <span className={isPrimary ? 'text-slate-900 font-black' : 'text-slate-700'}>{label}</span>
-          {isPrimary && <span className="text-[0.65rem] uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 font-extrabold border border-indigo-100">Primary</span>}
-          {isSecondary && <span className="text-[0.65rem] uppercase tracking-wider px-2 py-0.5 rounded-full bg-sky-50 text-sky-600 font-extrabold border border-sky-100">Secondary</span>}
+          <span className={isPrimary ? 'text-slate-900 font-bold' : 'text-slate-700'}>{label}</span>
+          {isPrimary && <span className="label-micro px-2 py-0.5 rounded-full bg-indigo-50 border border-indigo-100"><span className="text-indigo-600">Primary</span></span>}
+          {isSecondary && <span className="label-micro px-2 py-0.5 rounded-full bg-sky-50 border border-sky-100"><span className="text-sky-600">Secondary</span></span>}
         </span>
         <span className="font-mono text-slate-900 font-bold">{value}%</span>
       </div>
@@ -109,7 +109,7 @@ export default function JungianArchetypesResult() {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-[#fafafa] relative overflow-hidden flex flex-col items-center selection:bg-sky-200">
+    <div className="w-full min-h-screen bg-slate-50 relative overflow-hidden flex flex-col items-center selection:bg-sky-200">
       
       {/* Decorative Ambient Background Auras */}
       <div className={`fixed top-[-10vh] left-[-10vw] w-[50vw] h-[50vw] ${primaryInfo.bgLight} rounded-full blur-[120px] pointer-events-none opacity-60 z-0`} />
@@ -122,12 +122,12 @@ export default function JungianArchetypesResult() {
           <button 
             type="button"
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-slate-900 transition-colors group cursor-pointer"
+            className="flex items-center gap-2 label-micro transition-colors group cursor-pointer"
           >
             <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
               <ChevronLeft className="w-4 h-4 text-slate-700" />
             </div>
-            <span>Home</span>
+            <span className="hover:text-slate-900">Home</span>
           </button>
         </div>
 
@@ -140,10 +140,10 @@ export default function JungianArchetypesResult() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-5 py-3 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
-                  isActive 
-                    ? 'bg-slate-900 text-white shadow-md' 
-                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50'
+                className={`pill transition-all duration-300 cursor-pointer ${
+                  isActive
+                    ? 'pill-active'
+                    : 'pill-muted'
                 }`}
               >
                 <span>{tab.label}</span>
@@ -171,11 +171,11 @@ export default function JungianArchetypesResult() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                   
                   {/* Primary Archetype (Dominant 8 Cols) */}
-                  <div className="lg:col-span-8 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+                  <div className="lg:col-span-8 surface-card p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
                     <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${primaryColor} opacity-90`} />
                     
                     <div>
-                      <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 text-slate-900 tracking-tight leading-none">
+                      <h1 className="heading-display text-4xl sm:text-6xl md:text-7xl mb-4 leading-none">
                         {primaryInfo.name}
                       </h1>
                       
@@ -186,38 +186,38 @@ export default function JungianArchetypesResult() {
                   </div>
 
                   {/* Secondary Archetype Layer (4 Cols - Visible Side-by-Side without scrolling!) */}
-                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
-                     <h2 className="text-3xl sm:text-4xl md:text-5xl leading-none font-black tracking-tight text-slate-900 z-10 drop-shadow-sm pb-1 text-center">
+                  <div className="lg:col-span-4 surface-card p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                     <h2 className="heading-display text-3xl sm:text-4xl md:text-5xl leading-none z-10 drop-shadow-sm pb-1 text-center">
                        {secondaryInfo.name}
                      </h2>
-                     <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-slate-400 mt-3 z-10 whitespace-nowrap">Secondary Layer</span>
+                     <span className="label-micro-muted mt-3 z-10 whitespace-nowrap">Secondary Layer</span>
                   </div>
 
                 </div>
 
                 {/* 2. Dedicated Core Motivations Section (What Drives You & What You Avoid) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-2 text-emerald-600">
                       <PackageOpen className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">What Drives You (Core Desire)</span>
+                      <span className="label-micro"><span className="text-emerald-600">What Drives You (Core Desire)</span></span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{primaryInfo.coreDesire}</p>
                   </div>
 
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-2 text-rose-500">
                       <AlertTriangle className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">What You Avoid (Core Fear)</span>
+                      <span className="label-micro"><span className="text-rose-500">What You Avoid (Core Fear)</span></span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{primaryInfo.coreFear}</p>
                   </div>
                 </div>
 
                 {/* 2. Your 12 Archetypes Breakdown (Positioned directly below Secondary Layer!) */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                <div className="surface-card p-8 md:p-12 space-y-8">
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-slate-900">Your 12 Archetypes Breakdown</h3>
+                    <h3 className="heading-display text-2xl">Your 12 Archetypes Breakdown</h3>
                     <p className="text-slate-500 text-sm font-medium">
                       Here is how your result compares across all 12 personality archetypes.
                     </p>
@@ -248,12 +248,12 @@ export default function JungianArchetypesResult() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   
                   {/* Strengths Card */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center">
                         <CheckCircle2 className="w-5 h-5 text-indigo-600" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Key Strengths</h3>
+                      <h3 className="heading-display text-xl">Key Strengths</h3>
                     </div>
                     <ul className="space-y-4">
                       {primaryInfo.strengths?.map((item, idx) => (
@@ -266,12 +266,12 @@ export default function JungianArchetypesResult() {
                   </div>
 
                   {/* Weaknesses Card */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center">
                         <AlertTriangle className="w-5 h-5 text-amber-500" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Things to Watch Out For</h3>
+                      <h3 className="heading-display text-xl">Things to Watch Out For</h3>
                     </div>
                     <ul className="space-y-4">
                       {primaryInfo.weaknesses?.map((item, idx) => (
@@ -287,24 +287,24 @@ export default function JungianArchetypesResult() {
 
                 {/* 4. Relationships & Workplace Application */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
+                  <div className="surface-card p-8 md:p-12 space-y-4">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center">
                         <LinkIcon className="w-5 h-5 text-rose-500" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">In Relationships</h3>
+                      <h3 className="heading-display text-xl">In Relationships</h3>
                     </div>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       {primaryInfo.relationshipDynamics}
                     </p>
                   </div>
 
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
+                  <div className="surface-card p-8 md:p-12 space-y-4">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center">
                         <Users className="w-5 h-5 text-emerald-500" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">At Work</h3>
+                      <h3 className="heading-display text-xl">At Work</h3>
                     </div>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       {primaryInfo.workplaceBehavior}
@@ -321,28 +321,28 @@ export default function JungianArchetypesResult() {
             {activeTab === 'shadow' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Growth & Shadow Side</h3>
+                  <h3 className="heading-display text-3xl">Growth & Shadow Side</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Every personality type has blind spots or a shadow side that shows up under stress.
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
-                    <span className="text-xs font-bold uppercase tracking-widest text-rose-500 bg-rose-50 px-3 py-1 rounded-full inline-block">
-                      Under Stress
+                  <div className="surface-card p-8 md:p-12 space-y-4">
+                    <span className="label-micro bg-rose-50 px-3 py-1 rounded-full inline-block">
+                      <span className="text-rose-500">Under Stress</span>
                     </span>
-                    <h4 className="text-2xl font-black text-slate-900">What Triggers Your Shadow</h4>
+                    <h4 className="heading-display text-2xl">What Triggers Your Shadow</h4>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       When your desire for <strong className="text-slate-900">{primaryInfo.coreDesire.toLowerCase()}</strong> is blocked, stress can bring out your fear of <strong className="text-rose-600">{primaryInfo.coreFear.toLowerCase()}</strong>.
                     </p>
                   </div>
 
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
-                    <span className="text-xs font-bold uppercase tracking-widest text-emerald-500 bg-emerald-50 px-3 py-1 rounded-full inline-block">
-                      Self Growth
+                  <div className="surface-card p-8 md:p-12 space-y-4">
+                    <span className="label-micro bg-emerald-50 px-3 py-1 rounded-full inline-block">
+                      <span className="text-emerald-500">Self Growth</span>
                     </span>
-                    <h4 className="text-2xl font-black text-slate-900">How to Stay Balanced</h4>
+                    <h4 className="heading-display text-2xl">How to Stay Balanced</h4>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       Growth comes from accepting your strengths while staying mindful of how your primary <strong className="text-slate-900">{primaryInfo.shortName}</strong> traits work together with your <strong className="text-slate-900">{secondaryInfo.shortName}</strong> side.
                     </p>
@@ -353,7 +353,7 @@ export default function JungianArchetypesResult() {
                 <div className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.2)] rounded-[2.5rem] p-10 md:p-14 text-white space-y-4">
                   <div className="flex items-center gap-3">
                     <Brain className="w-6 h-6 text-sky-400" />
-                    <h4 className="text-2xl font-black">Growth Tip</h4>
+                    <h4 className="text-2xl font-bold">Growth Tip</h4>
                   </div>
                   <p className="text-slate-300 text-base md:text-lg leading-relaxed font-medium max-w-4xl">
                     Pay attention when you start reacting out of stress. Taking a pause and acknowledging your needs helps you make conscious choices rather than reacting on autopilot.
@@ -368,13 +368,13 @@ export default function JungianArchetypesResult() {
             {activeTab === 'matrix' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">All 12 Archetypes</h3>
+                  <h3 className="heading-display text-3xl">All 12 Archetypes</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     See how your scores rank across all 12 personality archetypes in the system.
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                <div className="surface-card p-8 md:p-12 space-y-8">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((num) => {
                       const archObj = jungianArchetypesMap[num];

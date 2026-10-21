@@ -26,7 +26,7 @@ function ResultBar({ label, value, color, isPrimary }) {
         <span className="flex items-center gap-2">
           <span className={`w-2.5 h-2.5 rounded-full ${isPrimary ? 'bg-emerald-500 ring-4 ring-emerald-100' : 'bg-slate-300'}`} />
           <span className={isPrimary ? 'text-slate-900 font-black' : 'text-slate-700'}>{label}</span>
-          {isPrimary && <span className="text-[0.65rem] uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 font-extrabold border border-emerald-100">Primary Axis</span>}
+          {isPrimary && <span className="chip-accent bg-emerald-50 text-emerald-600! border border-emerald-100">Primary Axis</span>}
         </span>
         <span className="font-mono text-slate-900 font-bold bg-slate-100 px-2.5 py-0.5 rounded-md text-xs">{displayVal}%</span>
       </div>
@@ -116,9 +116,9 @@ export default function MoralAlignmentResult() {
           <button 
             type="button"
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-slate-900 transition-colors group cursor-pointer"
+            className="label-micro hover:text-slate-900 transition-colors group cursor-pointer"
           >
-            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
+            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center transition-colors">
               <ChevronLeft className="w-4 h-4 text-slate-700" />
             </div>
             <span>Home</span>
@@ -134,10 +134,10 @@ export default function MoralAlignmentResult() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-5 py-3 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                className={`pill ${
                   isActive 
-                    ? 'bg-slate-900 text-white shadow-md' 
-                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50'
+                    ? 'pill-active' 
+                    : 'pill-muted'
                 }`}
               >
                 <span>{tab.label}</span>
@@ -165,11 +165,11 @@ export default function MoralAlignmentResult() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                   
                   {/* Primary Archetype (Dominant 8 Cols) */}
-                  <div className="lg:col-span-8 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+                  <div className="surface-card lg:col-span-8 p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
                     <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${primaryColor} opacity-90`} />
                     
                     <div>
-                      <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 text-slate-900 tracking-tight leading-none">
+                      <h1 className="heading-display text-4xl sm:text-6xl md:text-7xl mb-4 text-slate-900! leading-none">
                         {alignment.name}
                       </h1>
                       
@@ -177,38 +177,38 @@ export default function MoralAlignmentResult() {
                         {alignment.description}
                       </p>
 
-                      <div className="pl-4 border-l-2 border-slate-200 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                      <div className="label-micro-muted pl-4">
                         <span>"{alignment.quote}"</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Standardized 2nd Box (4 Cols - Prominent & Centered) */}
-                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
-                     <h2 className={`text-3xl sm:text-4xl md:text-5xl leading-tight font-black tracking-tight text-transparent bg-clip-text bg-linear-to-b ${primaryColor} z-10 drop-shadow-sm pb-1`}>
+                  <div className="surface-card lg:col-span-4 p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                     <h2 className={`text-3xl sm:text-4xl md:text-5xl leading-tight font-display font-bold tracking-tight text-transparent bg-clip-text bg-linear-to-b ${primaryColor} z-10 drop-shadow-sm pb-1`}>
                        {alignment.shortName}
                      </h2>
-                     <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-slate-400 mt-3 z-10 whitespace-nowrap">Moral Archetype</span>
+                     <span className="label-micro-muted mt-3 z-10 whitespace-nowrap">Moral Archetype</span>
                   </div>
 
                 </div>
 
                 {/* 2. Dedicated Core Motivations Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-2 text-emerald-600">
                       <Shield className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">What Drives You (Ethical Imperative)</span>
+                      <span className="label-micro text-emerald-600!">What Drives You (Ethical Imperative)</span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">
                       {alignment.axis} alignment guiding principled action and societal impact.
                     </p>
                   </div>
 
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-2 text-rose-500">
                       <Heart className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">What You Avoid (Moral Violation)</span>
+                      <span className="label-micro text-rose-500!">What You Avoid (Moral Violation)</span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">
                       Compromising your internal moral compass or succumbing to tyranny and moral decay.
@@ -217,9 +217,9 @@ export default function MoralAlignmentResult() {
                 </div>
 
                 {/* 3. Axis Allocation Summary */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                <div className="surface-card p-8 md:p-12 space-y-8">
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-slate-900">Moral & Ethical Axis Allocation</h3>
+                    <h3 className="heading-display text-2xl text-slate-900!">Moral & Ethical Axis Allocation</h3>
                     <p className="text-slate-500 text-sm font-medium">
                       Visual position across the Law-vs-Chaos and Good-vs-Evil spectrums.
                     </p>
@@ -245,12 +245,12 @@ export default function MoralAlignmentResult() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   
                   {/* Manifest Strengths */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center">
                         <CheckCircle2 className="w-5 h-5 text-indigo-600" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Manifest Strengths</h3>
+                      <h3 className="heading-display text-xl text-slate-900!">Manifest Strengths</h3>
                     </div>
                     <ul className="space-y-4">
                       {alignment.strengths?.map((item, idx) => (
@@ -263,12 +263,12 @@ export default function MoralAlignmentResult() {
                   </div>
 
                   {/* Shadow Elements */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center">
                         <AlertTriangle className="w-5 h-5 text-amber-500" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Shadow Elements</h3>
+                      <h3 className="heading-display text-xl text-slate-900!">Shadow Elements</h3>
                     </div>
                     <ul className="space-y-4">
                       {alignment.weaknesses?.map((item, idx) => (
@@ -291,14 +291,14 @@ export default function MoralAlignmentResult() {
             {activeTab === 'metrics' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Axis Spectrum Breakdown</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Axis Spectrum Breakdown</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Detailed analysis of your Ethics Axis (Law & Order vs Chaos & Freedom) and Morals Axis (Altruism vs Selfishness).
                   </p>
                 </div>
 
                 {/* Main Progress Bars */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                <div className="surface-card p-8 md:p-12 space-y-8">
                   <div className="space-y-6">
                     <ResultBar
                       label="Ethics Axis (Law vs Chaos)"
@@ -317,10 +317,10 @@ export default function MoralAlignmentResult() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Law vs Chaos Deep Dive */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                       <Scale className="w-5 h-5 text-indigo-600" />
-                      <h4 className="text-xl font-black text-slate-900">Ethics Axis (Law vs Chaos)</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Ethics Axis (Law vs Chaos)</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       This axis measures your stance toward social structure, rules, and authority versus absolute individual freedom, adaptability, and rebellion.
@@ -328,10 +328,10 @@ export default function MoralAlignmentResult() {
                   </div>
 
                   {/* Good vs Evil Deep Dive */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                       <Shield className="w-5 h-5 text-emerald-600" />
-                      <h4 className="text-xl font-black text-slate-900">Morals Axis (Good vs Evil)</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Morals Axis (Good vs Evil)</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       This axis measures your altruism, empathy, and commitment to serving others versus personal gain, self-preservation, and pragmatic dominance.
@@ -347,13 +347,13 @@ export default function MoralAlignmentResult() {
             {activeTab === 'grid' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">The 3x3 Moral Matrix Grid</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">The 3x3 Moral Matrix Grid</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Visual positioning across all 9 classic alignment archetypes.
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 flex flex-col items-center justify-center relative overflow-hidden">
+                <div className="surface-card p-8 md:p-12 flex flex-col items-center justify-center relative overflow-hidden">
                    <div className="w-full max-w-md aspect-square grid grid-cols-3 grid-rows-3 gap-3 relative z-10">
                       {gridCells.map((cell) => {
                         const isMatch = cell.id === alignment.id;
@@ -371,7 +371,7 @@ export default function MoralAlignmentResult() {
                             `}
                           >
                             <span>{cell.label}</span>
-                            <span className="text-[0.65rem] font-bold uppercase tracking-wider mt-1 opacity-90">{cell.col} {cell.row}</span>
+                            <span className="label-micro mt-1 opacity-90">{cell.col} {cell.row}</span>
                           </Motion.div>
                         );
                       })}
@@ -386,7 +386,7 @@ export default function MoralAlignmentResult() {
             {activeTab === 'dynamics' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Philosophical Dynamics & Ethical Growth</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Philosophical Dynamics & Ethical Growth</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     How your alignment manifests in team leadership, crisis management, and long-term ethical evolution.
                   </p>
@@ -394,33 +394,33 @@ export default function MoralAlignmentResult() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* Hack 1 */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-3">
+                  <div className="surface-card p-8 space-y-3">
                     <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-2">
                       <Scale className="w-5 h-5" />
                     </div>
-                    <h4 className="text-xl font-black text-slate-900">Decision Framework</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">Decision Framework</h4>
                     <p className="text-slate-600 font-medium text-sm leading-relaxed">
                       You evaluate choices through your internal compass first, weighing rules against consequences.
                     </p>
                   </div>
 
                   {/* Hack 2 */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-3">
+                  <div className="surface-card p-8 space-y-3">
                     <div className="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center text-rose-500 mb-2">
                       <RefreshCw className="w-5 h-5" />
                     </div>
-                    <h4 className="text-xl font-black text-slate-900">Crisis Conduct</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">Crisis Conduct</h4>
                     <p className="text-slate-600 font-medium text-sm leading-relaxed">
                       Under extreme pressure, you stick to your core convictions, rejecting short-term moral shortcuts.
                     </p>
                   </div>
 
                   {/* Hack 3 */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-3">
+                  <div className="surface-card p-8 space-y-3">
                     <div className="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 mb-2">
                       <Lock className="w-5 h-5" />
                     </div>
-                    <h4 className="text-xl font-black text-slate-900">Team Collaboration</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">Team Collaboration</h4>
                     <p className="text-slate-600 font-medium text-sm leading-relaxed">
                       You bring clarity, principled boundaries, and moral accountability to group endeavors.
                     </p>
@@ -431,7 +431,7 @@ export default function MoralAlignmentResult() {
                 <div className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.2)] rounded-[2.5rem] p-10 md:p-14 text-white space-y-4">
                   <div className="flex items-center gap-3">
                     <Shield className="w-6 h-6 text-emerald-400" />
-                    <h4 className="text-2xl font-black">Ethical Mastery Protocol</h4>
+                    <h4 className="heading-display text-2xl text-white!">Ethical Mastery Protocol</h4>
                   </div>
                   <p className="text-slate-300 text-base md:text-lg leading-relaxed font-medium max-w-4xl italic">
                     True moral maturity is not about rigid adherence to dogma nor total disregard for rules; it is the wisdom to wield principles with compassion and courage.

@@ -23,12 +23,13 @@ export default function ErrorPage() {
       <Motion.div 
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -15 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="w-full max-w-sm text-center relative z-10 flex flex-col items-center space-y-6"
       >
         {/* Simple ERROR Header & Description */}
         <div className="space-y-3">
-          <h2 className="text-3xl font-black text-rose-500 tracking-tight uppercase">ERROR!</h2>
+          <h2 className="heading-display text-3xl uppercase text-rose-500!">ERROR!</h2>
           <p className="text-slate-500 text-sm leading-relaxed font-semibold max-w-xs mx-auto">
             Sadly, you don't have any access to this page right now. :(
           </p>
@@ -37,10 +38,10 @@ export default function ErrorPage() {
         {/* Premium Pill Action Button */}
         <button
           onClick={() => navigate('/')}
-          className="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-full font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2.5 transition duration-300 shadow-md hover:shadow-lg active:scale-95 cursor-pointer mt-4 border border-slate-950"
+          className="btn-glass mt-4"
         >
-          <ArrowLeft className="w-4 h-4" />
           <span>Go back home</span>
+          <span className="btn-chip"><ArrowLeft className="w-4 h-4" /></span>
         </button>
 
       </Motion.div>

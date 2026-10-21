@@ -34,7 +34,7 @@ function formatMarkdown(text) {
   const parts = text.split(/\*\*([^*]+)\*\*/g);
   return parts.map((part, idx) => {
     if (idx % 2 === 1) {
-      return <strong key={idx} className="text-slate-900 font-extrabold">{part}</strong>;
+      return <strong key={idx} className="text-slate-900 font-bold">{part}</strong>;
     }
     return part;
   });
@@ -55,15 +55,15 @@ function ResultBar({ label, value, color, isPrimary, isWing }) {
                 : 'bg-slate-300'
             }`}
           />
-          <span className={isPrimary ? 'text-slate-900 font-black' : 'text-slate-700'}>{label}</span>
+          <span className={isPrimary ? 'text-slate-900 font-bold' : 'text-slate-700'}>{label}</span>
           {isPrimary && (
-            <span className="text-[0.65rem] uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 font-extrabold border border-indigo-100">
-              Primary
+            <span className="label-micro px-2 py-0.5 rounded-full bg-indigo-50 border border-indigo-100">
+              <span className="text-indigo-600">Primary</span>
             </span>
           )}
           {isWing && (
-            <span className="text-[0.65rem] uppercase tracking-wider px-2 py-0.5 rounded-full bg-rose-50 text-rose-600 font-extrabold border border-rose-100">
-              Wing
+            <span className="label-micro px-2 py-0.5 rounded-full bg-rose-50 border border-rose-100">
+              <span className="text-rose-600">Wing</span>
             </span>
           )}
         </span>
@@ -141,7 +141,7 @@ export default function EnneagramResult() {
 
   const { info, fullTitle, breakdown, type: primaryTypeNum, wing: wingTypeNum } = resultData;
   const primaryColor = info.color || 'from-indigo-500 to-purple-600';
-  const wingInfo = wingTypeNum ? enneagramTypes[wingTypeNum] : null;
+  const _wingInfo = wingTypeNum ? enneagramTypes[wingTypeNum] : null;
   const wingSubtype = info.wingSubtypes?.[wingTypeNum] || {
     title: `${primaryTypeNum}w${wingTypeNum}: The Hybrid`,
     subtitle: `Blends Type ${primaryTypeNum}'s core motivation with Type ${wingTypeNum}'s complementary qualities.`
@@ -175,7 +175,7 @@ export default function EnneagramResult() {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-[#fafafa] pb-32 pt-28 md:pt-36 px-4 sm:px-8 md:px-12 relative text-slate-800 font-sans selection:bg-indigo-100">
+    <div className="w-full min-h-screen bg-slate-50 pb-32 pt-28 md:pt-36 px-4 sm:px-8 md:px-12 relative text-slate-800 font-sans selection:bg-indigo-100">
       
       {/* Background ambient lighting */}
       <div className={`fixed top-[-15vh] left-[-10vw] w-[60vw] h-[60vw] ${info.bgLight} rounded-full blur-[140px] pointer-events-none opacity-70 z-0`} />
@@ -188,10 +188,10 @@ export default function EnneagramResult() {
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-slate-400 hover:text-slate-900 transition cursor-pointer"
+            className="inline-flex items-center gap-2 label-micro transition cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span>Test Directory</span>
+            <span className="hover:text-slate-900">Test Directory</span>
           </button>
 
           <div className="flex items-center gap-2.5">
@@ -199,7 +199,7 @@ export default function EnneagramResult() {
               type="button"
               onClick={handleDownloadCard}
               disabled={isExporting}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200/80 hover:bg-slate-50 text-xs font-black uppercase tracking-wider text-slate-700 shadow-2xs transition cursor-pointer"
+              className="pill pill-muted cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-indigo-500" />
               <span>{isExporting ? 'Exporting...' : 'Export Card'}</span>
@@ -207,7 +207,7 @@ export default function EnneagramResult() {
 
             <Link
               to="/test/enneagram"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-xs font-black uppercase tracking-wider text-white shadow-xs transition"
+              className="btn-dark px-4 py-2"
             >
               <RefreshCw className="w-3.5 h-3.5 text-slate-300" />
               <span>Retake Test</span>
@@ -218,7 +218,7 @@ export default function EnneagramResult() {
         {/* Hero Result Card (Captured for Export) */}
         <div
           ref={cardRef}
-          className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.03)] rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden group space-y-8"
+          className="surface-card p-8 md:p-12 relative overflow-hidden group space-y-8"
         >
           {/* Left Gradient Strip */}
           <div className={`absolute top-0 left-0 w-3 h-full bg-linear-to-b ${primaryColor}`} />
@@ -226,25 +226,25 @@ export default function EnneagramResult() {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
             <div className="space-y-4 max-w-3xl">
               <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
-                <span className={`text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border ${info.themeBg} ${info.themeBorder} ${info.themeText}`}>
-                  {centerDetail.badge}
+                <span className={`label-micro px-3.5 py-1 rounded-full border ${info.themeBg} ${info.themeBorder}`}>
+                  <span className={info.themeText}>{centerDetail.badge}</span>
                 </span>
-                <span className="text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200/60">
+                <span className="label-micro px-3 py-1 rounded-full bg-slate-100 border border-slate-200/60">
                   Core Type {primaryTypeNum} • Wing {wingTypeNum}
                 </span>
-                <span className="text-xs font-bold text-slate-400">
+                <span className="label-micro-muted">
                   {info.harmonic} Triad
                 </span>
               </div>
 
               <div className="space-y-2">
-                <h1 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight font-mono">
+                <h1 className="heading-display text-4xl sm:text-6xl">
                   {fullTitle}
                   <span className="text-indigo-600 font-sans italic text-2xl sm:text-4xl ml-3 font-normal">
                     — {info.name}
                   </span>
                 </h1>
-                <p className="text-sm sm:text-base font-bold text-indigo-600 uppercase tracking-wide">
+                <p className="font-display text-sm sm:text-base font-bold text-indigo-600 uppercase tracking-wide">
                   {info.tagline}
                 </p>
               </div>
@@ -255,30 +255,30 @@ export default function EnneagramResult() {
             </div>
 
             {/* Quick Stats Pill Matrix */}
-            <div className="w-full lg:w-96 p-6 rounded-3xl bg-slate-50/90 border border-slate-200/80 space-y-3 shrink-0">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
+            <div className="w-full lg:w-96 surface-glass rounded-3xl p-6 space-y-3 shrink-0">
+              <span className="label-micro-muted block">
                 Enneagram Architecture
               </span>
               
               <div className="space-y-2.5 text-xs">
                 <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
                   <span className="text-slate-500 font-bold">Center of Intelligence</span>
-                  <span className="text-slate-900 font-extrabold">{info.center}</span>
+                  <span className="text-slate-900 font-bold">{info.center}</span>
                 </div>
 
                 <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
                   <span className="text-slate-500 font-bold">Dominant Subtype</span>
-                  <span className="text-indigo-600 font-extrabold">{wingSubtype.title.split(':')[1]?.trim() || `Wing ${wingTypeNum}`}</span>
+                  <span className="text-indigo-600 font-bold">{wingSubtype.title.split(':')[1]?.trim() || `Wing ${wingTypeNum}`}</span>
                 </div>
 
                 <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
                   <span className="text-slate-500 font-bold">Growth Line (Security)</span>
-                  <span className="text-emerald-700 font-extrabold">→ Type {info.growth}</span>
+                  <span className="text-emerald-700 font-bold">→ Type {info.growth}</span>
                 </div>
 
                 <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
                   <span className="text-slate-500 font-bold">Stress Line (Pressure)</span>
-                  <span className="text-rose-600 font-extrabold">→ Type {info.stress}</span>
+                  <span className="text-rose-600 font-bold">→ Type {info.stress}</span>
                 </div>
               </div>
             </div>
@@ -295,10 +295,10 @@ export default function EnneagramResult() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                className={`pill transition-all duration-300 cursor-pointer ${
                   isActive
-                    ? 'bg-slate-900 text-white shadow-md'
-                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50'
+                    ? 'pill-active'
+                    : 'pill-muted'
                 }`}
               >
                 <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-slate-400'}`} />
@@ -326,12 +326,12 @@ export default function EnneagramResult() {
                 
                 {/* 1. Core Motivation Cards (What Drives You vs What You Avoid) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-2.5 text-emerald-600">
                       <div className="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
                         <Shield className="w-5 h-5 text-emerald-600" />
                       </div>
-                      <span className="text-xs font-black uppercase tracking-wider">What Drives You (Core Desire)</span>
+                      <span className="label-micro"><span className="text-emerald-600">What Drives You (Core Desire)</span></span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">
                       {info.coreDesire}
@@ -341,12 +341,12 @@ export default function EnneagramResult() {
                     </p>
                   </div>
 
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-2.5 text-rose-500">
                       <div className="w-9 h-9 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center">
                         <Heart className="w-5 h-5 text-rose-500" />
                       </div>
-                      <span className="text-xs font-black uppercase tracking-wider">What You Avoid (Core Fear)</span>
+                      <span className="label-micro"><span className="text-rose-500">What You Avoid (Core Fear)</span></span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">
                       {info.coreFear}
@@ -358,14 +358,14 @@ export default function EnneagramResult() {
                 </div>
 
                 {/* 2. Center of Intelligence Feature Box */}
-                <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                <div className="surface-card p-8 md:p-10 space-y-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center">
                       <Flame className="w-5 h-5 text-amber-500" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-slate-900">{centerDetail.name} Alignment</h3>
-                      <span className="text-xs font-bold text-slate-400">{centerDetail.theme}</span>
+                      <h3 className="heading-display text-xl">{centerDetail.name} Alignment</h3>
+                      <span className="label-micro-muted">{centerDetail.theme}</span>
                     </div>
                   </div>
                   <p className="text-slate-600 text-base leading-relaxed font-medium">
@@ -379,9 +379,9 @@ export default function EnneagramResult() {
                 </div>
 
                 {/* 3. Enneagram Type Allocation Statistics */}
-                <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                <div className="surface-card p-8 md:p-12 space-y-8">
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-slate-900">Enneagram Score Allocation</h3>
+                    <h3 className="heading-display text-2xl">Enneagram Score Allocation</h3>
                     <p className="text-slate-500 text-sm font-medium">
                       Calculated affinity across all 9 Enneagram archetypes based on your assessment answers.
                     </p>
@@ -418,18 +418,18 @@ export default function EnneagramResult() {
               <div className="space-y-8">
                 
                 {/* 1. Dominant Wing Spotlight */}
-                <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                <div className="surface-card p-8 md:p-12 space-y-6">
                   <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center font-mono font-black text-xl text-indigo-600">
+                      <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center font-mono font-bold text-xl text-indigo-600">
                         w{wingTypeNum}
                       </div>
                       <div>
-                        <h3 className="text-2xl font-black text-slate-900">{wingSubtype.title}</h3>
-                        <span className="text-xs font-bold text-slate-400">Your Dominant Wing Subtype</span>
+                        <h3 className="heading-display text-2xl">{wingSubtype.title}</h3>
+                        <span className="label-micro-muted">Your Dominant Wing Subtype</span>
                       </div>
                     </div>
-                    <span className="text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200/60">
+                    <span className="label-micro px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200/60">
                       Wing Influence
                     </span>
                   </div>
@@ -452,10 +452,10 @@ export default function EnneagramResult() {
                           }`}
                         >
                           <div className="flex justify-between items-center mb-3">
-                            <span className="text-sm font-black text-slate-900">{sub?.title}</span>
+                            <span className="text-sm font-bold text-slate-900">{sub?.title}</span>
                             {isDominant && (
-                              <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-600 text-white">
-                                Active Wing
+                              <span className="label-micro px-2 py-0.5 rounded-full bg-indigo-600">
+                                <span className="text-white">Active Wing</span>
                               </span>
                             )}
                           </div>
@@ -471,14 +471,14 @@ export default function EnneagramResult() {
                 {/* 2. Harmonic & Hornevian Triads */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
                   {/* Harmonic Triad */}
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center">
                         <Compass className="w-5 h-5 text-sky-600" />
                       </div>
                       <div>
-                        <h4 className="text-xl font-black text-slate-900">{info.harmonic} Triad</h4>
-                        <span className="text-xs font-bold text-slate-400">Harmonic Coping Style</span>
+                        <h4 className="heading-display text-xl">{info.harmonic} Triad</h4>
+                        <span className="label-micro-muted">Harmonic Coping Style</span>
                       </div>
                     </div>
                     <p className="text-slate-600 text-sm sm:text-base font-medium leading-relaxed">
@@ -487,14 +487,14 @@ export default function EnneagramResult() {
                   </div>
 
                   {/* Hornevian Stance */}
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center">
                         <Zap className="w-5 h-5 text-purple-600" />
                       </div>
                       <div>
-                        <h4 className="text-xl font-black text-slate-900">{info.hornevian} Stance</h4>
-                        <span className="text-xs font-bold text-slate-400">Social Interpersonal Reflex</span>
+                        <h4 className="heading-display text-xl">{info.hornevian} Stance</h4>
+                        <span className="label-micro-muted">Social Interpersonal Reflex</span>
                       </div>
                     </div>
                     <p className="text-slate-600 text-sm sm:text-base font-medium leading-relaxed">
@@ -515,12 +515,12 @@ export default function EnneagramResult() {
                 {/* Strengths & Weaknesses Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Strengths Card */}
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center">
                         <CheckCircle2 className="w-5 h-5 text-indigo-600" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Key Superpowers</h3>
+                      <h3 className="heading-display text-xl">Key Superpowers</h3>
                     </div>
                     <ul className="space-y-4">
                       {info.strengths?.map((item, idx) => (
@@ -533,12 +533,12 @@ export default function EnneagramResult() {
                   </div>
 
                   {/* Growth Areas Card */}
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center">
                         <AlertTriangle className="w-5 h-5 text-amber-500" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Blindspots & Pitfalls</h3>
+                      <h3 className="heading-display text-xl">Blindspots & Pitfalls</h3>
                     </div>
                     <ul className="space-y-4">
                       {info.weaknesses?.map((item, idx) => (
@@ -552,14 +552,14 @@ export default function EnneagramResult() {
                 </div>
 
                 {/* Career & Work Environment */}
-                <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                <div className="surface-card p-8 md:p-12 space-y-6">
                   <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                     <div className="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
                       <Briefcase className="w-5 h-5 text-emerald-600" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-slate-900">Professional Flow & Career Environments</h3>
-                      <span className="text-xs font-bold text-slate-400">Where Type {primaryTypeNum} naturally thrives</span>
+                      <h3 className="heading-display text-xl">Professional Flow & Career Environments</h3>
+                      <span className="label-micro-muted">Where Type {primaryTypeNum} naturally thrives</span>
                     </div>
                   </div>
 
@@ -569,14 +569,14 @@ export default function EnneagramResult() {
 
                   {info.idealCareers && (
                     <div className="pt-2 space-y-3">
-                      <span className="text-xs font-black uppercase tracking-wider text-slate-400 block">
+                      <span className="label-micro-muted block">
                         Recommended Career Pathways:
                       </span>
                       <div className="flex flex-wrap gap-2.5">
                         {info.idealCareers.map((career, idx) => (
                           <span
                             key={idx}
-                            className="px-4 py-2 rounded-full bg-slate-50 border border-slate-200/80 text-xs font-extrabold text-slate-700 shadow-2xs hover:bg-slate-100 transition"
+                            className="px-4 py-2 rounded-full bg-slate-50 border border-slate-200/80 text-xs font-bold text-slate-700 shadow-2xs hover:bg-slate-100 transition"
                           >
                             {career}
                           </span>
@@ -598,21 +598,21 @@ export default function EnneagramResult() {
                 {/* Integration & Disintegration Mechanics */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Growth (Integration) */}
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-5">
+                  <div className="surface-card p-8 md:p-12 space-y-5">
                     <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                      <span className="text-xs font-bold uppercase tracking-widest text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-3.5 py-1 rounded-full flex items-center gap-1.5">
+                      <span className="label-micro bg-emerald-50 border border-emerald-200/60 px-3.5 py-1 rounded-full flex items-center gap-1.5">
                         <ArrowUpRight className="w-4 h-4 text-emerald-600" />
-                        Growth (Integration) → Type {info.growth}
+                        <span className="text-emerald-700">Growth (Integration) → Type {info.growth}</span>
                       </span>
                     </div>
 
-                    <h4 className="text-2xl font-black text-slate-900">When Thriving & Centered</h4>
+                    <h4 className="heading-display text-2xl">When Thriving & Centered</h4>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       {info.growthDetails || `In relaxation and self-awareness, you naturally take on the healthiest attributes of Type ${info.growth} (${enneagramTypes[info.growth]?.name}).`}
                     </p>
 
                     <div className="bg-emerald-50/60 border border-emerald-100 p-4 rounded-2xl space-y-1.5">
-                      <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">Growth Direction Breakthrough:</span>
+                      <span className="label-micro"><span className="text-emerald-800">Growth Direction Breakthrough:</span></span>
                       <p className="text-slate-700 text-xs sm:text-sm font-semibold leading-relaxed">
                         Leaning toward Type {info.growth} brings balance, emotional freedom, and resilience beyond your routine fixations.
                       </p>
@@ -620,21 +620,21 @@ export default function EnneagramResult() {
                   </div>
 
                   {/* Stress (Disintegration) */}
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-5">
+                  <div className="surface-card p-8 md:p-12 space-y-5">
                     <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                      <span className="text-xs font-bold uppercase tracking-widest text-rose-700 bg-rose-50 border border-rose-200/60 px-3.5 py-1 rounded-full flex items-center gap-1.5">
+                      <span className="label-micro bg-rose-50 border border-rose-200/60 px-3.5 py-1 rounded-full flex items-center gap-1.5">
                         <ArrowDownRight className="w-4 h-4 text-rose-600" />
-                        Stress (Disintegration) → Type {info.stress}
+                        <span className="text-rose-700">Stress (Disintegration) → Type {info.stress}</span>
                       </span>
                     </div>
 
-                    <h4 className="text-2xl font-black text-slate-900">Under Chronic Pressure</h4>
+                    <h4 className="heading-display text-2xl">Under Chronic Pressure</h4>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       {info.stressDetails || `When overwhelmed or feeling unsupported, you unconsciously slide into the defense strategies of Type ${info.stress} (${enneagramTypes[info.stress]?.name}).`}
                     </p>
 
                     <div className="bg-rose-50/60 border border-rose-100 p-4 rounded-2xl space-y-1.5">
-                      <span className="text-xs font-bold uppercase tracking-wider text-rose-800">Early Warning Trigger:</span>
+                      <span className="label-micro"><span className="text-rose-800">Early Warning Trigger:</span></span>
                       <p className="text-slate-700 text-xs sm:text-sm font-semibold leading-relaxed">
                         Notice when reactive habits start showing up; it is an immediate somatic signal that your boundaries need gentle reset.
                       </p>
@@ -646,7 +646,7 @@ export default function EnneagramResult() {
                 <div className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.15)] rounded-[2.5rem] p-8 md:p-12 text-white space-y-4">
                   <div className="flex items-center gap-3">
                     <Brain className="w-6 h-6 text-indigo-400" />
-                    <h4 className="text-2xl font-black">Self-Development Tip for Type {primaryTypeNum}</h4>
+                    <h4 className="text-2xl font-bold">Self-Development Tip for Type {primaryTypeNum}</h4>
                   </div>
                   <p className="text-slate-300 text-base md:text-lg leading-relaxed font-medium max-w-4xl">
                     Growth begins with noticing when your core fear of <span className="text-white font-bold">"{info.coreFear.toLowerCase()}"</span> takes the steering wheel. Intentionally cultivate the grounded presence of <strong className="text-indigo-300">Type {info.growth}</strong> to stay centered and clear.
@@ -654,14 +654,14 @@ export default function EnneagramResult() {
                 </div>
 
                 {/* Relationship Dynamics Card */}
-                <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
+                <div className="surface-card p-8 md:p-12 space-y-4">
                   <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                     <div className="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center">
                       <Users className="w-5 h-5 text-rose-500" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-slate-900">In Romantic Relationships</h3>
-                      <span className="text-xs font-bold text-slate-400">Connection, intimacy, and communication style</span>
+                      <h3 className="heading-display text-xl">In Romantic Relationships</h3>
+                      <span className="label-micro-muted">Connection, intimacy, and communication style</span>
                     </div>
                   </div>
                   <p className="text-slate-600 font-medium text-base leading-relaxed">
@@ -671,14 +671,14 @@ export default function EnneagramResult() {
 
                 {/* Archetypal Figures with Quotes (Matching MBTI result layout) */}
                 {figures.length > 0 && (
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center">
                         <Quote className="w-5 h-5 text-amber-500" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-black text-slate-900">Iconic Type {primaryTypeNum} Archetypes</h3>
-                        <span className="text-xs font-bold text-slate-400">Historical leaders and cultural icons sharing your essence</span>
+                        <h3 className="heading-display text-xl">Iconic Type {primaryTypeNum} Archetypes</h3>
+                        <span className="label-micro-muted">Historical leaders and cultural icons sharing your essence</span>
                       </div>
                     </div>
 
@@ -695,7 +695,7 @@ export default function EnneagramResult() {
                             </p>
                           </div>
                           <div className="pt-3 border-t border-slate-200/60">
-                            <h5 className="font-black text-slate-900 text-sm">{fig.name}</h5>
+                            <h5 className="heading-display text-sm">{fig.name}</h5>
                             <span className="text-[11px] text-slate-400 font-bold">{fig.role}</span>
                           </div>
                         </div>

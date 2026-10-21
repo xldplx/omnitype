@@ -26,7 +26,7 @@ function ResultBar({ label, value, color, isPrimary }) {
         <span className="flex items-center gap-2">
           <span className={`w-2.5 h-2.5 rounded-full ${isPrimary ? 'bg-sky-500 ring-4 ring-sky-100' : 'bg-slate-300'}`} />
           <span className={isPrimary ? 'text-slate-900 font-black' : 'text-slate-700'}>{label}</span>
-          {isPrimary && <span className="text-[0.65rem] uppercase tracking-wider px-2 py-0.5 rounded-full bg-sky-50 text-sky-600 font-extrabold border border-sky-100">Dominant</span>}
+          {isPrimary && <span className="chip-accent bg-sky-50 text-sky-600! border border-sky-100">Dominant</span>}
         </span>
         <span className="font-mono text-slate-900 font-bold bg-slate-100 px-2.5 py-0.5 rounded-md text-xs">{displayVal}%</span>
       </div>
@@ -63,7 +63,9 @@ export default function DefenseResult() {
           if (parsed && (parsed.info || parsed.statusKey)) {
             stateData = parsed;
           }
-        } catch (e) {}
+        } catch {
+          // Ignore malformed cached data and fall back to URL reconstruction.
+        }
       }
     }
 
@@ -133,9 +135,9 @@ export default function DefenseResult() {
           <button 
             type="button"
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-slate-900 transition-colors group cursor-pointer"
+            className="label-micro hover:text-slate-900 transition-colors group cursor-pointer"
           >
-            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
+            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center transition-colors">
               <ChevronLeft className="w-4 h-4 text-slate-700" />
             </div>
             <span>Home</span>
@@ -151,10 +153,10 @@ export default function DefenseResult() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-5 py-3 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                className={`pill ${
                   isActive 
-                    ? 'bg-slate-900 text-white shadow-md' 
-                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50'
+                    ? 'pill-active' 
+                    : 'pill-muted'
                 }`}
               >
                 <span>{tab.label}</span>
@@ -182,11 +184,11 @@ export default function DefenseResult() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                   
                   {/* Primary Archetype (Dominant 8 Cols) */}
-                  <div className="lg:col-span-8 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+                  <div className="surface-card lg:col-span-8 p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
                     <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${primaryColor} opacity-90`} />
                     
                     <div>
-                      <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 text-slate-900 tracking-tight leading-none">
+                      <h1 className="heading-display text-4xl sm:text-6xl md:text-7xl mb-4 text-slate-900! leading-none">
                         {info.name}
                       </h1>
                       
@@ -195,10 +197,10 @@ export default function DefenseResult() {
                       </p>
 
                       <div className="flex flex-wrap gap-2">
-                        <span className="px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-700 font-extrabold text-xs uppercase tracking-wider border border-slate-200/60">
+                        <span className="chip-accent bg-slate-100 text-slate-700! border border-slate-200/60">
                           {info.subName}
                         </span>
-                        <span className="px-3.5 py-1.5 rounded-full bg-sky-50 text-sky-700 font-extrabold text-xs uppercase tracking-wider border border-sky-100">
+                        <span className="chip-accent bg-sky-50 text-sky-700! border border-sky-100">
                           Psychological Shield
                         </span>
                       </div>
@@ -206,38 +208,38 @@ export default function DefenseResult() {
                   </div>
 
                   {/* Standardized 2nd Box (4 Cols - Prominent & Centered - Icon-Free) */}
-                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
-                     <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-slate-900 z-10 drop-shadow-sm pb-1 leading-tight">
+                  <div className="surface-card lg:col-span-4 p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                     <h2 className="heading-display text-3xl sm:text-4xl text-slate-900! z-10 drop-shadow-sm pb-1 leading-tight">
                        {info.subName}
                      </h2>
-                     <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-slate-400 mt-3 z-10 whitespace-nowrap">Primary Defense Mechanism</span>
+                     <span className="label-micro-muted mt-3 z-10 whitespace-nowrap">Primary Defense Mechanism</span>
                   </div>
 
                 </div>
 
                 {/* 2. Dedicated Core Motivations Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-2 text-emerald-600">
                       <Shield className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">What Drives You (Underlying Desire)</span>
+                      <span className="label-micro text-emerald-600!">What Drives You (Underlying Desire)</span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreDesire}</p>
                   </div>
 
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-2 text-rose-500">
                       <Heart className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">What You Avoid (Underlying Fear)</span>
+                      <span className="label-micro text-rose-500!">What You Avoid (Underlying Fear)</span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreFear}</p>
                   </div>
                 </div>
 
                 {/* 3. Defense Matrix Summary (Standardized Progress Bars) */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                <div className="surface-card p-8 md:p-12 space-y-8">
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-slate-900">Defense System Load</h3>
+                    <h3 className="heading-display text-2xl text-slate-900!">Defense System Load</h3>
                     <p className="text-slate-500 text-sm font-medium">
                       Dominant coping mechanisms deployed under psychological pressure.
                     </p>
@@ -275,12 +277,12 @@ export default function DefenseResult() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   
                   {/* Functional Strengths */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center">
                         <CheckCircle2 className="w-5 h-5 text-indigo-600" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Functional Strengths (Pros)</h3>
+                      <h3 className="heading-display text-xl text-slate-900!">Functional Strengths (Pros)</h3>
                     </div>
                     <ul className="space-y-4">
                       {info.pros?.map((item, idx) => (
@@ -293,12 +295,12 @@ export default function DefenseResult() {
                   </div>
 
                   {/* Friction Points */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center">
                         <AlertTriangle className="w-5 h-5 text-rose-500" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">The Friction Points (Cons)</h3>
+                      <h3 className="heading-display text-xl text-slate-900!">The Friction Points (Cons)</h3>
                     </div>
                     <ul className="space-y-4">
                       {info.cons?.map((item, idx) => (
@@ -321,7 +323,7 @@ export default function DefenseResult() {
             {activeTab === 'spectrum' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Full Defense Spectrum & Mechanisms</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Full Defense Spectrum & Mechanisms</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Detailed breakdown across all 4 psychological defense archetypes, ranging from primitive projection to mature sublimation.
                   </p>
@@ -334,18 +336,18 @@ export default function DefenseResult() {
                     return (
                       <div 
                         key={key}
-                        className={`bg-white border shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-4 relative overflow-hidden transition-all ${
-                          isPrimary ? 'border-sky-300 ring-2 ring-sky-100' : 'border-slate-100'
+                        className={`surface-card p-8 space-y-4 relative overflow-hidden transition-all ${
+                          isPrimary ? 'border-sky-300 ring-2 ring-sky-100' : ''
                         }`}
                       >
                         <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${status.color}`} />
                         <div className="flex justify-between items-center pb-2 border-b border-slate-100">
                           <div>
-                            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{status.subName}</span>
-                            <h4 className="text-2xl font-black text-slate-900">{status.name}</h4>
+                            <span className="label-micro-muted">{status.subName}</span>
+                            <h4 className="heading-display text-2xl text-slate-900!">{status.name}</h4>
                           </div>
                           {isPrimary && (
-                            <span className="text-[0.65rem] font-black uppercase tracking-wider px-3 py-1 bg-sky-50 text-sky-700 rounded-full border border-sky-200">
+                            <span className="chip-accent bg-sky-50 text-sky-700! border border-sky-200">
                               Your Primary
                             </span>
                           )}
@@ -369,7 +371,7 @@ export default function DefenseResult() {
             {activeTab === 'neural' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Neural & Nervous System Dynamics</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Neural & Nervous System Dynamics</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Physiological baselines, background cognitive processing costs, and subconscious protective goals.
                   </p>
@@ -377,37 +379,37 @@ export default function DefenseResult() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Core Trigger */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                       <AlertTriangle className="w-5 h-5 text-amber-500" />
-                      <h4 className="text-xl font-black text-slate-900">The Core Trigger</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">The Core Trigger</h4>
                     </div>
                     <p className="text-slate-700 text-base font-medium leading-relaxed">{info.coreTrigger}</p>
                   </div>
 
                   {/* Subconscious Goal */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                       <Target className="w-5 h-5 text-sky-500" />
-                      <h4 className="text-xl font-black text-slate-900">Subconscious Protection Goal</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Subconscious Protection Goal</h4>
                     </div>
                     <p className="text-slate-700 text-base font-medium leading-relaxed">{info.subconsciousGoal}</p>
                   </div>
 
                   {/* Cognitive Load */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                       <BrainCircuit className="w-5 h-5 text-indigo-600" />
-                      <h4 className="text-xl font-black text-slate-900">Systemic Cognitive Load</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Systemic Cognitive Load</h4>
                     </div>
                     <p className="text-slate-700 text-base font-medium leading-relaxed">{info.cognitiveLoad}</p>
                   </div>
 
                   {/* Nervous System Status */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                       <Activity className="w-5 h-5 text-emerald-600" />
-                      <h4 className="text-xl font-black text-slate-900">Nervous System State</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Nervous System State</h4>
                     </div>
                     <p className="text-slate-700 text-base font-medium leading-relaxed">{info.nervousSystemStatus}</p>
                   </div>
@@ -421,17 +423,17 @@ export default function DefenseResult() {
             {activeTab === 'pathway' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Growth Pathway & Somatic Integration</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Growth Pathway & Somatic Integration</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     De-escalating defense mechanisms, addressing the backfire effect, and shifting toward mature sublimation.
                   </p>
                 </div>
 
                 {/* Backfire Effect Card */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                <div className="surface-card p-8 md:p-10 space-y-4">
                   <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                     <ShieldAlert className="w-5 h-5 text-rose-500" />
-                    <h4 className="text-xl font-black text-slate-900">The Backfire Effect</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">The Backfire Effect</h4>
                   </div>
                   <p className="text-slate-700 font-medium text-base leading-relaxed">
                     {info.backfireEffect}
@@ -439,10 +441,10 @@ export default function DefenseResult() {
                 </div>
 
                 {/* Growth Pathway Card */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                <div className="surface-card p-8 md:p-10 space-y-4">
                   <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                     <Zap className="w-5 h-5 text-emerald-500" />
-                    <h4 className="text-xl font-black text-slate-900">Targeted Growth Pathway</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">Targeted Growth Pathway</h4>
                   </div>
                   <p className="text-slate-700 font-medium text-base leading-relaxed italic">
                     {info.growthPathway}
@@ -453,7 +455,7 @@ export default function DefenseResult() {
                 <div className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.2)] rounded-[2.5rem] p-10 md:p-14 text-white space-y-4">
                   <div className="flex items-center gap-3">
                     <Sparkles className="w-6 h-6 text-sky-400" />
-                    <h4 className="text-2xl font-black">Somatic De-escalation Protocol</h4>
+                    <h4 className="heading-display text-2xl text-white!">Somatic De-escalation Protocol</h4>
                   </div>
                   <p className="text-slate-300 text-base md:text-lg leading-relaxed font-medium max-w-4xl italic">
                     Defense mechanisms are not moral failings; they are intelligent survival subroutines created by your nervous system to protect you from overwhelming emotional threat. Real growth comes not from forcefully destroying your defenses, but from cultivating enough somatic safety that your brain no longer needs to hide.

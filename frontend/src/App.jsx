@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -71,70 +71,79 @@ function PageLoader() {
   );
 }
 
+function AppContent() {
+  const location = useLocation();
+  const hideFooter = location.pathname === '/coming-soon' || location.pathname === '/error';
+
+  return (
+    <div className="bg-[#fafafa] min-h-screen text-slate-800 relative w-full h-full font-sans overflow-x-hidden selection:bg-purple-200">
+      
+      {/* Zero-Cost Ambient Radial Background Layer */}
+      <div className="fixed top-[-10vh] left-[-10vw] w-[60vw] h-[60vw] bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.06),_transparent_70%)] pointer-events-none z-0" />
+      <div className="fixed bottom-[10vh] right-[-10vw] w-[50vw] h-[50vw] bg-[radial-gradient(circle_at_center,_rgba(244,63,94,0.05),_transparent_70%)] pointer-events-none z-0" />
+
+      <div className="relative z-10 flex flex-col min-h-screen w-full">
+        <Navbar />
+        <main className="flex-1 w-full mx-auto">
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/test/mbti" element={<MbtiPage />} />
+              <Route path="/result/mbti/:type" element={<MbtiResult />} />
+              <Route path="/test/enneagram" element={<EnneagramTest />} />
+              <Route path="/result/enneagram/:type" element={<EnneagramResult />} />
+              <Route path="/test/love-languages" element={<LoveLanguagesTest />} />
+              <Route path="/result/love-languages/:type" element={<LoveLanguagesResult />} />
+              <Route path="/test/attachment-styles" element={<AttachmentStylesTest />} />
+              <Route path="/result/attachment-styles/:type" element={<AttachmentStylesResult />} />
+              <Route path="/test/instinctual-variants" element={<InstinctualVariantsTest />} />
+              <Route path="/result/instinctual-variants/:type" element={<InstinctualVariantsResult />} />
+              <Route path="/test/tritype" element={<TritypeTest />} />
+              <Route path="/result/tritype/:type" element={<TritypeResult />} />
+              <Route path="/test/color-psychology" element={<ColorPsychologyTest />} />
+              <Route path="/result/color-psychology/:type" element={<ColorPsychologyResult />} />
+              <Route path="/test/jungian-archetypes" element={<JungianArchetypesTest />} />
+              <Route path="/result/jungian-archetypes/:type" element={<JungianArchetypesResult />} />
+              <Route path="/test/alignment" element={<MoralAlignmentTest />} />
+              <Route path="/result/alignment/:type" element={<MoralAlignmentResult />} />
+              <Route path="/test/resilience" element={<ResilienceQuotientTest />} />
+              <Route path="/result/resilience/:type" element={<ResilienceQuotientResult />} />
+              <Route path="/test/adhd" element={<AdhdTest />} />
+              <Route path="/result/adhd/:type" element={<AdhdResult />} />
+              <Route path="/test/hsp" element={<HspTest />} />
+              <Route path="/result/hsp/:type" element={<HspResult />} />
+              <Route path="/test/burnout" element={<BurnoutTest />} />
+              <Route path="/result/burnout/:type" element={<BurnoutResult />} />
+              <Route path="/test/dark-triad" element={<DarkTriadTest />} />
+              <Route path="/result/dark-triad/:type" element={<DarkTriadResult />} />
+              <Route path="/test/defense" element={<DefenseTest />} />
+              <Route path="/result/defense/:type" element={<DefenseResult />} />
+              <Route path="/test/imposter" element={<ImposterTest />} />
+              <Route path="/result/imposter/:type" element={<ImposterResult />} />
+              <Route path="/test/dere" element={<DereTest />} />
+              <Route path="/result/dere/:type" element={<DereResult />} />
+              <Route path="/dashboard" element={<LocalhostRoute><IdentityDashboard /></LocalhostRoute>} />
+              <Route path="/wiki" element={<Wiki />} />
+              <Route path="/wiki/mbti/:type" element={<MbtiWikiDetail />} />
+              <Route path="/wiki/:type" element={<MbtiWikiDetail />} />
+              <Route path="/coming-soon" element={<ComingSoon />} />
+              <Route path="/login" element={<LocalhostRoute><Login /></LocalhostRoute>} />
+              <Route path="/error" element={<ErrorPage />} />
+            </Routes>
+          </Suspense>
+        </main>
+        {!hideFooter && <Footer />}
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <Router>
-      <div className="bg-[#fafafa] min-h-screen text-slate-800 relative w-full h-full font-sans overflow-x-hidden selection:bg-purple-200">
-        
-        {/* Zero-Cost Ambient Radial Background Layer */}
-        <div className="fixed top-[-10vh] left-[-10vw] w-[60vw] h-[60vw] bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.06),_transparent_70%)] pointer-events-none z-0" />
-        <div className="fixed bottom-[10vh] right-[-10vw] w-[50vw] h-[50vw] bg-[radial-gradient(circle_at_center,_rgba(244,63,94,0.05),_transparent_70%)] pointer-events-none z-0" />
-
-        <div className="relative z-10 flex flex-col min-h-screen w-full">
-          <Navbar />
-          <main className="flex-1 w-full mx-auto">
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/test/mbti" element={<MbtiPage />} />
-                <Route path="/result/mbti/:type" element={<MbtiResult />} />
-                <Route path="/test/enneagram" element={<EnneagramTest />} />
-                <Route path="/result/enneagram/:type" element={<EnneagramResult />} />
-                <Route path="/test/love-languages" element={<LoveLanguagesTest />} />
-                <Route path="/result/love-languages/:type" element={<LoveLanguagesResult />} />
-                <Route path="/test/attachment-styles" element={<AttachmentStylesTest />} />
-                <Route path="/result/attachment-styles/:type" element={<AttachmentStylesResult />} />
-                <Route path="/test/instinctual-variants" element={<InstinctualVariantsTest />} />
-                <Route path="/result/instinctual-variants/:type" element={<InstinctualVariantsResult />} />
-                <Route path="/test/tritype" element={<TritypeTest />} />
-                <Route path="/result/tritype/:type" element={<TritypeResult />} />
-                <Route path="/test/color-psychology" element={<ColorPsychologyTest />} />
-                <Route path="/result/color-psychology/:type" element={<ColorPsychologyResult />} />
-                <Route path="/test/jungian-archetypes" element={<JungianArchetypesTest />} />
-                <Route path="/result/jungian-archetypes/:type" element={<JungianArchetypesResult />} />
-                <Route path="/test/alignment" element={<MoralAlignmentTest />} />
-                <Route path="/result/alignment/:type" element={<MoralAlignmentResult />} />
-                <Route path="/test/resilience" element={<ResilienceQuotientTest />} />
-                <Route path="/result/resilience/:type" element={<ResilienceQuotientResult />} />
-                <Route path="/test/adhd" element={<AdhdTest />} />
-                <Route path="/result/adhd/:type" element={<AdhdResult />} />
-                <Route path="/test/hsp" element={<HspTest />} />
-                <Route path="/result/hsp/:type" element={<HspResult />} />
-                <Route path="/test/burnout" element={<BurnoutTest />} />
-                <Route path="/result/burnout/:type" element={<BurnoutResult />} />
-                <Route path="/test/dark-triad" element={<DarkTriadTest />} />
-                <Route path="/result/dark-triad/:type" element={<DarkTriadResult />} />
-                <Route path="/test/defense" element={<DefenseTest />} />
-                <Route path="/result/defense/:type" element={<DefenseResult />} />
-                <Route path="/test/imposter" element={<ImposterTest />} />
-                <Route path="/result/imposter/:type" element={<ImposterResult />} />
-                <Route path="/test/dere" element={<DereTest />} />
-                <Route path="/result/dere/:type" element={<DereResult />} />
-                <Route path="/dashboard" element={<LocalhostRoute><IdentityDashboard /></LocalhostRoute>} />
-                <Route path="/wiki" element={<Wiki />} />
-                <Route path="/wiki/mbti/:type" element={<MbtiWikiDetail />} />
-                <Route path="/wiki/:type" element={<MbtiWikiDetail />} />
-                <Route path="/coming-soon" element={<ComingSoon />} />
-                <Route path="/login" element={<LocalhostRoute><Login /></LocalhostRoute>} />
-                <Route path="/error" element={<ErrorPage />} />
-              </Routes>
-            </Suspense>
-          </main>
-          <Footer />
-        </div>
-      </div>
+      <AppContent />
     </Router>
   );
 }

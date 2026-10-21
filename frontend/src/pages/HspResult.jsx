@@ -26,7 +26,7 @@ function ResultBar({ label, value, color, isPrimary }) {
         <span className="flex items-center gap-2">
           <span className={`w-2.5 h-2.5 rounded-full ${isPrimary ? 'bg-pink-500 ring-4 ring-pink-100' : 'bg-slate-300'}`} />
           <span className={isPrimary ? 'text-slate-900 font-black' : 'text-slate-700'}>{label}</span>
-          {isPrimary && <span className="text-[0.65rem] uppercase tracking-wider px-2 py-0.5 rounded-full bg-pink-50 text-pink-600 font-extrabold border border-pink-100">Dominant Channel</span>}
+          {isPrimary && <span className="chip-accent bg-pink-50 text-pink-600! border border-pink-100">Dominant Channel</span>}
         </span>
         <span className="font-mono text-slate-900 font-bold bg-slate-100 px-2.5 py-0.5 rounded-md text-xs">{displayVal}%</span>
       </div>
@@ -104,9 +104,9 @@ export default function HspResult() {
           <button 
             type="button"
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-slate-900 transition-colors group cursor-pointer"
+            className="label-micro hover:text-slate-900 transition-colors group cursor-pointer"
           >
-            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
+            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center transition-colors">
               <ChevronLeft className="w-4 h-4 text-slate-700" />
             </div>
             <span>Home</span>
@@ -122,10 +122,10 @@ export default function HspResult() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-5 py-3 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                className={`pill ${
                   isActive 
-                    ? 'bg-slate-900 text-white shadow-md' 
-                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50'
+                    ? 'pill-active' 
+                    : 'pill-muted'
                 }`}
               >
                 <span>{tab.label}</span>
@@ -153,11 +153,11 @@ export default function HspResult() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                   
                   {/* Primary Archetype (Dominant 8 Cols) */}
-                  <div className="lg:col-span-8 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+                  <div className="surface-card lg:col-span-8 p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
                     <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${primaryColor} opacity-90`} />
                     
                     <div>
-                      <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 text-slate-900 tracking-tight leading-none">
+                      <h1 className="heading-display text-4xl sm:text-6xl md:text-7xl mb-4 text-slate-900! leading-none">
                         {info.name}
                       </h1>
                       
@@ -168,38 +168,38 @@ export default function HspResult() {
                   </div>
 
                   {/* Standardized 2nd Box (4 Cols - Prominent & Centered) */}
-                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
-                     <h2 className={`text-3xl sm:text-4xl md:text-5xl leading-tight font-black tracking-tight text-transparent bg-clip-text bg-linear-to-b ${primaryColor} z-10 drop-shadow-sm pb-1`}>
+                  <div className="surface-card lg:col-span-4 p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                     <h2 className={`text-3xl sm:text-4xl md:text-5xl leading-tight font-display font-bold tracking-tight text-transparent bg-clip-text bg-linear-to-b ${primaryColor} z-10 drop-shadow-sm pb-1`}>
                        {info.subName}
                      </h2>
-                     <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-slate-400 mt-3 z-10 whitespace-nowrap">Sensitivity Profile</span>
+                     <span className="label-micro-muted mt-3 z-10 whitespace-nowrap">Sensitivity Profile</span>
                   </div>
 
                 </div>
 
                 {/* 2. Dedicated Core Motivations Section */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-2 text-emerald-600">
                       <Shield className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">What Drives You (Core Desire)</span>
+                      <span className="label-micro text-emerald-600!">What Drives You (Core Desire)</span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreDesire}</p>
                   </div>
 
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-2 text-rose-500">
                       <Heart className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">What You Avoid (Hidden Fear)</span>
+                      <span className="label-micro text-rose-500!">What You Avoid (Hidden Fear)</span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreFear}</p>
                   </div>
                 </div>
 
                 {/* 3. Sensory Metrics Allocation */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                <div className="surface-card p-8 md:p-12 space-y-8">
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-slate-900">Sensory Processing Statistics</h3>
+                    <h3 className="heading-display text-2xl text-slate-900!">Sensory Processing Statistics</h3>
                     <p className="text-slate-500 text-sm font-medium">
                       Calculated sensitivity across environmental inputs, emotional empathy, and depth of processing.
                     </p>
@@ -231,12 +231,12 @@ export default function HspResult() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   
                   {/* Superpowers */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center">
                         <CheckCircle2 className="w-5 h-5 text-indigo-600" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Sensory Superpowers (Pros)</h3>
+                      <h3 className="heading-display text-xl text-slate-900!">Sensory Superpowers (Pros)</h3>
                     </div>
                     <ul className="space-y-4">
                       {info.pros?.map((item, idx) => (
@@ -249,12 +249,12 @@ export default function HspResult() {
                   </div>
 
                   {/* Friction Points */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center">
                         <AlertTriangle className="w-5 h-5 text-amber-500" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Friction Points (Cons)</h3>
+                      <h3 className="heading-display text-xl text-slate-900!">Friction Points (Cons)</h3>
                     </div>
                     <ul className="space-y-4">
                       {info.cons?.map((item, idx) => (
@@ -277,14 +277,14 @@ export default function HspResult() {
             {activeTab === 'metrics' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Sensory Processing Breakdown</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Sensory Processing Breakdown</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Detailed breakdown across sensory input tolerance, emotional absorption, and internal processing depth.
                   </p>
                 </div>
 
                 {/* Main Progress Bars */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                <div className="surface-card p-8 md:p-12 space-y-8">
                   <div className="space-y-6">
                     <ResultBar
                       label="Sensory Input Sensitivity"
@@ -311,10 +311,10 @@ export default function HspResult() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   
                   {/* Sensory Input Card */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-4">
+                  <div className="surface-card p-8 space-y-4">
                     <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                       <Target className="w-5 h-5 text-pink-500" />
-                      <h4 className="text-lg font-black text-slate-900">Sensory Input</h4>
+                      <h4 className="heading-display text-lg text-slate-900!">Sensory Input</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-sm leading-relaxed">
                       {info.traits?.sensory || "Attuned to environmental details, lights, sounds, and ambient stimulation."}
@@ -322,10 +322,10 @@ export default function HspResult() {
                   </div>
 
                   {/* Emotional Empathy Card */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-4">
+                  <div className="surface-card p-8 space-y-4">
                     <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                       <Heart className="w-5 h-5 text-rose-500" />
-                      <h4 className="text-lg font-black text-slate-900">Emotional Empathy</h4>
+                      <h4 className="heading-display text-lg text-slate-900!">Emotional Empathy</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-sm leading-relaxed">
                       {info.traits?.empathy || "Deeply absorbs social atmosphere and non-verbal emotional cues from others."}
@@ -333,10 +333,10 @@ export default function HspResult() {
                   </div>
 
                   {/* Depth of Processing Card */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-4">
+                  <div className="surface-card p-8 space-y-4">
                     <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                       <Activity className="w-5 h-5 text-indigo-500" />
-                      <h4 className="text-lg font-black text-slate-900">Depth of Processing</h4>
+                      <h4 className="heading-display text-lg text-slate-900!">Depth of Processing</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-sm leading-relaxed">
                       {info.traits?.processing || "Internalizes experiences deeply, reflecting thoroughly before acting."}
@@ -346,10 +346,10 @@ export default function HspResult() {
                 </div>
 
                 {/* Primary Sensory Triggers Card */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                <div className="surface-card p-8 md:p-10 space-y-3">
                   <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                     <VolumeX className="w-5 h-5 text-rose-500" />
-                    <h4 className="text-xl font-black text-slate-900">Primary Sensory Triggers</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">Primary Sensory Triggers</h4>
                   </div>
                   <p className="text-slate-700 font-bold text-base md:text-lg leading-relaxed">
                     {info.sensoryTriggers}
@@ -365,7 +365,7 @@ export default function HspResult() {
             {activeTab === 'sanctuary' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Environmental Needs & Sanctuary</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Environmental Needs & Sanctuary</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Curating an optimal physical and psychological environment for your sensitive nervous system.
                   </p>
@@ -373,10 +373,10 @@ export default function HspResult() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Space Requirements */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <Home className="w-5 h-5 text-sky-500" />
-                      <h4 className="text-xl font-black text-slate-900">Environmental Needs</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Environmental Needs</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       {info.environmentalNeeds}
@@ -384,10 +384,10 @@ export default function HspResult() {
                   </div>
 
                   {/* Ideal Workspace */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <Leaf className="w-5 h-5 text-emerald-500" />
-                      <h4 className="text-xl font-black text-slate-900">Optimal Workspace Setup</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Optimal Workspace Setup</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       {info.idealWorkspace}
@@ -396,8 +396,8 @@ export default function HspResult() {
                 </div>
 
                 {/* Sensory Sanctuary Rules Card */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
-                  <h4 className="text-xl font-black text-slate-900">Sanctuary Design Checklist</h4>
+                <div className="surface-card p-8 md:p-12 space-y-6">
+                  <h4 className="heading-display text-xl text-slate-900!">Sanctuary Design Checklist</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs font-medium text-slate-600">
                     <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-1">
                       <span className="font-extrabold text-slate-900 block">1. Lighting & Optics</span>
@@ -422,19 +422,19 @@ export default function HspResult() {
             {activeTab === 'recharge' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Recharge Mode & Decompression Hacks</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Recharge Mode & Decompression Hacks</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Customized strategies to restore your energy reserves and protect your nervous system.
                   </p>
                 </div>
 
                 {/* Primary Recharge Mode Card */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                <div className="surface-card p-8 md:p-10 space-y-4">
                   <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                     <BatteryCharging className="w-5 h-5 text-pink-500" />
-                    <h4 className="text-xl font-black text-slate-900">Prescribed Recharge Mode</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">Prescribed Recharge Mode</h4>
                   </div>
-                  <h5 className="text-lg font-bold text-slate-900">{info.rechargeMode}</h5>
+                  <h5 className="heading-display text-lg text-slate-900!">{info.rechargeMode}</h5>
                   <p className="text-slate-600 font-medium text-base leading-relaxed">
                     {info.rechargeDesc}
                   </p>
@@ -442,33 +442,33 @@ export default function HspResult() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* Hack 1 */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-3">
+                  <div className="surface-card p-8 space-y-3">
                     <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-2">
                       <Scale className="w-5 h-5" />
                     </div>
-                    <h4 className="text-xl font-black text-slate-900">Empathy Un-Merging</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">Empathy Un-Merging</h4>
                     <p className="text-slate-600 font-medium text-sm leading-relaxed">
                       Visualize an energetic boundary separating your internal emotional state from the feelings of others.
                     </p>
                   </div>
 
                   {/* Hack 2 */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-3">
+                  <div className="surface-card p-8 space-y-3">
                     <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-500 mb-2">
                       <RefreshCw className="w-5 h-5" />
                     </div>
-                    <h4 className="text-xl font-black text-slate-900">Sensory Buffer Zone</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">Sensory Buffer Zone</h4>
                     <p className="text-slate-600 font-medium text-sm leading-relaxed">
                       Schedule 15 minutes of zero-input quiet solitude immediately following intense social or work events.
                     </p>
                   </div>
 
                   {/* Hack 3 */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 space-y-3">
+                  <div className="surface-card p-8 space-y-3">
                     <div className="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 mb-2">
                       <Lock className="w-5 h-5" />
                     </div>
-                    <h4 className="text-xl font-black text-slate-900">Overstimulation Brake</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">Overstimulation Brake</h4>
                     <p className="text-slate-600 font-medium text-sm leading-relaxed">
                       Give yourself explicit permission to step away from crowded spaces when sensory static becomes overwhelming.
                     </p>
@@ -479,7 +479,7 @@ export default function HspResult() {
                 <div className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.2)] rounded-[2.5rem] p-10 md:p-14 text-white space-y-4">
                   <div className="flex items-center gap-3">
                     <Eye className="w-6 h-6 text-pink-400" />
-                    <h4 className="text-2xl font-black">Sensory Gift Mandate</h4>
+                    <h4 className="heading-display text-2xl text-white!">Sensory Gift Mandate</h4>
                   </div>
                   <p className="text-slate-300 text-base md:text-lg leading-relaxed font-medium max-w-4xl italic">
                     High sensitivity is not a vulnerability to be cured; it is a refined perceptual gift that allows you to feel the richness of life, art, and connection deeply. Protect your sanctuary so your gift can shine.

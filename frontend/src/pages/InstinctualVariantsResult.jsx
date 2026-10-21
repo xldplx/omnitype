@@ -31,7 +31,7 @@ function formatMarkdown(text) {
   const parts = text.split(/\*\*([^*]+)\*\*/g);
   return parts.map((part, idx) => {
     if (idx % 2 === 1) {
-      return <strong key={idx} className="text-slate-900 font-extrabold">{part}</strong>;
+      return <strong key={idx} className="text-slate-900 font-bold">{part}</strong>;
     }
     return part;
   });
@@ -52,20 +52,20 @@ function ResultBar({ label, value, color, isPrimary, isSecondary, isBlindspot })
                 : 'bg-slate-300'
             }`}
           />
-          <span className={isPrimary ? 'text-slate-900 font-black' : 'text-slate-700'}>{label}</span>
+          <span className={isPrimary ? 'text-slate-900 font-bold' : 'text-slate-700'}>{label}</span>
           {isPrimary && (
-            <span className="text-[0.65rem] uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-extrabold border border-emerald-200">
-              Dominant
+            <span className="label-micro px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200">
+              <span className="text-emerald-700">Dominant</span>
             </span>
           )}
           {isSecondary && (
-            <span className="text-[0.65rem] uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-extrabold border border-indigo-200">
-              Support
+            <span className="label-micro px-2 py-0.5 rounded-full bg-indigo-50 border border-indigo-200">
+              <span className="text-indigo-700">Support</span>
             </span>
           )}
           {isBlindspot && (
-            <span className="text-[0.65rem] uppercase tracking-wider px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 font-extrabold border border-rose-200">
-              Shadow
+            <span className="label-micro px-2 py-0.5 rounded-full bg-rose-50 border border-rose-200">
+              <span className="text-rose-700">Shadow</span>
             </span>
           )}
         </span>
@@ -178,7 +178,7 @@ export default function InstinctualVariantsResult() {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-[#fafafa] pb-32 pt-28 md:pt-36 px-4 sm:px-8 md:px-12 relative text-slate-800 font-sans selection:bg-emerald-100">
+    <div className="w-full min-h-screen bg-slate-50 pb-32 pt-28 md:pt-36 px-4 sm:px-8 md:px-12 relative text-slate-800 font-sans selection:bg-emerald-100">
       
       {/* Background ambient lighting */}
       <div className={`fixed top-[-15vh] left-[-10vw] w-[60vw] h-[60vw] ${info.bgLight} rounded-full blur-[140px] pointer-events-none opacity-70 z-0`} />
@@ -191,10 +191,10 @@ export default function InstinctualVariantsResult() {
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-slate-400 hover:text-slate-900 transition cursor-pointer"
+            className="inline-flex items-center gap-2 label-micro transition cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
-            <span>Test Directory</span>
+            <span className="hover:text-slate-900">Test Directory</span>
           </button>
 
           <div className="flex items-center gap-2.5">
@@ -202,7 +202,7 @@ export default function InstinctualVariantsResult() {
               type="button"
               onClick={handleDownloadCard}
               disabled={isExporting}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200/80 hover:bg-slate-50 text-xs font-black uppercase tracking-wider text-slate-700 shadow-2xs transition cursor-pointer"
+              className="pill pill-muted cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-emerald-600" />
               <span>{isExporting ? 'Exporting...' : 'Export Card'}</span>
@@ -210,7 +210,7 @@ export default function InstinctualVariantsResult() {
 
             <Link
               to="/test/instinctual-variants"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-xs font-black uppercase tracking-wider text-white shadow-xs transition"
+              className="btn-dark px-4 py-2"
             >
               <RefreshCw className="w-3.5 h-3.5 text-slate-300" />
               <span>Retake Test</span>
@@ -221,7 +221,7 @@ export default function InstinctualVariantsResult() {
         {/* Hero Result Card (Captured for Export) */}
         <div
           ref={cardRef}
-          className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.03)] rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden group space-y-8"
+          className="surface-card p-8 md:p-12 relative overflow-hidden group space-y-8"
         >
           {/* Left Gradient Strip */}
           <div className={`absolute top-0 left-0 w-3 h-full bg-linear-to-b ${primaryColor}`} />
@@ -229,25 +229,25 @@ export default function InstinctualVariantsResult() {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
             <div className="space-y-4 max-w-3xl">
               <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
-                <span className={`text-xs font-black uppercase tracking-wider px-3.5 py-1 rounded-full border ${info.themeBg} ${info.themeBorder} ${info.themeText}`}>
-                  Dominant: {info.name}
+                <span className={`label-micro px-3.5 py-1 rounded-full border ${info.themeBg} ${info.themeBorder}`}>
+                  <span className={info.themeText}>Dominant: {info.name}</span>
                 </span>
-                <span className="text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200/60 font-mono">
+                <span className="label-micro px-3 py-1 rounded-full bg-slate-100 border border-slate-200/60">
                   Stacking: {stacking}
                 </span>
-                <span className="text-xs font-bold text-rose-500 bg-rose-50 border border-rose-100 px-3 py-1 rounded-full uppercase tracking-wider">
-                  Shadow: {blindspot?.abbreviation}
+                <span className="label-micro bg-rose-50 border border-rose-100 px-3 py-1 rounded-full">
+                  <span className="text-rose-500">Shadow: {blindspot?.abbreviation}</span>
                 </span>
               </div>
 
               <div className="space-y-2">
-                <h1 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight font-mono uppercase">
+                <h1 className="heading-display text-4xl sm:text-6xl uppercase">
                   {stacking}
                   <span className="text-emerald-600 font-sans italic text-2xl sm:text-4xl ml-3 font-normal">
                     — {stackingInfo?.title || info.shortName}
                   </span>
                 </h1>
-                <p className="text-sm sm:text-base font-bold text-emerald-600 uppercase tracking-wide">
+                <p className="font-display text-sm sm:text-base font-bold text-emerald-600 uppercase tracking-wide">
                   {info.tagline}
                 </p>
               </div>
@@ -258,30 +258,30 @@ export default function InstinctualVariantsResult() {
             </div>
 
             {/* Quick Stats Pill Matrix */}
-            <div className="w-full lg:w-96 p-6 rounded-3xl bg-slate-50/90 border border-slate-200/80 space-y-3 shrink-0">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
+            <div className="w-full lg:w-96 surface-glass rounded-3xl p-6 space-y-3 shrink-0">
+              <span className="label-micro-muted block">
                 Instinctual Blueprint
               </span>
               
               <div className="space-y-2.5 text-xs">
                 <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
                   <span className="text-slate-500 font-bold">Dominant Drive</span>
-                  <span className="text-emerald-700 font-extrabold">{info.shortName}</span>
+                  <span className="text-emerald-700 font-bold">{info.shortName}</span>
                 </div>
 
                 <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
                   <span className="text-slate-500 font-bold">Secondary Support</span>
-                  <span className="text-indigo-600 font-extrabold">{secondaryInfo?.shortName}</span>
+                  <span className="text-indigo-600 font-bold">{secondaryInfo?.shortName}</span>
                 </div>
 
                 <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
                   <span className="text-slate-500 font-bold">Repressed Blindspot</span>
-                  <span className="text-rose-600 font-extrabold">{blindspot?.shortName}</span>
+                  <span className="text-rose-600 font-bold">{blindspot?.shortName}</span>
                 </div>
 
                 <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-100 shadow-2xs">
                   <span className="text-slate-500 font-bold">Primary Focus</span>
-                  <span className="text-slate-800 font-extrabold text-right max-w-[170px] truncate">{info.primaryFocus}</span>
+                  <span className="text-slate-800 font-bold text-right max-w-[170px] truncate">{info.primaryFocus}</span>
                 </div>
               </div>
             </div>
@@ -298,10 +298,10 @@ export default function InstinctualVariantsResult() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-3 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                className={`pill transition-all duration-300 cursor-pointer ${
                   isActive
-                    ? 'bg-slate-900 text-white shadow-md'
-                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50'
+                    ? 'pill-active'
+                    : 'pill-muted'
                 }`}
               >
                 <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-white' : 'text-slate-400'}`} />
@@ -329,12 +329,12 @@ export default function InstinctualVariantsResult() {
                 
                 {/* 1. Core Motivation Cards (What Drives You vs What You Avoid) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-2.5 text-emerald-600">
                       <div className="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
                         <Shield className="w-5 h-5 text-emerald-600" />
                       </div>
-                      <span className="text-xs font-black uppercase tracking-wider">What Drives You (Core Desire)</span>
+                      <span className="label-micro"><span className="text-emerald-600">What Drives You (Core Desire)</span></span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">
                       {info.coreDesire}
@@ -344,12 +344,12 @@ export default function InstinctualVariantsResult() {
                     </p>
                   </div>
 
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-2.5 text-rose-500">
                       <div className="w-9 h-9 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center">
                         <Heart className="w-5 h-5 text-rose-500" />
                       </div>
-                      <span className="text-xs font-black uppercase tracking-wider">What You Avoid (Core Fear)</span>
+                      <span className="label-micro"><span className="text-rose-500">What You Avoid (Core Fear)</span></span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">
                       {info.coreFear}
@@ -361,14 +361,14 @@ export default function InstinctualVariantsResult() {
                 </div>
 
                 {/* 2. Instinctual Domain & Zone Box */}
-                <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                <div className="surface-card p-8 md:p-10 space-y-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
                       <Flame className="w-5 h-5 text-emerald-600" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-slate-900">{info.name} Domain</h3>
-                      <span className="text-xs font-bold text-slate-400">Core Focus: {info.primaryFocus}</span>
+                      <h3 className="heading-display text-xl">{info.name} Domain</h3>
+                      <span className="label-micro-muted">Core Focus: {info.primaryFocus}</span>
                     </div>
                   </div>
                   <p className="text-slate-600 text-base leading-relaxed font-medium">
@@ -382,9 +382,9 @@ export default function InstinctualVariantsResult() {
                 </div>
 
                 {/* 3. Instinctual Energy Distribution */}
-                <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                <div className="surface-card p-8 md:p-12 space-y-8">
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-slate-900">Instinctual Energy Distribution</h3>
+                    <h3 className="heading-display text-2xl">Instinctual Energy Distribution</h3>
                     <p className="text-slate-500 text-sm font-medium">
                       Calculated energy allocation across all three biological survival instincts.
                     </p>
@@ -423,18 +423,18 @@ export default function InstinctualVariantsResult() {
               <div className="space-y-8">
                 
                 {/* 1. Stacking Profile Breakdown */}
-                <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                <div className="surface-card p-8 md:p-12 space-y-6">
                   <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center font-mono font-black text-xl text-emerald-700 uppercase">
+                      <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center font-mono font-bold text-xl text-emerald-700 uppercase">
                         {stacking}
                       </div>
                       <div>
-                        <h3 className="text-2xl font-black text-slate-900">{stackingInfo?.title}</h3>
-                        <span className="text-xs font-bold text-slate-400">Instinctual Stacking Profile</span>
+                        <h3 className="heading-display text-2xl">{stackingInfo?.title}</h3>
+                        <span className="label-micro-muted">Instinctual Stacking Profile</span>
                       </div>
                     </div>
-                    <span className="text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200/60 font-mono">
+                    <span className="label-micro px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200/60">
                       {stacking}
                     </span>
                   </div>
@@ -451,42 +451,42 @@ export default function InstinctualVariantsResult() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
                     <div className="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 space-y-2">
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800">1st (Dominant)</span>
-                        <span className="text-xs font-mono font-black text-emerald-700 uppercase">{info.abbreviation}</span>
+                        <span className="label-micro"><span className="text-emerald-800">1st (Dominant)</span></span>
+                        <span className="text-xs font-mono font-bold text-emerald-700 uppercase">{info.abbreviation}</span>
                       </div>
-                      <h4 className="font-black text-slate-900 text-base">{info.shortName}</h4>
+                      <h4 className="heading-display text-base">{info.shortName}</h4>
                       <p className="text-slate-600 text-xs leading-relaxed font-medium">Consumes the vast majority of your daily focus and instinctive reflexes.</p>
                     </div>
 
                     <div className="p-5 rounded-2xl bg-indigo-50/70 border border-indigo-200/80 space-y-2">
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-indigo-800">2nd (Support)</span>
-                        <span className="text-xs font-mono font-black text-indigo-700 uppercase">{secondaryInfo?.abbreviation}</span>
+                        <span className="label-micro"><span className="text-indigo-800">2nd (Support)</span></span>
+                        <span className="text-xs font-mono font-bold text-indigo-700 uppercase">{secondaryInfo?.abbreviation}</span>
                       </div>
-                      <h4 className="font-black text-slate-900 text-base">{secondaryInfo?.shortName}</h4>
+                      <h4 className="heading-display text-base">{secondaryInfo?.shortName}</h4>
                       <p className="text-slate-600 text-xs leading-relaxed font-medium">Acts as your flexible secondary resource, supporting your dominant drive without obsession.</p>
                     </div>
 
                     <div className="p-5 rounded-2xl bg-rose-50/70 border border-rose-200/80 space-y-2">
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-rose-800">3rd (Shadow)</span>
-                        <span className="text-xs font-mono font-black text-rose-700 uppercase">{blindspot?.abbreviation}</span>
+                        <span className="label-micro"><span className="text-rose-800">3rd (Shadow)</span></span>
+                        <span className="text-xs font-mono font-bold text-rose-700 uppercase">{blindspot?.abbreviation}</span>
                       </div>
-                      <h4 className="font-black text-slate-900 text-base">{blindspot?.shortName}</h4>
+                      <h4 className="heading-display text-base">{blindspot?.shortName}</h4>
                       <p className="text-slate-600 text-xs leading-relaxed font-medium">Your neglected sphere; easily dismissed until unexpected friction demands attention.</p>
                     </div>
                   </div>
                 </div>
 
                 {/* 2. Blindspot & Shadow Integration Card */}
-                <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                <div className="surface-card p-8 md:p-12 space-y-6">
                   <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                     <div className="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center">
                       <EyeOff className="w-5 h-5 text-rose-600" />
                     </div>
                     <div>
-                      <span className="text-xs font-black uppercase tracking-wider text-rose-500">Your Repressed Instinct</span>
-                      <h4 className="text-2xl font-black text-slate-900">{blindspot?.name} Blindspot</h4>
+                      <span className="label-micro"><span className="text-rose-500">Your Repressed Instinct</span></span>
+                      <h4 className="heading-display text-2xl">{blindspot?.name} Blindspot</h4>
                     </div>
                   </div>
 
@@ -497,7 +497,7 @@ export default function InstinctualVariantsResult() {
                   <div className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.15)] rounded-2xl p-8 text-white space-y-3">
                     <div className="flex items-center gap-2.5 text-emerald-400">
                       <Compass className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">Shadow Integration Practice</span>
+                      <span className="label-micro"><span className="text-emerald-400">Shadow Integration Practice</span></span>
                     </div>
                     <p className="text-slate-300 text-sm sm:text-base font-medium leading-relaxed">
                       Consciously bringing small doses of <strong className="text-white">{blindspot?.shortName}</strong> awareness into your weekly routine restores psychological equilibrium. It prevents your dominant instinct (<strong className="text-emerald-400">{info.shortName}</strong>) from becoming an unbalanced, exhausting obsession.
@@ -517,12 +517,12 @@ export default function InstinctualVariantsResult() {
                 {/* Strengths & Weaknesses Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Strengths Card */}
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
                         <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Empowered Strengths</h3>
+                      <h3 className="heading-display text-xl">Empowered Strengths</h3>
                     </div>
                     <ul className="space-y-4">
                       {info.strengths?.map((item, idx) => (
@@ -535,12 +535,12 @@ export default function InstinctualVariantsResult() {
                   </div>
 
                   {/* Weaknesses Card */}
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center">
                         <AlertTriangle className="w-5 h-5 text-amber-500" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Unhealthy Pitfalls</h3>
+                      <h3 className="heading-display text-xl">Unhealthy Pitfalls</h3>
                     </div>
                     <ul className="space-y-4">
                       {info.weaknesses?.map((item, idx) => (
@@ -554,14 +554,14 @@ export default function InstinctualVariantsResult() {
                 </div>
 
                 {/* Workplace & Professional Role Card */}
-                <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                <div className="surface-card p-8 md:p-12 space-y-6">
                   <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                     <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center">
                       <Briefcase className="w-5 h-5 text-indigo-600" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-slate-900">Workplace Collaboration & Professional Role</h3>
-                      <span className="text-xs font-bold text-slate-400">How {info.shortName} approaches productivity and teams</span>
+                      <h3 className="heading-display text-xl">Workplace Collaboration & Professional Role</h3>
+                      <span className="label-micro-muted">How {info.shortName} approaches productivity and teams</span>
                     </div>
                   </div>
 
@@ -580,14 +580,14 @@ export default function InstinctualVariantsResult() {
               <div className="space-y-8">
                 
                 {/* Interpersonal & Romantic Filtering Card */}
-                <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
+                <div className="surface-card p-8 md:p-12 space-y-4">
                   <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                     <div className="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center">
                       <Heart className="w-5 h-5 text-rose-500" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-slate-900">Interpersonal & Romantic Filtering</h3>
-                      <span className="text-xs font-bold text-slate-400">Intimacy, expectations, and connection style</span>
+                      <h3 className="heading-display text-xl">Interpersonal & Romantic Filtering</h3>
+                      <span className="label-micro-muted">Intimacy, expectations, and connection style</span>
                     </div>
                   </div>
                   <p className="text-slate-600 font-medium text-base leading-relaxed">
@@ -596,10 +596,10 @@ export default function InstinctualVariantsResult() {
                 </div>
 
                 {/* Instinctual Chemistry Guide */}
-                <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                <div className="surface-card p-8 md:p-10 space-y-4">
                   <div className="flex items-center gap-2.5 text-indigo-600">
                     <Activity className="w-5 h-5" />
-                    <h4 className="text-lg font-black text-slate-900">Instinctual Compatibility Insights</h4>
+                    <h4 className="heading-display text-lg">Instinctual Compatibility Insights</h4>
                   </div>
                   <p className="text-slate-600 text-sm sm:text-base font-medium leading-relaxed">
                     Partners who share the same dominant instinct (e.g. SP with SP, or SX with SX) often experience effortless intuitive harmony regarding daily priorities. When partners have different dominant instincts, they bring valuable complementary balance, but must consciously respect why their partner prioritizes different life spheres.
@@ -608,14 +608,14 @@ export default function InstinctualVariantsResult() {
 
                 {/* Archetypal Figures with Quotes (Matching MBTI & Enneagram result layout) */}
                 {figures.length > 0 && (
-                  <div className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center">
                         <Quote className="w-5 h-5 text-amber-500" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-black text-slate-900">Iconic {info.shortName} Archetypes</h3>
-                        <span className="text-xs font-bold text-slate-400">Historical leaders and cultural icons embodying this drive</span>
+                        <h3 className="heading-display text-xl">Iconic {info.shortName} Archetypes</h3>
+                        <span className="label-micro-muted">Historical leaders and cultural icons embodying this drive</span>
                       </div>
                     </div>
 
@@ -632,7 +632,7 @@ export default function InstinctualVariantsResult() {
                             </p>
                           </div>
                           <div className="pt-3 border-t border-slate-200/60">
-                            <h5 className="font-black text-slate-900 text-sm">{fig.name}</h5>
+                            <h5 className="heading-display text-sm">{fig.name}</h5>
                             <span className="text-[11px] text-slate-400 font-bold">{fig.role}</span>
                           </div>
                         </div>

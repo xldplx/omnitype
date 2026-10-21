@@ -1,5 +1,15 @@
 @import 'tailwindcss';
 
+/* Extended palette shades used across the site's design system */
+@theme {
+  --color-slate-350: #b3bdcc;
+  --color-slate-505: #67748a;
+  --color-slate-650: #435066;
+  --color-slate-850: #16202f;
+  --color-indigo-650: #4f52e0;
+  --color-indigo-750: #3f3fbd;
+}
+
 * {
   font-family: 'JetBrains Mono', monospace;
 }
@@ -7,11 +17,165 @@
 @layer base {
   body {
     @apply bg-slate-50 text-slate-800 antialiased overflow-x-hidden min-h-screen selection:bg-purple-200 selection:text-purple-900;
-    font-family: 'Inter', sans-serif;
+    font-family: 'JetBrains Mono', monospace;
   }
 }
 
 @layer utilities {
+  /* Display face used across the site chrome (navbar, labels, headings) */
+  .font-display {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ---- Design system primitives -------------------------------------- */
+
+  /* Section / card headings */
+  .heading-display {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: #0f172a;
+  }
+
+  /* Frosted content card */
+  .surface-card {
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 2.5rem;
+    background-color: rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+  }
+
+  /* Micro uppercase label */
+  .label-micro {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #64748b;
+  }
+
+  /* Quieter variant of the micro label */
+  .label-micro-muted {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #94a3b8;
+  }
+
+  /* Pill chip */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-inline: 1rem;
+    padding-block: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-radius: 9999px;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .pill-active {
+    background-color: #0f172a;
+    color: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  }
+
+  .pill-muted {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #64748b;
+    border: 1px solid rgba(226, 232, 240, 0.6);
+  }
+
+  /* Glass call-to-action button */
+  .btn-glass {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 9999px;
+    padding-block: 0.625rem;
+    padding-inline: 1.5rem 0.625rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #0f172a;
+    background-color: rgba(255, 255, 255, 0.6);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95), 0 6px 24px rgba(15, 23, 42, 0.06);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  /* Round icon chip inside .btn-glass */
+  .btn-chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 9999px;
+    background-color: #0f172a;
+    color: #ffffff;
+  }
+
+  /* Inline accent chip — colours come from the utility classes applied alongside it */
+  .chip-accent {
+    display: inline-block;
+    padding-inline: 0.75rem;
+    padding-block: 0.375rem;
+    border-radius: 9999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+
+  /* Dark pill action button */
+  .btn-dark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    background-color: #0f172a;
+    color: #ffffff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  /* Lightweight glass panel (radius/padding supplied by the caller) */
+  .surface-glass {
+    background-color: rgba(255, 255, 255, 0.45);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06);
+  }
+
+  /* ---- Existing helpers --------------------------------------------- */
+
   .btn-primary {
     @apply px-6 py-3 md:px-8 md:py-4 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold hover:shadow-lg hover:shadow-purple-500/30 hover:-translate-y-0.5 transition-all outline-none focus:ring-4 focus:ring-purple-500/50 active:scale-95;
   }
@@ -21,7 +185,7 @@
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r;
   }
-  
+
   /* Custom scrollbar utilities */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -29,6 +193,20 @@
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* Alias used by the home page filter rows */
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Slow spinner used by loading states */
+  .animate-spin-slow {
+    animation: spin 3s linear infinite;
   }
 
   /* Genre category visible sleek scrollbar */

@@ -100,7 +100,7 @@ export default function DereResult() {
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-slate-400 hover:text-slate-900 transition cursor-pointer"
+            className="label-micro-muted inline-flex items-center gap-2 hover:text-slate-900 transition cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
             <span>Test Directory</span>
@@ -111,17 +111,19 @@ export default function DereResult() {
               type="button"
               onClick={handleDownloadCard}
               disabled={isExporting}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200/80 hover:bg-slate-50 text-xs font-black uppercase tracking-wider text-slate-700 shadow-2xs transition cursor-pointer"
+              className="btn-dark px-4 py-2.5"
             >
-              <Download className="w-3.5 h-3.5 text-indigo-500" />
+              <Download className="w-3.5 h-3.5" />
               <span>{isExporting ? 'Exporting...' : 'Export Card'}</span>
             </button>
             <Link
               to="/test/dere"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-xs font-black uppercase tracking-wider text-white shadow-xs transition"
+              className="btn-glass"
             >
-              <RefreshCw className="w-3.5 h-3.5 text-slate-300" />
               <span>Retake Test</span>
+              <span className="btn-chip w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center">
+                <RefreshCw className="w-3.5 h-3.5 text-slate-300" />
+              </span>
             </Link>
           </div>
         </div>
@@ -129,7 +131,7 @@ export default function DereResult() {
         {/* Hero Card for Result Display & Export */}
         <div 
           ref={cardRef}
-          className="bg-white border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.03)] rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden space-y-8"
+          className="surface-card p-8 md:p-12 relative overflow-hidden space-y-8"
         >
           {/* Accent Border Strip */}
           <div className={`absolute top-0 left-0 w-3 h-full bg-linear-to-b ${primaryType.color}`} />
@@ -137,7 +139,7 @@ export default function DereResult() {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
             <div className="space-y-4 max-w-3xl">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                <span className="chip-accent bg-slate-100 text-slate-700! border border-slate-200">
                   {primaryType.japaneseName}
                 </span>
                 <span className="text-xs font-bold text-slate-400">
@@ -149,13 +151,13 @@ export default function DereResult() {
               </div>
 
               <div className="space-y-2">
-                <h1 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight">
+                <h1 className="heading-display text-4xl sm:text-6xl text-slate-900!">
                   {primaryType.name}
                   <span className="text-rose-500 font-serif italic text-2xl sm:text-4xl ml-3 font-normal">
                     — {primaryType.title}
                   </span>
                 </h1>
-                <p className="text-xs sm:text-sm font-bold text-indigo-600 uppercase tracking-wider">
+                <p className="label-micro text-indigo-600!">
                   Hybrid Blend: {hybridTitle}
                 </p>
               </div>
@@ -168,7 +170,7 @@ export default function DereResult() {
             {/* Signature Quote Callout */}
             <div className="w-full lg:w-96 p-6 rounded-3xl bg-slate-50/90 border border-slate-200/80 space-y-3 shrink-0 relative">
               <Quote className="w-6 h-6 text-slate-300 absolute top-4 right-4" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">
+              <span className="label-micro-muted block">
                 Signature Phrase
               </span>
               <blockquote className="text-sm sm:text-base font-semibold text-slate-800 italic leading-relaxed pr-6">
@@ -180,15 +182,15 @@ export default function DereResult() {
           {/* Key Trait Matrix Bar */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-slate-100">
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">Love Language</span>
+              <span className="label-micro-muted block">Love Language</span>
               <p className="text-xs sm:text-sm font-black text-slate-900">{primaryType.loveLanguage}</p>
             </div>
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">Defense Pattern</span>
+              <span className="label-micro-muted block">Defense Pattern</span>
               <p className="text-xs sm:text-sm font-black text-slate-900">{primaryType.defenseMechanism}</p>
             </div>
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block">Core Relational Driver</span>
+              <span className="label-micro-muted block">Core Relational Driver</span>
               <p className="text-xs sm:text-sm font-black text-slate-900">{primaryType.relationalDriver}</p>
             </div>
           </div>
@@ -204,11 +206,7 @@ export default function DereResult() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center justify-center gap-2 py-3 px-3 sm:px-4 rounded-2xl text-xs font-black uppercase tracking-wider transition-all duration-200 cursor-pointer ${
-                  isActive 
-                    ? 'bg-slate-900 text-white shadow-md scale-[1.01]' 
-                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50 shadow-2xs'
-                }`}
+                className={`pill justify-center gap-2 ${isActive ? 'pill-active' : 'pill-muted'}`}
               >
                 <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-rose-400' : 'text-slate-400'}`} />
                 <span className="truncate">{tab.label}</span>
@@ -242,7 +240,7 @@ export default function DereResult() {
                       <Check className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-slate-900">Relational Superpowers</h3>
+                      <h3 className="heading-display text-xl text-slate-900!">Relational Superpowers</h3>
                       <span className="text-xs font-bold text-slate-400">Natural strengths and loyalty assets</span>
                     </div>
                   </div>
@@ -264,7 +262,7 @@ export default function DereResult() {
                       <AlertTriangle className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-black text-slate-900">Blindspots & Defense Triggers</h3>
+                      <h3 className="heading-display text-xl text-slate-900!">Blindspots & Defense Triggers</h3>
                       <span className="text-xs font-bold text-slate-400">Vulnerabilities to be conscious of</span>
                     </div>
                   </div>
@@ -284,14 +282,14 @@ export default function DereResult() {
               {/* Partner Connection Guide (Do's & Don'ts) */}
               <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-6">
                 <div className="space-y-1">
-                  <span className="text-xs font-black uppercase tracking-widest text-indigo-600 block">Communication Playbook</span>
-                  <h3 className="text-2xl font-black text-slate-900">How to Connect with a {primaryType.name}</h3>
+                  <span className="label-micro text-indigo-600! block">Communication Playbook</span>
+                  <h3 className="heading-display text-2xl text-slate-900!">How to Connect with a {primaryType.name}</h3>
                   <p className="text-slate-500 text-sm font-medium">Practical guidance for partners and friends building a deeper bond.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                   <div className="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-200/70 space-y-3">
-                    <div className="flex items-center gap-2 text-emerald-800 font-black text-xs uppercase tracking-wider">
+                    <div className="label-micro text-emerald-800! flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                       <span>Recommended Approach (Do's)</span>
                     </div>
@@ -301,7 +299,7 @@ export default function DereResult() {
                   </div>
 
                   <div className="p-6 rounded-2xl bg-rose-50/60 border border-rose-200/70 space-y-3">
-                    <div className="flex items-center gap-2 text-rose-800 font-black text-xs uppercase tracking-wider">
+                    <div className="label-micro text-rose-800! flex items-center gap-2">
                       <ShieldAlert className="w-4 h-4 text-rose-600" />
                       <span>Pitfalls to Avoid (Don'ts)</span>
                     </div>
@@ -314,10 +312,10 @@ export default function DereResult() {
 
               {/* Famous Character Archetypes */}
               <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-400 block">Famous Archetype Examples in Pop Culture</span>
+                <span className="label-micro-muted block">Famous Archetype Examples in Pop Culture</span>
                 <div className="flex flex-wrap gap-2.5">
                   {primaryType.famousExamples.map((name, idx) => (
-                    <span key={idx} className="px-4 py-2 rounded-xl bg-slate-50 text-slate-800 font-bold text-xs uppercase tracking-wider border border-slate-200/80">
+                    <span key={idx} className="chip-accent bg-slate-50 text-slate-800! border border-slate-200/80">
                       ★ {name}
                     </span>
                   ))}
@@ -340,7 +338,7 @@ export default function DereResult() {
             >
               <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-12 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-8">
                 <div className="space-y-1">
-                  <h3 className="text-2xl font-black text-slate-900">Your Full -dere Spectrum Distribution</h3>
+                  <h3 className="heading-display text-2xl text-slate-900!">Your Full -dere Spectrum Distribution</h3>
                   <p className="text-slate-500 text-sm font-medium">Ranked score distribution across all 10 relational dimensions.</p>
                 </div>
 
@@ -355,12 +353,12 @@ export default function DereResult() {
                             <span className="text-slate-900 text-sm font-extrabold">{item.name}</span>
                             <span className="text-slate-400 font-bold hidden sm:inline">({item.title})</span>
                             {isTop && (
-                              <span className="px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 text-[10px] font-black uppercase tracking-wider border border-rose-200">
+                              <span className="chip-accent bg-rose-50 text-rose-700! border border-rose-200">
                                 Primary Match
                               </span>
                             )}
                             {isSecond && (
-                              <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-[10px] font-black uppercase tracking-wider border border-indigo-200">
+                              <span className="chip-accent bg-indigo-50 text-indigo-700! border border-indigo-200">
                                 Secondary Undertone
                               </span>
                             )}
@@ -383,8 +381,8 @@ export default function DereResult() {
 
                 {/* Hybrid Blend Insight */}
                 <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 mt-6">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-indigo-600 block">Hybrid Spectrum Insight</span>
-                  <h4 className="text-base font-black text-slate-900">{hybridTitle}</h4>
+                  <span className="label-micro text-indigo-600! block">Hybrid Spectrum Insight</span>
+                  <h4 className="heading-display text-base text-slate-900!">{hybridTitle}</h4>
                   <p className="text-slate-600 text-sm font-medium leading-relaxed">
                     Your core behavioral reflex is anchored in <strong className="text-slate-900">{primaryType.name}</strong> ({primaryType.tagline.toLowerCase()}), 
                     subtly shaded by <strong className="text-slate-900">{secondaryType.name}</strong> habits. This blend creates a nuanced interpersonal balance between your primary protective instincts and secondary emotional expressions.
@@ -410,8 +408,8 @@ export default function DereResult() {
                 
                 {/* Public Persona */}
                 <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
-                  <span className="text-xs font-black uppercase tracking-widest text-indigo-600 block">Social Settings</span>
-                  <h3 className="text-2xl font-black text-slate-900">In Public Settings</h3>
+                  <span className="label-micro text-indigo-600! block">Social Settings</span>
+                  <h3 className="heading-display text-2xl text-slate-900!">In Public Settings</h3>
                   <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
                     {primaryType.publicVsPrivate.inPublic}
                   </p>
@@ -419,8 +417,8 @@ export default function DereResult() {
 
                 {/* Private Intimacy */}
                 <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-4">
-                  <span className="text-xs font-black uppercase tracking-widest text-rose-500 block">One-on-One Intimacy</span>
-                  <h3 className="text-2xl font-black text-slate-900">In Private Intimacy</h3>
+                  <span className="label-micro text-rose-500! block">One-on-One Intimacy</span>
+                  <h3 className="heading-display text-2xl text-slate-900!">In Private Intimacy</h3>
                   <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed">
                     {primaryType.publicVsPrivate.inPrivate}
                   </p>
@@ -430,8 +428,8 @@ export default function DereResult() {
 
               {/* Caught Off Guard / When Flustered */}
               <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-3">
-                <span className="text-xs font-black uppercase tracking-widest text-amber-600 block">Reflex Reaction</span>
-                <h3 className="text-2xl font-black text-slate-900">When Flustered or Caught Off Guard</h3>
+                <span className="label-micro text-amber-600! block">Reflex Reaction</span>
+                <h3 className="heading-display text-2xl text-slate-900!">When Flustered or Caught Off Guard</h3>
                 <p className="text-slate-700 text-base font-medium leading-relaxed">
                   {primaryType.flusteredReaction}
                 </p>
@@ -439,8 +437,8 @@ export default function DereResult() {
 
               {/* Emotional Safety Blueprint */}
               <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-3">
-                <span className="text-xs font-black uppercase tracking-widest text-emerald-600 block">De-escalation & Safety</span>
-                <h3 className="text-2xl font-black text-slate-900">Creating Emotional Safety</h3>
+                <span className="label-micro text-emerald-600! block">De-escalation & Safety</span>
+                <h3 className="heading-display text-2xl text-slate-900!">Creating Emotional Safety</h3>
                 <p className="text-slate-600 text-sm sm:text-base font-medium leading-relaxed">
                   To help a {primaryType.name} feel completely comfortable, consistency and psychological safety are paramount. 
                   When they exhibit their characteristic defense mechanism ({primaryType.defenseMechanism.toLowerCase()}), avoid escalating or demanding immediate vulnerability. 
@@ -467,8 +465,8 @@ export default function DereResult() {
                 {/* High Synergy Pairings */}
                 <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-6">
                   <div className="space-y-1">
-                    <span className="text-xs font-black uppercase tracking-widest text-emerald-600 block">Natural Harmony</span>
-                    <h3 className="text-2xl font-black text-slate-900">High Synergy Pairings</h3>
+                    <span className="label-micro text-emerald-600! block">Natural Harmony</span>
+                    <h3 className="heading-display text-2xl text-slate-900!">High Synergy Pairings</h3>
                     <p className="text-slate-500 text-xs sm:text-sm font-medium">Complementary archetypes that bring out their best relational side.</p>
                   </div>
 
@@ -480,7 +478,7 @@ export default function DereResult() {
                       >
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-black text-slate-900">{item.name}</span>
-                          <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                          <span className="chip-accent bg-emerald-100 text-emerald-800!">
                             High Synergy
                           </span>
                         </div>
@@ -495,8 +493,8 @@ export default function DereResult() {
                 {/* Growth Challenge Pairings */}
                 <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-6">
                   <div className="space-y-1">
-                    <span className="text-xs font-black uppercase tracking-widest text-amber-600 block">Growth Friction</span>
-                    <h3 className="text-2xl font-black text-slate-900">Challenging Pairings</h3>
+                    <span className="label-micro text-amber-600! block">Growth Friction</span>
+                    <h3 className="heading-display text-2xl text-slate-900!">Challenging Pairings</h3>
                     <p className="text-slate-500 text-xs sm:text-sm font-medium">Pairings with potential friction points that require conscious communication.</p>
                   </div>
 
@@ -508,7 +506,7 @@ export default function DereResult() {
                       >
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-black text-slate-900">{item.name}</span>
-                          <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">
+                          <span className="chip-accent bg-amber-100 text-amber-800!">
                             Growth Friction
                           </span>
                         </div>
@@ -524,8 +522,8 @@ export default function DereResult() {
 
               {/* Relational Dynamics Takeaway */}
               <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 md:p-10 shadow-[0_4px_25px_rgb(0,0,0,0.02)] space-y-3">
-                <span className="text-xs font-black uppercase tracking-widest text-indigo-600 block">Relational Philosophy</span>
-                <h3 className="text-2xl font-black text-slate-900">Navigating Compatibility</h3>
+                <span className="label-micro text-indigo-600! block">Relational Philosophy</span>
+                <h3 className="heading-display text-2xl text-slate-900!">Navigating Compatibility</h3>
                 <p className="text-slate-600 text-sm sm:text-base font-medium leading-relaxed">
                   No archetype pairing is inherently doomed or guaranteed to succeed. 
                   Compatibility is built on understanding each other's defense reflexes, acknowledging differing love languages ({primaryType.loveLanguage}), 

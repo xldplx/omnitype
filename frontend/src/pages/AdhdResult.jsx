@@ -110,9 +110,9 @@ export default function AdhdResult() {
           <button 
             type="button"
             onClick={() => navigate('/')}
-            className="flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest hover:text-slate-900 transition-colors group cursor-pointer"
+            className="label-micro hover:text-slate-900 transition-colors group cursor-pointer"
           >
-            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center group-hover:bg-slate-200 transition-colors">
+            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center transition-colors">
               <ChevronLeft className="w-4 h-4 text-slate-700" />
             </div>
             <span>Home</span>
@@ -128,10 +128,10 @@ export default function AdhdResult() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-5 py-3 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                className={`pill ${
                   isActive 
-                    ? 'bg-slate-900 text-white shadow-md' 
-                    : 'bg-white text-slate-500 hover:text-slate-900 border border-slate-200/80 hover:bg-slate-50'
+                    ? 'pill-active' 
+                    : 'pill-muted'
                 }`}
               >
                 <span>{tab.label}</span>
@@ -159,11 +159,11 @@ export default function AdhdResult() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                   
                   {/* Main Result Card (Dominant 8 Cols) */}
-                  <div className="lg:col-span-8 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+                  <div className="surface-card lg:col-span-8 p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
                     <div className={`absolute top-0 left-0 w-2 h-full bg-linear-to-b ${primaryColor} opacity-90`} />
                     
                     <div>
-                      <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-4 text-slate-900 tracking-tight leading-none">
+                      <h1 className="heading-display text-4xl sm:text-6xl md:text-7xl mb-4 text-slate-900! leading-none">
                         {info.name}
                       </h1>
                       
@@ -174,38 +174,38 @@ export default function AdhdResult() {
                   </div>
 
                   {/* Persona Card (4 Cols - Prominent & Centered) */}
-                  <div className="lg:col-span-4 bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
-                     <h2 className={`text-3xl sm:text-4xl md:text-5xl leading-none font-black tracking-tight text-transparent bg-clip-text bg-linear-to-b ${primaryColor} z-10 drop-shadow-sm pb-1 text-center`}>
+                  <div className="surface-card lg:col-span-4 p-8 md:p-10 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                     <h2 className={`text-3xl sm:text-4xl md:text-5xl leading-none font-display font-bold tracking-tight text-transparent bg-clip-text bg-linear-to-b ${primaryColor} z-10 drop-shadow-sm pb-1 text-center`}>
                        {info.subName}
                      </h2>
-                     <span className="text-xs font-extrabold tracking-[0.2em] uppercase text-slate-400 mt-3 z-10 whitespace-nowrap">Cognitive Profile</span>
+                     <span className="label-micro-muted mt-3 z-10 whitespace-nowrap">Cognitive Profile</span>
                   </div>
 
                 </div>
 
                 {/* 2. Dedicated Core Motivations Section (What Drives You & What You Avoid) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-2 text-emerald-600">
                       <Target className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">What Drives You (Core Desire)</span>
+                      <span className="label-micro text-emerald-600!">What Drives You (Core Desire)</span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreDesire}</p>
                   </div>
 
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-3">
+                  <div className="surface-card p-8 md:p-10 space-y-3">
                     <div className="flex items-center gap-2 text-rose-500">
                       <AlertTriangle className="w-5 h-5" />
-                      <span className="text-xs font-black uppercase tracking-wider">What You Avoid (Core Fear)</span>
+                      <span className="label-micro text-rose-500!">What You Avoid (Core Fear)</span>
                     </div>
                     <p className="text-slate-900 text-lg md:text-xl font-bold leading-relaxed">{info.coreFear}</p>
                   </div>
                 </div>
 
                 {/* 3. Neural Activity Metrics Gauges */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
+                <div className="surface-card p-8 md:p-12 space-y-8">
                   <div className="space-y-2">
-                    <h3 className="text-2xl font-black text-slate-900">Neural Activity Metrics</h3>
+                    <h3 className="heading-display text-2xl text-slate-900!">Neural Activity Metrics</h3>
                     <p className="text-slate-500 text-sm font-medium">
                       Calculated score distribution across attention, movement, and impulse control indicators.
                     </p>
@@ -222,12 +222,12 @@ export default function AdhdResult() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   
                   {/* Strengths Card */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center">
                         <CheckCircle2 className="w-5 h-5 text-indigo-600" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Key Strengths</h3>
+                      <h3 className="heading-display text-xl text-slate-900!">Key Strengths</h3>
                     </div>
                     <ul className="space-y-4">
                       {info.pros?.map((item, idx) => (
@@ -240,12 +240,12 @@ export default function AdhdResult() {
                   </div>
 
                   {/* Challenges Card */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center">
                         <AlertTriangle className="w-5 h-5 text-amber-500" />
                       </div>
-                      <h3 className="text-xl font-black text-slate-900">Things to Watch Out For</h3>
+                      <h3 className="heading-display text-xl text-slate-900!">Things to Watch Out For</h3>
                     </div>
                     <ul className="space-y-4">
                       {info.cons?.map((item, idx) => (
@@ -268,15 +268,15 @@ export default function AdhdResult() {
             {activeTab === 'metrics' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Neural & Executive Spectrum Breakdown</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Neural & Executive Spectrum Breakdown</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Detailed analysis of attention regulation, impulse control, working memory, and cognitive activation energy.
                   </p>
                 </div>
 
                 {/* Core ASRS Screening Metrics */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
-                  <h4 className="text-lg font-black text-slate-900 border-b border-slate-100 pb-3">Symptom Cluster Metrics</h4>
+                <div className="surface-card p-8 md:p-12 space-y-8">
+                  <h4 className="heading-display text-lg text-slate-900! border-b border-slate-100 pb-3">Symptom Cluster Metrics</h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <MetricBar label="Inattention Spectrum" value={breakdown.inPercent} color={primaryColor} icon={Target} />
                     <MetricBar label="Hyperactivity Index" value={breakdown.hyperPercent} color={primaryColor} icon={Flame} />
@@ -285,8 +285,8 @@ export default function AdhdResult() {
                 </div>
 
                 {/* Executive Function Capacity Metrics */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-8">
-                  <h4 className="text-lg font-black text-slate-900 border-b border-slate-100 pb-3">Executive Function Capacity</h4>
+                <div className="surface-card p-8 md:p-12 space-y-8">
+                  <h4 className="heading-display text-lg text-slate-900! border-b border-slate-100 pb-3">Executive Function Capacity</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <MetricBar label="Task Initiation Energy" value={breakdown.taskInitiation || 50} color="from-amber-500 to-emerald-500" icon={Activity} />
                     <MetricBar label="Working Memory Retention" value={breakdown.workingMemory || 45} color="from-sky-500 to-indigo-500" icon={BrainCircuit} />
@@ -297,10 +297,10 @@ export default function AdhdResult() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Time Perception Card */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
+                  <div className="surface-card p-8 md:p-12 space-y-4">
                     <div className="flex items-center gap-3 mb-2">
                       <Clock className="w-5 h-5 text-indigo-600" />
-                      <h4 className="text-xl font-black text-slate-900">Time Perception Mechanics</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Time Perception Mechanics</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       {info.timePerception}
@@ -308,10 +308,10 @@ export default function AdhdResult() {
                   </div>
 
                   {/* Rejection Sensitivity Card */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
+                  <div className="surface-card p-8 md:p-12 space-y-4">
                     <div className="flex items-center gap-3 mb-2">
                       <ShieldAlert className="w-5 h-5 text-rose-500" />
-                      <h4 className="text-xl font-black text-slate-900">Rejection Sensitivity (RSD)</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Rejection Sensitivity (RSD)</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       {info.rsdDesc}
@@ -327,7 +327,7 @@ export default function AdhdResult() {
             {activeTab === 'fuel' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Cognitive Fuel & Environment Optimization</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Cognitive Fuel & Environment Optimization</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Understanding dopamine triggers, hyperfocus entry conditions, and sensory environment design.
                   </p>
@@ -335,22 +335,22 @@ export default function AdhdResult() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Dopamine Style Card */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
-                    <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3.5 py-1 rounded-full inline-block">
+                  <div className="surface-card p-8 md:p-12 space-y-4">
+                    <span className="chip-accent bg-indigo-50 text-indigo-600! inline-block">
                       Dopamine Style
                     </span>
-                    <h4 className="text-2xl font-black text-slate-900">{info.dopamineStyle}</h4>
+                    <h4 className="heading-display text-2xl text-slate-900!">{info.dopamineStyle}</h4>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       {info.dopamineDesc}
                     </p>
                   </div>
 
                   {/* Hyperfocus Mode Card */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
-                    <span className="text-xs font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3.5 py-1 rounded-full inline-block">
+                  <div className="surface-card p-8 md:p-12 space-y-4">
+                    <span className="chip-accent bg-emerald-50 text-emerald-600! inline-block">
                       Hyperfocus Mode
                     </span>
-                    <h4 className="text-2xl font-black text-slate-900">{info.hyperfocus}</h4>
+                    <h4 className="heading-display text-2xl text-slate-900!">{info.hyperfocus}</h4>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       {info.hyperfocusDesc}
                     </p>
@@ -358,22 +358,22 @@ export default function AdhdResult() {
                 </div>
 
                 {/* Sensory & Soundscape Optimization Card */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                <div className="surface-card p-8 md:p-12 space-y-6">
                   <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
                     <Headphones className="w-5 h-5 text-indigo-600" />
-                    <h4 className="text-xl font-black text-slate-900">Sensory Environment Blueprint</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">Sensory Environment Blueprint</h4>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">🎧 Soundscape</span>
+                      <span className="label-micro text-indigo-600!">🎧 Soundscape</span>
                       <p className="text-xs sm:text-sm text-slate-700 font-semibold leading-snug">Brown noise, lo-fi beats, or video game soundtracks without lyrics.</p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">💡 Lighting & Visuals</span>
+                      <span className="label-micro text-emerald-600!">💡 Lighting & Visuals</span>
                       <p className="text-xs sm:text-sm text-slate-700 font-semibold leading-snug">Warm ambient lamps, dark mode UI, and clean desk surfaces to prevent visual clutter.</p>
                     </div>
                     <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-amber-600">🖐 Tactile Anchors</span>
+                      <span className="label-micro text-amber-600!">🖐 Tactile Anchors</span>
                       <p className="text-xs sm:text-sm text-slate-700 font-semibold leading-snug">Silent fidget tools, weighted lap blankets, or standing desk transitions.</p>
                     </div>
                   </div>
@@ -383,7 +383,7 @@ export default function AdhdResult() {
                 <div className="bg-slate-900 border border-slate-800 shadow-[0_20px_50px_rgb(0,0,0,0.2)] rounded-[2.5rem] p-10 md:p-14 text-white space-y-4">
                   <div className="flex items-center gap-3">
                     <BatteryCharging className="w-6 h-6 text-orange-400" />
-                    <h4 className="text-2xl font-black">Energy Management Protocol</h4>
+                    <h4 className="heading-display text-2xl text-white!">Energy Management Protocol</h4>
                   </div>
                   <p className="text-slate-300 text-base md:text-lg leading-relaxed font-medium max-w-4xl">
                     Structure your day around your cognitive peak hours rather than fighting against rigid clock time. Protect your hyperfocus blocks and allow yourself guilt-free recovery time after intense mental output.
@@ -398,7 +398,7 @@ export default function AdhdResult() {
             {activeTab === 'work' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Workplace & Social Communication</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Workplace & Social Communication</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Ideal career paths, workplace boundary scripts, and communication patterns.
                   </p>
@@ -406,10 +406,10 @@ export default function AdhdResult() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Career Roles Card */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <Briefcase className="w-5 h-5 text-indigo-600" />
-                      <h4 className="text-xl font-black text-slate-900">Aligned Career Paths</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Aligned Career Paths</h4>
                     </div>
                     <div className="flex flex-wrap gap-2.5">
                       {info.careers?.map((career) => (
@@ -421,10 +421,10 @@ export default function AdhdResult() {
                   </div>
 
                   {/* Social Communication Style Card */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-4">
+                  <div className="surface-card p-8 md:p-12 space-y-4">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <MessageSquare className="w-5 h-5 text-emerald-600" />
-                      <h4 className="text-xl font-black text-slate-900">Social Communication Style</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Social Communication Style</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-base leading-relaxed">
                       {info.socialStyle}
@@ -433,18 +433,18 @@ export default function AdhdResult() {
                 </div>
 
                 {/* Communication Scripts & Boundary Card */}
-                <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                <div className="surface-card p-8 md:p-12 space-y-6">
                   <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                     <Shield className="w-5 h-5 text-indigo-600" />
-                    <h4 className="text-xl font-black text-slate-900">Neurodivergent Boundary & Accommodation Scripts</h4>
+                    <h4 className="heading-display text-xl text-slate-900!">Neurodivergent Boundary & Accommodation Scripts</h4>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">💼 To Managers</span>
+                      <span className="label-micro text-indigo-600!">💼 To Managers</span>
                       <p className="text-slate-800 text-sm font-bold">"I execute fastest when tasks are summarized in bullet points with clear priority order."</p>
                     </div>
                     <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 space-y-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-rose-500">❤️ To Partners & Friends</span>
+                      <span className="label-micro text-rose-500!">❤️ To Partners & Friends</span>
                       <p className="text-slate-800 text-sm font-bold">"If I miss a text or look distracted, it's not lack of care—my attention span gets hijacked by task transitions."</p>
                     </div>
                   </div>
@@ -452,10 +452,10 @@ export default function AdhdResult() {
 
                 {/* Compatible MBTI Types Card */}
                 {info.mbti && info.mbti.length > 0 && (
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-12 space-y-6">
+                  <div className="surface-card p-8 md:p-12 space-y-6">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-100">
                       <Users className="w-5 h-5 text-purple-600" />
-                      <h4 className="text-xl font-black text-slate-900">Compatible MBTI Cognitive Alignments</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Compatible MBTI Cognitive Alignments</h4>
                     </div>
                     <div className="flex flex-wrap gap-3">
                       {info.mbti.map((code) => (
@@ -475,7 +475,7 @@ export default function AdhdResult() {
             {activeTab === 'hacks' && (
               <div className="space-y-8">
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-slate-900 tracking-tight">Neurodivergent Life Hacks & Toolkits</h3>
+                  <h3 className="heading-display text-3xl text-slate-900!">Neurodivergent Life Hacks & Toolkits</h3>
                   <p className="text-slate-500 text-sm md:text-base font-medium max-w-2xl">
                     Proven, low-friction strategies designed to work with your brain's natural neurochemistry rather than fighting against it.
                   </p>
@@ -483,12 +483,12 @@ export default function AdhdResult() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* Hack 1: Body Doubling */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center">
                         <Users className="w-5 h-5 text-indigo-600" />
                       </div>
-                      <h4 className="text-xl font-black text-slate-900">Body Doubling</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Body Doubling</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-sm leading-relaxed">
                       Working alongside another person (in-person, on video calls, or via co-working streams) creates ambient social accountability that unlocks executive function and prevents task drift.
@@ -496,12 +496,12 @@ export default function AdhdResult() {
                   </div>
 
                   {/* Hack 2: The 5-Minute Micro-Start */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center">
                         <Clock className="w-5 h-5 text-emerald-600" />
                       </div>
-                      <h4 className="text-xl font-black text-slate-900">The 5-Minute Micro-Start</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">The 5-Minute Micro-Start</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-sm leading-relaxed">
                       Lower the friction threshold to zero. Tell yourself you only have to work on a daunting task for exactly 5 minutes, after which you have permission to stop. 85% of the time, overcoming activation friction keeps momentum going.
@@ -509,12 +509,12 @@ export default function AdhdResult() {
                   </div>
 
                   {/* Hack 3: Dopamine Menu */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center">
                         <Zap className="w-5 h-5 text-amber-500" />
                       </div>
-                      <h4 className="text-xl font-black text-slate-900">The Dopamine Menu</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">The Dopamine Menu</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-sm leading-relaxed">
                       Build a written menu of healthy dopamine sources categorized into <strong className="text-slate-900">Starters</strong> (quick 2-min stretches, tea), <strong className="text-slate-900">Mains</strong> (hobbies, workouts), and <strong className="text-slate-900">Sides</strong> (background music while working) so you don't default to doom-scrolling.
@@ -522,12 +522,12 @@ export default function AdhdResult() {
                   </div>
 
                   {/* Hack 4: Externalize Working Memory */}
-                  <div className="bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-[2.5rem] p-8 md:p-10 space-y-4">
+                  <div className="surface-card p-8 md:p-10 space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center">
                         <Wrench className="w-5 h-5 text-rose-500" />
                       </div>
-                      <h4 className="text-xl font-black text-slate-900">Externalize Working Memory</h4>
+                      <h4 className="heading-display text-xl text-slate-900!">Externalize Working Memory</h4>
                     </div>
                     <p className="text-slate-600 font-medium text-sm leading-relaxed">
                       Never rely on internal memory for tasks or appointments. Use immediate voice memos, sticky notes, or digital kanban boards. If an idea isn't written down in an external system immediately, it disappears.
@@ -539,7 +539,7 @@ export default function AdhdResult() {
                 <div className="bg-indigo-950 border border-indigo-900 shadow-[0_20px_50px_rgb(0,0,0,0.3)] rounded-[2.5rem] p-10 md:p-14 text-white space-y-4">
                   <div className="flex items-center gap-3">
                     <Sparkles className="w-6 h-6 text-indigo-400" />
-                    <h4 className="text-2xl font-black">The Neurodivergent Advantage</h4>
+                    <h4 className="heading-display text-2xl text-slate-900!">The Neurodivergent Advantage</h4>
                   </div>
                   <p className="text-indigo-200 text-base md:text-lg leading-relaxed font-medium max-w-4xl">
                     ADHD is not a deficit of intelligence or willpower—it is a difference in interest-based nervous system regulation. When you align your life, work environment, and routine with your natural cognitive rhythm, your speed, creativity, and hyperfocus become an unmatched superpower.
