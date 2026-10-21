@@ -59,21 +59,26 @@ export default function Navbar() {
     <div className="fixed top-6 md:top-8 left-0 right-0 z-50 flex justify-center px-4 md:px-8 pointer-events-none">
       <Motion.nav 
         variants={{
-          visible: { y: 0, opacity: 1, scale: 1 },
-          hidden: { y: -100, opacity: 0, scale: 0.95 }
+          visible: { y: 0, opacity: 1 },
+          hidden: { y: -100, opacity: 0 }
         }}
         initial="visible"
         animate={hidden ? "hidden" : "visible"}
         transition={{ type: "spring", stiffness: 260, damping: 25, mass: 0.5 }}
-        className={`pointer-events-auto flex items-center justify-center transition-all duration-500 rounded-full px-4 py-2.5 sm:px-5 sm:py-3 border ${
-          scrolled 
-            ? 'bg-white/60 backdrop-blur-2xl border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_10px_35px_rgba(0,0,0,0.07)]' 
-            : 'bg-white/45 backdrop-blur-xl border-white/70 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_25px_rgba(0,0,0,0.05)]'
-        }`}
-        style={{ WebkitBackdropFilter: 'blur(20px) saturate(180%)', backdropFilter: 'blur(20px) saturate(180%)' }}
+        className="pointer-events-auto relative flex items-center justify-center rounded-full px-4 py-2.5 sm:px-5 sm:py-3"
       >
+        {/* Navbar Pill Glassmorphism Background (isolated from children so dropdown blur works) */}
+        <div 
+          className={`absolute inset-0 rounded-full transition-all duration-500 border pointer-events-none ${
+            scrolled 
+              ? 'bg-white/60 border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_10px_35px_rgba(0,0,0,0.07)]' 
+              : 'bg-white/45 border-white/70 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_25px_rgba(0,0,0,0.05)]'
+          }`}
+          style={{ WebkitBackdropFilter: 'blur(20px) saturate(180%)', backdropFilter: 'blur(20px) saturate(180%)' }}
+        />
+
         {/* Navigation Links */}
-        <div className="flex gap-1.5 sm:gap-2 items-center">
+        <div className="relative z-10 flex gap-1.5 sm:gap-2 items-center">
           <NavLink to="/" current={location.pathname === "/"}>Home</NavLink>
           
           {/* Wiki Multi-Level Nested Dropdown Menu */}
@@ -96,12 +101,18 @@ export default function Navbar() {
             <AnimatePresence>
               {isWikiOpen && (
                 <Motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.96 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                  className="absolute top-full left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 mt-2.5 w-[calc(100vw-2.5rem)] sm:w-64 max-w-xs bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.12)] p-2 pointer-events-auto z-50 flex flex-col gap-1"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  className="absolute top-full left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 mt-2.5 w-[calc(100vw-2.5rem)] sm:w-64 max-w-xs rounded-2xl p-2 pointer-events-auto z-50 flex flex-col gap-1"
                 >
+                  {/* Level 1 Glass Background (isolated so Level 2 submenu can blur properly) */}
+                  <div 
+                    className="absolute inset-0 rounded-2xl bg-white/70 border border-white/80 shadow-[0_20px_50px_rgba(0,0,0,0.12),inset_0_1px_2px_rgba(255,255,255,0.9)] pointer-events-none -z-10"
+                    style={{ WebkitBackdropFilter: 'blur(24px) saturate(180%)', backdropFilter: 'blur(24px) saturate(180%)' }}
+                  />
+
                   {/* Nested Submenu Trigger Item */}
                   <div 
                     className="relative"
@@ -111,24 +122,25 @@ export default function Navbar() {
                     <button
                       type="button"
                       onClick={() => setIsMbtiSubmenuOpen(!isMbtiSubmenuOpen)}
-                      className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-indigo-50/70 text-xs font-bold text-slate-800 transition group cursor-pointer"
+                      className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl hover:bg-slate-900/5 text-xs font-bold text-slate-800 transition group cursor-pointer"
                     >
                       <div className="flex items-center gap-2.5">
-                        <Brain className="w-4 h-4 text-indigo-500" />
+                        <Brain className="w-4 h-4 text-slate-700 group-hover:text-slate-900" />
                         <span>16 Personality Types</span>
                       </div>
-                      <ChevronRight className={`w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-600 transition-transform duration-300 ${isMbtiSubmenuOpen ? 'rotate-90 sm:rotate-0' : ''}`} />
+                      <ChevronRight className={`w-3.5 h-3.5 text-slate-400 group-hover:text-slate-800 transition-transform duration-300 ${isMbtiSubmenuOpen ? 'rotate-90 sm:rotate-0' : ''}`} />
                     </button>
 
                     {/* Level 2 Sub-Dropdown */}
                     <AnimatePresence>
                       {isMbtiSubmenuOpen && (
                         <Motion.div
-                          initial={{ opacity: 0, y: -5, scale: 0.96 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -5, scale: 0.96 }}
-                          transition={{ duration: 0.2 }}
-                          className="relative sm:absolute left-0 sm:left-full top-0 mt-2 sm:mt-0 sm:ml-2 w-full sm:w-64 bg-slate-50/90 sm:bg-white/95 backdrop-blur-2xl border border-slate-200/80 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.12)] p-3 grid grid-cols-2 gap-1.5 pointer-events-auto z-50 max-h-[60vh] overflow-y-auto"
+                          initial={{ opacity: 0, x: -5 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -5 }}
+                          transition={{ duration: 0.15 }}
+                          className="relative sm:absolute left-0 sm:left-full top-0 mt-2 sm:mt-0 sm:ml-2 w-full sm:w-64 bg-white/70 border border-white/80 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.12),inset_0_1px_2px_rgba(255,255,255,0.9)] p-3 grid grid-cols-2 gap-1.5 pointer-events-auto z-50 max-h-[60vh] overflow-y-auto"
+                          style={{ WebkitBackdropFilter: 'blur(24px) saturate(180%)', backdropFilter: 'blur(24px) saturate(180%)' }}
                         >
                           {mbtiTypes.map((t) => (
                             <Link
@@ -138,10 +150,10 @@ export default function Navbar() {
                                 setIsWikiOpen(false);
                                 setIsMbtiSubmenuOpen(false);
                               }}
-                              className="px-2.5 py-2 rounded-xl bg-white hover:bg-indigo-600 hover:text-white border border-slate-100 shadow-2xs transition text-center flex flex-col group cursor-pointer"
+                              className="px-2.5 py-2 rounded-xl bg-white/50 hover:bg-slate-900 hover:text-white border border-white/70 shadow-2xs transition text-center flex flex-col group cursor-pointer"
                             >
                               <span className="text-xs font-black text-slate-800 group-hover:text-white">{t.code}</span>
-                              <span className="text-[0.6rem] text-slate-400 group-hover:text-indigo-100 font-medium truncate">{t.name}</span>
+                              <span className="text-[0.6rem] text-slate-400 group-hover:text-slate-200 font-medium truncate">{t.name}</span>
                             </Link>
                           ))}
                         </Motion.div>
@@ -149,7 +161,7 @@ export default function Navbar() {
                     </AnimatePresence>
                   </div>
 
-                  <div className="h-px bg-slate-100 my-1" />
+                  <div className="h-px bg-slate-200/40 my-1" />
 
                   {/* Standard Category Topic Links */}
                   {topicItems.map((topic, idx) => {
@@ -159,9 +171,9 @@ export default function Navbar() {
                         key={idx}
                         to={topic.to}
                         onClick={() => setIsWikiOpen(false)}
-                        className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl hover:bg-indigo-50/70 text-xs font-bold text-slate-700 transition group"
+                        className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl hover:bg-slate-900/5 text-xs font-bold text-slate-700 transition group"
                       >
-                        <IconComp className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 transition-colors" />
+                        <IconComp className="w-4 h-4 text-slate-400 group-hover:text-slate-900 transition-colors" />
                         <span className="group-hover:text-slate-900">{topic.label}</span>
                       </Link>
                     );
